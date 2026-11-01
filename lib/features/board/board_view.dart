@@ -27,6 +27,7 @@ class BoardView extends StatefulWidget {
     this.onDragEnd,
     this.animateMove,
     this.size,
+    this.shakeSquare,
   });
 
   final Position position;
@@ -48,6 +49,10 @@ class BoardView extends StatefulWidget {
   /// Side length; defaults to the shorter side of the available space.
   final double? size;
 
+  /// The piece on this square shakes its head (a short rotation) whenever
+  /// the value changes to a non-null square.
+  final Square? shakeSquare;
+
   @override
   State<BoardView> createState() => _BoardViewState();
 }
@@ -63,6 +68,9 @@ class _BoardViewState extends State<BoardView> {
   /// The move currently sliding, until its animation has finished.
   Move? _sliding;
 
+  /// Bumped whenever shakeSquare changes so the shake restarts.
+  int _shakeToken = 0;
+
   static const Duration _slideDuration = Duration(milliseconds: 220);
 
   @override
@@ -76,6 +84,10 @@ class _BoardViewState extends State<BoardView> {
     super.didUpdateWidget(oldWidget);
     if (widget.animateMove != oldWidget.animateMove) {
       _sliding = widget.animateMove;
+    }
+    if (widget.shakeSquare != null &&
+        widget.shakeSquare != oldWidget.shakeSquare) {
+      _shakeToken++;
     }
   }
 
@@ -249,6 +261,24 @@ class _BoardViewState extends State<BoardView> {
     );
   }
 
+  /// Wraps the piece on [widget.shakeSquare] in a short "no" rotation.
+  Widget _maybeShake(Square s, Widget child) {
+    if (widget.shakeSquare != s) {
+      return child;
+    }
+    return TweenAnimationBuilder<double>(
+      key: ValueKey('shake-${s.name}-$_shakeToken'),
+      tween: Tween(begin: 0, end: 1),
+      duration: const Duration(milliseconds: 300),
+      builder: (context, t, child) => Transform.rotate(
+        key: const Key('shake'),
+        angle: math.sin(t * math.pi * 3) * (1 - t) * 0.14,
+        child: child,
+      ),
+      child: child,
+    );
+  }
+
   Widget _squareWidget(
     Square s,
     double square,
@@ -301,10 +331,43 @@ class _BoardViewState extends State<BoardView> {
                 ),
               ),
             ),
+          if (h.danger.contains(s))
+            Center(
+              child: Container(
+                key: const Key('danger-dot'),
+                width: square * 0.4,
+                height: square * 0.4,
+                decoration: BoxDecoration(
+                  color: palette.check.withValues(alpha: 0.55),
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+          if (h.stars.contains(s))
+            Center(
+              child: Icon(
+                Icons.star_rounded,
+                key: Key('star-${s.name}'),
+                size: square * 0.7,
+                color: palette.selected,
+              ),
+            ),
+          if (h.ghosts[s] case final ghost? when piece == null)
+            Opacity(
+              key: Key('ghost-${s.name}'),
+              opacity: 0.35,
+              child: Padding(
+                padding: EdgeInsets.all(square * 0.06),
+                child: PieceImage(ghost),
+              ),
+            ),
           if (piece != null && !hidden.contains(s))
-            Padding(
-              padding: EdgeInsets.all(square * 0.06),
-              child: PieceImage(piece),
+            _maybeShake(
+              s,
+              Padding(
+                padding: EdgeInsets.all(square * 0.06),
+                child: PieceImage(piece),
+              ),
             ),
           if (h.moveTargets.contains(s))
             Center(

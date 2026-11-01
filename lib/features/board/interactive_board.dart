@@ -25,6 +25,10 @@ class InteractiveBoard extends StatefulWidget {
     this.enabled = true,
     this.size,
     this.promotionChooser = showPromotionPicker,
+    this.onRejected,
+    this.moveFilter,
+    this.extraHighlights = const BoardHighlights(),
+    this.shakeSquare,
   });
 
   final Position position;
@@ -38,6 +42,19 @@ class InteractiveBoard extends StatefulWidget {
   final bool enabled;
   final double? size;
   final PromotionChooser promotionChooser;
+
+  /// A tap that is neither an own piece nor an allowed target: an enemy
+  /// piece, an empty square, or a legal move the [moveFilter] excludes.
+  final ValueChanged<Square>? onRejected;
+
+  /// Only legal moves passing this filter are offered as targets.
+  final bool Function(Move move)? moveFilter;
+
+  /// Highlights laid over the board's own (stars, danger, ghosts...).
+  final BoardHighlights extraHighlights;
+
+  /// See [BoardView.shakeSquare].
+  final Square? shakeSquare;
 
   @override
   State<InteractiveBoard> createState() => _InteractiveBoardState();
@@ -74,10 +91,16 @@ class _InteractiveBoardState extends State<InteractiveBoard> {
     return piece != null && piece.color == widget.position.sideToMove;
   }
 
+  bool _allowed(Move m) => widget.moveFilter?.call(m) ?? true;
+
   void _select(Square s) {
     setState(() {
       _selected = s;
-      _targets = legalMoves(widget.position, from: s, rules: widget.rules);
+      _targets = legalMoves(
+        widget.position,
+        from: s,
+        rules: widget.rules,
+      ).where(_allowed).toList();
     });
   }
 
@@ -92,6 +115,7 @@ class _InteractiveBoardState extends State<InteractiveBoard> {
       _select(s);
     } else {
       setState(_clear);
+      widget.onRejected?.call(s);
     }
   }
 
@@ -111,6 +135,9 @@ class _InteractiveBoardState extends State<InteractiveBoard> {
       _play(candidates, dragged: true);
     } else {
       setState(_clear);
+      if (to != null && to != from) {
+        widget.onRejected?.call(to);
+      }
     }
   }
 
@@ -151,24 +178,26 @@ class _InteractiveBoardState extends State<InteractiveBoard> {
     final checked = isInCheck(position)
         ? position.kingSquare(position.sideToMove)
         : null;
+    final own = BoardHighlights(
+      selected: _selected,
+      moveTargets: {
+        for (final m in _targets)
+          if (!_isCapture(m)) m.to,
+      },
+      captureTargets: {
+        for (final m in _targets)
+          if (_isCapture(m)) m.to,
+      },
+      lastMove: widget.lastMove,
+      checkedKing: checked,
+    );
     return BoardView(
       position: position,
       orientation: widget.orientation,
       size: widget.size,
       animateMove: widget.lastMove == _draggedMove ? null : widget.lastMove,
-      highlights: BoardHighlights(
-        selected: _selected,
-        moveTargets: {
-          for (final m in _targets)
-            if (!_isCapture(m)) m.to,
-        },
-        captureTargets: {
-          for (final m in _targets)
-            if (_isCapture(m)) m.to,
-        },
-        lastMove: widget.lastMove,
-        checkedKing: checked,
-      ),
+      highlights: own.merge(widget.extraHighlights),
+      shakeSquare: widget.shakeSquare,
       onSquareTap: _onTap,
       onDragStart: _onDragStart,
       onDragEnd: _onDragEnd,
