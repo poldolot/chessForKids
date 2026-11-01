@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'app/app.dart';
 import 'core/tts_speaker.dart';
 import 'data/app_repository.dart';
+import 'features/games/game_catalog.dart';
 import 'state/app_state.dart';
 
 Future<void> main() async {
@@ -12,8 +13,9 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   final repository = AppRepository(await getApplicationDocumentsDirectory());
   final state = await AppState.load(repository);
+  final games = await loadMiniGames(rootBundle);
   final speaker = TtsSpeaker()
     ..enabled = state.settings.voiceEnabled
     ..rate = state.settings.speechRate;
-  runApp(ChessForKidsApp(state: state, speaker: speaker));
+  runApp(ChessForKidsApp(state: state, speaker: speaker, games: games));
 }

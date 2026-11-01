@@ -1,4 +1,5 @@
 import 'package:chess_for_kids/app/constants.dart';
+import 'package:chess_for_kids/app/route_observer.dart';
 import 'package:chess_for_kids/app/theme/app_theme.dart';
 import 'package:chess_for_kids/core/speaker.dart';
 import 'package:chess_for_kids/data/models.dart';
@@ -14,6 +15,7 @@ void main() {
   Widget wrap(Widget child) => ChangeNotifierProvider<Speaker>.value(
     value: fake,
     child: MaterialApp(
+      navigatorObservers: [appRouteObserver],
       home: AppTheme(
         ui: uiPaletteById('sky'),
         board: boardPaletteById('classic'),
@@ -85,4 +87,51 @@ void main() {
       greaterThanOrEqualTo(kMinTouchTarget),
     );
   });
+
+  testWidgets(
+    'a bubble covered by another route stays quiet and speaks on return',
+    (tester) async {
+      var text = 'One';
+      late StateSetter rebuild;
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) {
+              rebuild = setState;
+              return Column(
+                children: [
+                  TeacherBubble(
+                    theme: TeacherTheme.animals,
+                    avatarIndex: 1,
+                    text: text,
+                    speechKey: 'k',
+                  ),
+                  FilledButton(
+                    key: const Key('cover'),
+                    onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const Scaffold(body: Text('covering')),
+                      ),
+                    ),
+                    child: const Text('cover'),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(fake.spoken.length, 1);
+      await tester.tap(find.byKey(const Key('cover')));
+      await tester.pumpAndSettle();
+      rebuild(() => text = 'Two');
+      await tester.pump();
+      await tester.pump();
+      expect(fake.spoken.length, 1, reason: 'spoke while covered');
+      Navigator.of(tester.element(find.text('covering'))).pop();
+      await tester.pumpAndSettle();
+      expect(fake.spoken.map((s) => s.$2).toList(), ['One', 'Two']);
+    },
+  );
 }

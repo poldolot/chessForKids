@@ -21,7 +21,13 @@ final class TtsSpeaker extends Speaker {
   bool _available = false;
   bool _speaking = false;
 
-  /// A non-interrupting line waiting for the current one to finish.
+  /// Whether the line being spoken is a main (interrupting) line; hints are
+  /// never queued behind another hint, so a child tapping around hears the
+  /// hint once per teacher line, not once per tap.
+  bool _currentIsMain = true;
+
+  /// A non-interrupting line waiting for the current main line to finish;
+  /// a newer one replaces an older one.
   (String text, String key)? _pending;
 
   /// The language set-up in flight; speech waits for it instead of being
@@ -64,17 +70,20 @@ final class TtsSpeaker extends Speaker {
       return;
     }
     if (!interrupt && _speaking) {
-      _pending = (text, key);
+      if (_currentIsMain) {
+        _pending = (text, key);
+      }
       return;
     }
     if (interrupt) {
       _pending = null;
     }
-    await _speak(text);
+    await _speak(text, main: interrupt);
   }
 
-  Future<void> _speak(String text) async {
+  Future<void> _speak(String text, {required bool main}) async {
     _speaking = true;
+    _currentIsMain = main;
     await _guard(() async {
       await _tts.setSpeechRate(rate.ttsRate);
       await _tts.stop();
@@ -88,7 +97,7 @@ final class TtsSpeaker extends Speaker {
     final pending = _pending;
     if (pending != null && enabled && _available) {
       _pending = null;
-      _speak(pending.$1);
+      _speak(pending.$1, main: false);
     }
   }
 

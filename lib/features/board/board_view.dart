@@ -369,7 +369,18 @@ class _BoardViewState extends State<BoardView> {
                 child: PieceImage(piece),
               ),
             ),
-          if (h.moveTargets.contains(s))
+          // A star is the dot's colour, so a target on a star gets a frame.
+          if (h.moveTargets.contains(s) && h.stars.contains(s))
+            Container(
+              key: const Key('move-dot'),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: palette.moveDot,
+                  width: square * 0.09,
+                ),
+              ),
+            )
+          else if (h.moveTargets.contains(s))
             Center(
               child: Container(
                 key: const Key('move-dot'),

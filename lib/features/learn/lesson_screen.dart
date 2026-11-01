@@ -6,6 +6,9 @@ import '../../data/models.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../../widgets/teacher_bubble.dart';
+import '../games/game_catalog.dart';
+import '../games/game_model.dart';
+import '../games/games_screen.dart';
 import 'celebrate_view.dart';
 import 'lesson_model.dart';
 import 'lesson_strings.dart';
@@ -18,9 +21,19 @@ import 'widgets/step_dots.dart';
 
 /// Plays a lesson step by step, counts mistakes and ends with a celebration.
 class LessonScreen extends StatefulWidget {
-  const LessonScreen({super.key, required this.lesson, this.onFinished});
+  const LessonScreen({
+    super.key,
+    required this.lesson,
+    this.onFinished,
+    this.queueFirstLine = false,
+  });
 
   final Lesson lesson;
+
+  /// When the lesson is opened right after another line was spoken (a
+  /// locked mini-game), the first step's line waits for it instead of
+  /// cutting it off.
+  final bool queueFirstLine;
 
   /// Called when the child leaves the celebration; defaults to popping.
   final VoidCallback? onFinished;
@@ -140,6 +153,7 @@ class _LessonScreenState extends State<LessonScreen> {
                   avatarIndex: 2,
                   text: learnLine(l10n, step.lineKey),
                   speechKey: step.lineKey,
+                  interrupt: !(widget.queueFirstLine && _index == 0),
                 ),
                 const SizedBox(height: 12),
                 Expanded(child: _stepView(step)),
@@ -160,6 +174,13 @@ class _LessonScreenState extends State<LessonScreen> {
                     lesson: lesson,
                     mistakes: _mistakes,
                     onNext: _finish,
+                    playBuilder: switch (gameForLesson(
+                      context.read<List<MiniGame>>(),
+                      lesson.id,
+                    )) {
+                      final game? => (_) => gameEntryScreen(game),
+                      null => null,
+                    },
                   ),
                 ),
             ],

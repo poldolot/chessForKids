@@ -22,10 +22,11 @@ with recorded voice planned later. Polish and English at launch.
 
 ## Status
 
-Learn section ready: 14 lessons (six pieces, eight rules) with stars, badges and
-spoken guidance in Polish and English, on top of the app shell (profiles, menu,
-parent zone) and a tested chess rules engine. Mini-games and the computer opponent
-come next.
+Learn and Mini-games sections ready: 14 lessons (six pieces, eight rules) and five
+mini-games (Pawn War, Rook Roads, Bishop Tracks, King Race, The Hunt) with stars,
+badges, hints and spoken guidance in Polish and English, on top of the app shell
+(profiles, menu, parent zone) and a tested chess rules engine. The computer
+opponent comes next.
 
 ## License
 

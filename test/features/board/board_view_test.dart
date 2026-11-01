@@ -203,4 +203,33 @@ void main() {
       );
     },
   );
+
+  testWidgets('a move target on a star square is drawn as a frame, not a dot', (
+    tester,
+  ) async {
+    final a8 = Square.parse('a8');
+    final b8 = Square.parse('b8');
+    await pumpBoard(
+      tester,
+      BoardView(
+        position: Position.fromFen('8/8/8/8/8/8/8/R7 w - - 0 1'),
+        size: 320,
+        highlights: BoardHighlights(stars: {a8}, moveTargets: {a8, b8}),
+      ),
+    );
+    BoxDecoration decorationIn(Finder square) =>
+        tester
+                .widget<Container>(
+                  find.descendant(
+                    of: square,
+                    matching: find.byKey(const Key('move-dot')),
+                  ),
+                )
+                .decoration!
+            as BoxDecoration;
+    expect(decorationIn(sq('a8')).border, isNotNull);
+    expect(decorationIn(sq('a8')).color, isNull);
+    expect(decorationIn(sq('b8')).border, isNull);
+    expect(decorationIn(sq('b8')).shape, BoxShape.circle);
+  });
 }

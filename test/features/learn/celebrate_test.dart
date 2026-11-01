@@ -1,5 +1,9 @@
 import 'package:chess_for_kids/data/models.dart';
+import 'package:chess_for_kids/engine/engine.dart';
+import 'package:chess_for_kids/features/games/game_play_screen.dart';
 import 'package:chess_for_kids/features/learn/celebrate_view.dart';
+import 'package:chess_for_kids/features/learn/lesson_model.dart';
+import 'package:chess_for_kids/features/learn/lesson_screen.dart';
 import 'package:chess_for_kids/features/learn/lessons/catalog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -96,5 +100,41 @@ void main() {
     expect(app.state.currentProfile!.stars['lesson:pawn'], 1);
     await tester.tap(find.byKey(const Key('celebrate-next')));
     expect(next, 1);
+  });
+
+  testWidgets('after the pawn lesson a play button opens pawn war', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      app.wrap(LessonScreen(lesson: lessonById('pawn'), onFinished: () {})),
+    );
+    await tester.pump();
+    Future<void> tapMove(Move move) async {
+      await tester.tap(find.byKey(Key('sq-${move.from.name}')));
+      await tester.pump();
+      await tester.tap(find.byKey(Key('sq-${move.to.name}')));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pump();
+    }
+
+    await tester.tap(find.byKey(const Key('lesson-next')));
+    await tester.pump();
+    for (final step in lessonById('pawn').steps.whereType<BoardTaskStep>()) {
+      for (final move in step.solution) {
+        await tapMove(move);
+      }
+      await tester.tap(find.byKey(const Key('lesson-next')));
+      await tester.pump();
+    }
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('celebrate-play')), findsOneWidget);
+    await tester.tap(find.byKey(const Key('celebrate-play')));
+    await tester.pumpAndSettle();
+    expect(
+      tester.widget<GamePlayScreen>(find.byType(GamePlayScreen)).game.id,
+      'pawnWar',
+    );
+    await tester.pumpAndSettle();
   });
 }

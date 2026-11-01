@@ -6,6 +6,8 @@ import '../../data/models.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../../widgets/teacher_bubble.dart';
+import '../games/game_model.dart';
+import '../games/game_progress.dart';
 import '../learn/lesson_progress.dart';
 import '../profiles/avatar_image.dart';
 import '../profiles/profile_picker_screen.dart';
@@ -49,11 +51,15 @@ const Map<String, IconData> _badgeIcons = {
 
 /// Stars shown on a section tile (0–3). Mini-games fill in their own rule in
 /// plan 4; matches earn one tile star per ten match stars.
-int sectionStars(Profile profile, MenuSection section) {
+int sectionStars(
+  Profile profile,
+  MenuSection section, {
+  List<MiniGame> games = const [],
+}) {
   return switch (section) {
     MenuSection.play => (profile.matchStars ~/ 10).clamp(0, 3),
     MenuSection.learn => learnSectionStars(profile),
-    MenuSection.miniGames => 0,
+    MenuSection.miniGames => gamesSectionStars(profile, games),
   };
 }
 
@@ -79,6 +85,7 @@ class MainMenuScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final palette = AppTheme.of(context).ui;
     final profile = context.watch<AppState>().currentProfile;
+    final games = context.watch<List<MiniGame>>();
     if (profile == null) {
       return const ProfilePickerScreen();
     }
@@ -140,7 +147,7 @@ class MainMenuScreen extends StatelessWidget {
         subtitle: l10n.miniGamesSubtitle,
         icon: Icons.sports_esports_rounded,
         color: palette.games,
-        stars: sectionStars(profile, MenuSection.miniGames),
+        stars: sectionStars(profile, MenuSection.miniGames, games: games),
         onTap: () => _openSection(context, MenuSection.miniGames),
       ),
       const SizedBox(height: 14),

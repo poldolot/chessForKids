@@ -179,5 +179,42 @@
   "learnValuesTitle": "Values",
   "learnValuesIntro": "Every piece is worth something. The queen the most!",
   "learnValuesTask": "Which piece is worth more? Tap it.",
-  "learnValuesHint": "No, the other one is worth more."
+  "learnValuesHint": "No, the other one is worth more.",
+  "gamesTitle": "Mini-games",
+  "gamesCommonBoards": "Boards",
+  "gamesCommonHint": "Try this!",
+  "gamesCommonUndo": "Undo",
+  "gamesCommonAgain": "Again",
+  "gamesCommonNext": "Next",
+  "gamesCommonBack": "Back",
+  "gamesCommonWon": "You won! Well done!",
+  "gamesCommonLost": "Not this time. Try again!",
+  "gamesCommonLimit": "Out of moves. One more time!",
+  "gamesCommonYourMove": "Your move!",
+  "gamesCommonOpponentMoves": "My turn.",
+  "gamesCommonBadgeHunter": "Hunter badge! Ten wins!",
+  "gamesCommonBadgeCollector": "Fifty stars! Collector!",
+  "gamesPawnWarTitle": "Pawn War",
+  "gamesPawnWarIntro": "Your pawns against mine. Reach the far side or capture all of mine!",
+  "gamesPawnWarHint": "A pawn that reaches the end wins. Capture diagonally!",
+  "gamesRookRoadsTitle": "Rook Roads",
+  "gamesRookRoadsIntro": "Collect every star with the rook. As few moves as you can!",
+  "gamesRookRoadsHint": "The rook goes straight. Go around your own pawns.",
+  "gamesBishopTracksTitle": "Bishop Tracks",
+  "gamesBishopTracksIntro": "Collect the stars with the bishop. It stays on its color!",
+  "gamesBishopTracksHint": "The bishop moves only diagonally.",
+  "gamesKingRaceTitle": "King Race",
+  "gamesKingRaceIntro": "Walk the king to the other side. The red squares are dangerous!",
+  "gamesKingRaceHint": "Step by step. Avoid the red squares.",
+  "gamesHuntTitle": "The Hunt",
+  "gamesHuntIntro": "Catch the fleeing piece before you run out of moves!",
+  "gamesHuntHint": "Chase it! Capture when it is in reach.",
+  "gamesCommonLocked": "First the lesson: {lesson}. Come, I'll show you!",
+  "@gamesCommonLocked": {
+    "placeholders": {
+      "lesson": {
+        "type": "String"
+      }
+    }
+  }
 }

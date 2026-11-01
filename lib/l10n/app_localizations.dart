@@ -1009,6 +1009,186 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No, the other one is worth more.'**
   String get learnValuesHint;
+
+  /// No description provided for @gamesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mini-games'**
+  String get gamesTitle;
+
+  /// No description provided for @gamesCommonBoards.
+  ///
+  /// In en, this message translates to:
+  /// **'Boards'**
+  String get gamesCommonBoards;
+
+  /// No description provided for @gamesCommonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Try this!'**
+  String get gamesCommonHint;
+
+  /// No description provided for @gamesCommonUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get gamesCommonUndo;
+
+  /// No description provided for @gamesCommonAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Again'**
+  String get gamesCommonAgain;
+
+  /// No description provided for @gamesCommonNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get gamesCommonNext;
+
+  /// No description provided for @gamesCommonBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get gamesCommonBack;
+
+  /// No description provided for @gamesCommonWon.
+  ///
+  /// In en, this message translates to:
+  /// **'You won! Well done!'**
+  String get gamesCommonWon;
+
+  /// No description provided for @gamesCommonLost.
+  ///
+  /// In en, this message translates to:
+  /// **'Not this time. Try again!'**
+  String get gamesCommonLost;
+
+  /// No description provided for @gamesCommonLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Out of moves. One more time!'**
+  String get gamesCommonLimit;
+
+  /// No description provided for @gamesCommonYourMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Your move!'**
+  String get gamesCommonYourMove;
+
+  /// No description provided for @gamesCommonOpponentMoves.
+  ///
+  /// In en, this message translates to:
+  /// **'My turn.'**
+  String get gamesCommonOpponentMoves;
+
+  /// No description provided for @gamesCommonBadgeHunter.
+  ///
+  /// In en, this message translates to:
+  /// **'Hunter badge! Ten wins!'**
+  String get gamesCommonBadgeHunter;
+
+  /// No description provided for @gamesCommonBadgeCollector.
+  ///
+  /// In en, this message translates to:
+  /// **'Fifty stars! Collector!'**
+  String get gamesCommonBadgeCollector;
+
+  /// No description provided for @gamesPawnWarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pawn War'**
+  String get gamesPawnWarTitle;
+
+  /// No description provided for @gamesPawnWarIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Your pawns against mine. Reach the far side or capture all of mine!'**
+  String get gamesPawnWarIntro;
+
+  /// No description provided for @gamesPawnWarHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A pawn that reaches the end wins. Capture diagonally!'**
+  String get gamesPawnWarHint;
+
+  /// No description provided for @gamesRookRoadsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rook Roads'**
+  String get gamesRookRoadsTitle;
+
+  /// No description provided for @gamesRookRoadsIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Collect every star with the rook. As few moves as you can!'**
+  String get gamesRookRoadsIntro;
+
+  /// No description provided for @gamesRookRoadsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The rook goes straight. Go around your own pawns.'**
+  String get gamesRookRoadsHint;
+
+  /// No description provided for @gamesBishopTracksTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bishop Tracks'**
+  String get gamesBishopTracksTitle;
+
+  /// No description provided for @gamesBishopTracksIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Collect the stars with the bishop. It stays on its color!'**
+  String get gamesBishopTracksIntro;
+
+  /// No description provided for @gamesBishopTracksHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The bishop moves only diagonally.'**
+  String get gamesBishopTracksHint;
+
+  /// No description provided for @gamesKingRaceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'King Race'**
+  String get gamesKingRaceTitle;
+
+  /// No description provided for @gamesKingRaceIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Walk the king to the other side. The red squares are dangerous!'**
+  String get gamesKingRaceIntro;
+
+  /// No description provided for @gamesKingRaceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Step by step. Avoid the red squares.'**
+  String get gamesKingRaceHint;
+
+  /// No description provided for @gamesHuntTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The Hunt'**
+  String get gamesHuntTitle;
+
+  /// No description provided for @gamesHuntIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Catch the fleeing piece before you run out of moves!'**
+  String get gamesHuntIntro;
+
+  /// No description provided for @gamesHuntHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Chase it! Capture when it is in reach.'**
+  String get gamesHuntHint;
+
+  /// No description provided for @gamesCommonLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'First the lesson: {lesson}. Come, I\'ll show you!'**
+  String gamesCommonLocked(String lesson);
 }
 
 class _AppLocalizationsDelegate

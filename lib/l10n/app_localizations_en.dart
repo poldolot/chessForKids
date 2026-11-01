@@ -502,4 +502,103 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get learnValuesHint => 'No, the other one is worth more.';
+
+  @override
+  String get gamesTitle => 'Mini-games';
+
+  @override
+  String get gamesCommonBoards => 'Boards';
+
+  @override
+  String get gamesCommonHint => 'Try this!';
+
+  @override
+  String get gamesCommonUndo => 'Undo';
+
+  @override
+  String get gamesCommonAgain => 'Again';
+
+  @override
+  String get gamesCommonNext => 'Next';
+
+  @override
+  String get gamesCommonBack => 'Back';
+
+  @override
+  String get gamesCommonWon => 'You won! Well done!';
+
+  @override
+  String get gamesCommonLost => 'Not this time. Try again!';
+
+  @override
+  String get gamesCommonLimit => 'Out of moves. One more time!';
+
+  @override
+  String get gamesCommonYourMove => 'Your move!';
+
+  @override
+  String get gamesCommonOpponentMoves => 'My turn.';
+
+  @override
+  String get gamesCommonBadgeHunter => 'Hunter badge! Ten wins!';
+
+  @override
+  String get gamesCommonBadgeCollector => 'Fifty stars! Collector!';
+
+  @override
+  String get gamesPawnWarTitle => 'Pawn War';
+
+  @override
+  String get gamesPawnWarIntro =>
+      'Your pawns against mine. Reach the far side or capture all of mine!';
+
+  @override
+  String get gamesPawnWarHint =>
+      'A pawn that reaches the end wins. Capture diagonally!';
+
+  @override
+  String get gamesRookRoadsTitle => 'Rook Roads';
+
+  @override
+  String get gamesRookRoadsIntro =>
+      'Collect every star with the rook. As few moves as you can!';
+
+  @override
+  String get gamesRookRoadsHint =>
+      'The rook goes straight. Go around your own pawns.';
+
+  @override
+  String get gamesBishopTracksTitle => 'Bishop Tracks';
+
+  @override
+  String get gamesBishopTracksIntro =>
+      'Collect the stars with the bishop. It stays on its color!';
+
+  @override
+  String get gamesBishopTracksHint => 'The bishop moves only diagonally.';
+
+  @override
+  String get gamesKingRaceTitle => 'King Race';
+
+  @override
+  String get gamesKingRaceIntro =>
+      'Walk the king to the other side. The red squares are dangerous!';
+
+  @override
+  String get gamesKingRaceHint => 'Step by step. Avoid the red squares.';
+
+  @override
+  String get gamesHuntTitle => 'The Hunt';
+
+  @override
+  String get gamesHuntIntro =>
+      'Catch the fleeing piece before you run out of moves!';
+
+  @override
+  String get gamesHuntHint => 'Chase it! Capture when it is in reach.';
+
+  @override
+  String gamesCommonLocked(String lesson) {
+    return 'First the lesson: $lesson. Come, I\'ll show you!';
+  }
 }

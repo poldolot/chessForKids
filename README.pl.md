@@ -23,9 +23,11 @@ nagrania lektora w planach. Polski i angielski od startu.
 
 ## Stan prac
 
-Gotowy moduł Nauka: 14 lekcji (sześć figur, osiem zasad) z gwiazdkami, odznakami
-i głosem po polsku i angielsku, na bazie szkieletu aplikacji (profile, menu, strefa
-rodzica) i przetestowanego silnika reguł. Dalej: mini‑gry i komputerowy przeciwnik.
+Gotowe moduły Nauka i Mini‑gry: 14 lekcji (sześć figur, osiem zasad) i pięć
+mini‑gier (Wojna pionów, Drogi wieży, Tory gońca, Wyścig królem, Polowanie)
+z gwiazdkami, odznakami, podpowiedziami i głosem po polsku i angielsku, na bazie
+szkieletu aplikacji (profile, menu, strefa rodzica) i przetestowanego silnika reguł.
+Dalej: komputerowy przeciwnik.
 
 ## Licencja
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../app/route_observer.dart';
 import '../app/theme/app_theme.dart';
 import '../core/speaker.dart';
 import '../data/models.dart';
@@ -19,6 +20,7 @@ class TeacherBubble extends StatefulWidget {
     this.speakOnShow = true,
     this.showSpeakButton = true,
     this.avatarSize = 64,
+    this.interrupt = true,
   });
 
   final TeacherTheme theme;
@@ -29,16 +31,40 @@ class TeacherBubble extends StatefulWidget {
   final bool showSpeakButton;
   final double avatarSize;
 
+  /// Whether the line cuts off whatever is being spoken; `false` queues it
+  /// behind the current main line instead.
+  final bool interrupt;
+
   @override
   State<TeacherBubble> createState() => _TeacherBubbleState();
 }
 
-class _TeacherBubbleState extends State<TeacherBubble> {
+class _TeacherBubbleState extends State<TeacherBubble> with RouteAware {
+  /// A line that arrived while another screen covered this one; spoken
+  /// when the child comes back.
+  bool _pending = false;
+  ModalRoute<void>? _route;
+
   @override
   void initState() {
     super.initState();
     if (widget.speakOnShow) {
       _speak();
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route != _route) {
+      if (_route != null) {
+        appRouteObserver.unsubscribe(this);
+      }
+      _route = route;
+      if (route != null) {
+        appRouteObserver.subscribe(this, route);
+      }
     }
   }
 
@@ -50,12 +76,36 @@ class _TeacherBubbleState extends State<TeacherBubble> {
     }
   }
 
+  @override
+  void didPopNext() {
+    if (_pending) {
+      _pending = false;
+      _speak();
+    }
+  }
+
+  @override
+  void dispose() {
+    appRouteObserver.unsubscribe(this);
+    super.dispose();
+  }
+
   void _speak() {
     final speaker = context.read<Speaker>();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        speaker.say(widget.text, key: widget.speechKey);
+      if (!mounted) {
+        return;
       }
+      final route = ModalRoute.of(context);
+      if (route != null && !route.isCurrent) {
+        _pending = true;
+        return;
+      }
+      speaker.say(
+        widget.text,
+        key: widget.speechKey,
+        interrupt: widget.interrupt,
+      );
     });
   }
 

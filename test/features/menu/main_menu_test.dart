@@ -155,6 +155,24 @@ void main() {
     );
   });
 
+  test('section stars for mini-games use the game catalog', () {
+    const base = Profile(
+      id: 'x',
+      name: '',
+      theme: TeacherTheme.ufo,
+      avatarIndex: 1,
+    );
+    expect(sectionStars(base, MenuSection.miniGames, games: app.games), 0);
+    expect(
+      sectionStars(
+        base.copyWith(stars: {'game:rookRoads:0': 3}),
+        MenuSection.miniGames,
+        games: app.games,
+      ),
+      1,
+    );
+  });
+
   test('section stars for play grow with match stars', () {
     const base = Profile(
       id: 'x',

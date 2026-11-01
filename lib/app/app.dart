@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../core/speaker.dart';
+import '../features/games/game_model.dart';
+import '../features/games/games_screen.dart';
 import '../features/learn/learn_screen.dart';
-import '../features/menu/coming_soon_screen.dart';
 import '../features/menu/main_menu_screen.dart';
 import '../features/menu/menu_tile.dart';
 import '../features/parent/parent_gate_screen.dart';
@@ -12,6 +13,7 @@ import '../features/profiles/profile_wizard_screen.dart';
 import '../features/sandbox/sandbox_screen.dart';
 import '../l10n/app_localizations.dart';
 import '../state/app_state.dart';
+import 'route_observer.dart';
 import 'theme/app_theme.dart';
 
 /// Root widget: providers, theme, locale and the start screen.
@@ -20,10 +22,12 @@ class ChessForKidsApp extends StatelessWidget {
     super.key,
     required this.state,
     required this.speaker,
+    required this.games,
   });
 
   final AppState state;
   final Speaker speaker;
+  final List<MiniGame> games;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +35,7 @@ class ChessForKidsApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<AppState>.value(value: state),
         ChangeNotifierProvider<Speaker>.value(value: speaker),
+        Provider<List<MiniGame>>.value(value: games),
       ],
       child: Consumer<AppState>(
         builder: (context, state, _) {
@@ -49,6 +54,7 @@ class ChessForKidsApp extends StatelessWidget {
                 ? const Locale('pl')
                 : const Locale('en'),
             theme: buildTheme(ui),
+            navigatorObservers: [appRouteObserver],
             builder: (context, child) => AppTheme(
               ui: ui,
               board: board,
@@ -116,7 +122,7 @@ class _Home extends StatelessWidget {
     final Widget screen = switch (section) {
       MenuSection.play => const SandboxScreen(),
       MenuSection.learn => const LearnScreen(),
-      MenuSection.miniGames => const ComingSoonScreen(),
+      MenuSection.miniGames => const GamesScreen(),
     };
     Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => screen));
   }

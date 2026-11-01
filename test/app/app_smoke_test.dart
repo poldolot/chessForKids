@@ -2,6 +2,9 @@ import 'package:chess_for_kids/app/app.dart';
 import 'package:chess_for_kids/core/speaker.dart';
 import 'package:chess_for_kids/data/models.dart';
 import 'package:chess_for_kids/features/board/piece_image.dart';
+import 'package:chess_for_kids/features/games/game_catalog.dart';
+import 'package:chess_for_kids/features/games/game_model.dart';
+import 'package:chess_for_kids/features/games/games_screen.dart';
 import 'package:chess_for_kids/features/learn/learn_screen.dart';
 import 'package:chess_for_kids/features/menu/main_menu_screen.dart';
 import 'package:chess_for_kids/features/parent/parent_gate_screen.dart';
@@ -10,13 +13,17 @@ import 'package:chess_for_kids/features/profiles/profile_wizard_screen.dart';
 import 'package:chess_for_kids/features/sandbox/sandbox_screen.dart';
 import 'package:chess_for_kids/state/app_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../support/memory_store.dart';
 
 void main() {
   late MemoryStore store;
+  late List<MiniGame> games;
   late FakeSpeaker speaker;
+
+  setUpAll(() async => games = await loadMiniGames(rootBundle));
 
   setUp(() {
     EditableText.debugDeterministicCursor = true;
@@ -37,7 +44,9 @@ void main() {
 
   Future<AppState> pumpApp(WidgetTester tester) async {
     final state = await AppState.load(store);
-    await tester.pumpWidget(ChessForKidsApp(state: state, speaker: speaker));
+    await tester.pumpWidget(
+      ChessForKidsApp(state: state, speaker: speaker, games: games),
+    );
     await tester.pumpAndSettle();
     return state;
   }
@@ -217,5 +226,14 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(LearnScreen), findsOneWidget);
     expect(find.byKey(const Key('lesson-pawn')), findsOneWidget);
+  });
+
+  testWidgets('mini-games tile opens the games list', (tester) async {
+    await seedProfile(lastId: 'keep');
+    await pumpApp(tester);
+    await tester.tap(find.byKey(const Key('tile-miniGames')));
+    await tester.pumpAndSettle();
+    expect(find.byType(GamesScreen), findsOneWidget);
+    expect(find.byKey(const Key('game-pawnWar')), findsOneWidget);
   });
 }

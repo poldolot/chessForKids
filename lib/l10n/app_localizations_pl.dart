@@ -499,4 +499,102 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get learnValuesHint => 'Nie, ta druga jest cenniejsza.';
+
+  @override
+  String get gamesTitle => 'Mini-gry';
+
+  @override
+  String get gamesCommonBoards => 'Plansze';
+
+  @override
+  String get gamesCommonHint => 'Spróbuj tak!';
+
+  @override
+  String get gamesCommonUndo => 'Cofnij';
+
+  @override
+  String get gamesCommonAgain => 'Jeszcze raz';
+
+  @override
+  String get gamesCommonNext => 'Następna';
+
+  @override
+  String get gamesCommonBack => 'Wróć';
+
+  @override
+  String get gamesCommonWon => 'Wygrana! Brawo!';
+
+  @override
+  String get gamesCommonLost => 'Tym razem nie wyszło. Spróbuj jeszcze raz!';
+
+  @override
+  String get gamesCommonLimit => 'Skończyły się ruchy. Jeszcze raz!';
+
+  @override
+  String get gamesCommonYourMove => 'Twój ruch!';
+
+  @override
+  String get gamesCommonOpponentMoves => 'Teraz ja.';
+
+  @override
+  String get gamesCommonBadgeHunter => 'Odznaka Łowcy! Dziesięć wygranych!';
+
+  @override
+  String get gamesCommonBadgeCollector => 'Pięćdziesiąt gwiazdek! Kolekcjoner!';
+
+  @override
+  String get gamesPawnWarTitle => 'Wojna pionów';
+
+  @override
+  String get gamesPawnWarIntro =>
+      'Twoje pionki kontra moje. Dojdź pionkiem na drugi koniec albo zbij wszystkie moje!';
+
+  @override
+  String get gamesPawnWarHint =>
+      'Pionek, który dojdzie na koniec, wygrywa. Bij na ukos!';
+
+  @override
+  String get gamesRookRoadsTitle => 'Drogi wieży';
+
+  @override
+  String get gamesRookRoadsIntro =>
+      'Zbierz wieżą wszystkie gwiazdki. Jak najmniej ruchów!';
+
+  @override
+  String get gamesRookRoadsHint => 'Wieża jedzie prosto. Omijaj swoje pionki.';
+
+  @override
+  String get gamesBishopTracksTitle => 'Tory gońca';
+
+  @override
+  String get gamesBishopTracksIntro =>
+      'Zbierz gońcem gwiazdki. Goniec zostaje na swoim kolorze!';
+
+  @override
+  String get gamesBishopTracksHint => 'Goniec jeździ tylko na ukos.';
+
+  @override
+  String get gamesKingRaceTitle => 'Wyścig królem';
+
+  @override
+  String get gamesKingRaceIntro =>
+      'Przeprowadź króla na drugą stronę. Czerwone pola są niebezpieczne!';
+
+  @override
+  String get gamesKingRaceHint => 'Krok po kroku. Omijaj czerwone pola.';
+
+  @override
+  String get gamesHuntTitle => 'Polowanie';
+
+  @override
+  String get gamesHuntIntro =>
+      'Złap uciekającą figurę, zanim skończą się ruchy!';
+
+  @override
+  String get gamesHuntHint => 'Goń ją! Zbij, gdy będzie w zasięgu.';
+
+  @override
+  String gamesCommonLocked(String lesson) {
+    return 'Najpierw lekcja: $lesson. Chodź, pokażę!';
+  }
 }
