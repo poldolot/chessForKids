@@ -1,5 +1,6 @@
 import 'package:chess_for_kids/app/constants.dart';
 import 'package:chess_for_kids/data/models.dart';
+import 'package:chess_for_kids/features/menu/badges_screen.dart';
 import 'package:chess_for_kids/features/menu/coming_soon_screen.dart';
 import 'package:chess_for_kids/features/menu/main_menu_screen.dart';
 import 'package:chess_for_kids/features/menu/menu_tile.dart';
@@ -184,5 +185,50 @@ void main() {
     expect(sectionStars(base.copyWith(matchStars: 10), MenuSection.play), 1);
     expect(sectionStars(base.copyWith(matchStars: 45), MenuSection.play), 3);
     expect(sectionStars(base, MenuSection.miniGames), 0);
+  });
+
+  testWidgets('tapping a badge shows and speaks its name and meaning', (
+    tester,
+  ) async {
+    await app.state.awardBadge('rook');
+    await pumpMenu(tester);
+    await tester.tap(find.byKey(const Key('badge-rook')));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Wieża'), findsOneWidget);
+    expect(app.speaker.spoken.last.$1, 'menu.badge');
+    expect(app.speaker.spoken.last.$2, contains('Wieża'));
+    expect(app.speaker.spoken.last.$2, contains('lekcję'));
+    // A badge not earned yet tells what it is for too.
+    await tester.tap(find.byKey(const Key('badge-collector')));
+    await tester.pumpAndSettle();
+    expect(app.speaker.spoken.last.$2, contains('Kolekcjoner'));
+  });
+
+  testWidgets('the badge list screen names every badge and speaks on tap', (
+    tester,
+  ) async {
+    await app.state.awardBadge('pawn');
+    await pumpMenu(tester);
+    await tester.tap(find.byKey(const Key('badges-all')));
+    await tester.pumpAndSettle();
+    expect(find.byType(BadgesScreen), findsOneWidget);
+    expect(app.speaker.spoken.last.$1, 'menu.badges');
+    for (final id in kBadgeIds) {
+      expect(find.byKey(Key('badge-tile-$id')), findsOneWidget, reason: id);
+    }
+    expect(find.text('Pion'), findsOneWidget);
+    expect(find.text('Kolekcjoner'), findsOneWidget);
+    expect(
+      tester.widget<BadgeTile>(find.byKey(const Key('badge-tile-pawn'))).earned,
+      isTrue,
+    );
+    expect(
+      tester.widget<BadgeTile>(find.byKey(const Key('badge-tile-rook'))).earned,
+      isFalse,
+    );
+    await tester.ensureVisible(find.byKey(const Key('badge-tile-hunter')));
+    await tester.tap(find.byKey(const Key('badge-tile-hunter')));
+    await tester.pump();
+    expect(app.speaker.spoken.last.$2, contains('Łowca'));
   });
 }

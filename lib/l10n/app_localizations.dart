@@ -1285,6 +1285,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Badge: persistent player!'**
   String get matchBadgePersistent;
+
+  /// No description provided for @badgesAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All badges'**
+  String get badgesAll;
+
+  /// No description provided for @badgesYours.
+  ///
+  /// In en, this message translates to:
+  /// **'Your badges. Tap one and I will tell you what it is for!'**
+  String get badgesYours;
+
+  /// No description provided for @badgePawnName.
+  ///
+  /// In en, this message translates to:
+  /// **'Pawn'**
+  String get badgePawnName;
+
+  /// No description provided for @badgePawnDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'For the pawn lesson.'**
+  String get badgePawnDesc;
+
+  /// No description provided for @badgeRookName.
+  ///
+  /// In en, this message translates to:
+  /// **'Rook'**
+  String get badgeRookName;
+
+  /// No description provided for @badgeRookDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'For the rook lesson.'**
+  String get badgeRookDesc;
+
+  /// No description provided for @badgeBishopName.
+  ///
+  /// In en, this message translates to:
+  /// **'Bishop'**
+  String get badgeBishopName;
+
+  /// No description provided for @badgeBishopDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'For the bishop lesson.'**
+  String get badgeBishopDesc;
+
+  /// No description provided for @badgeQueenName.
+  ///
+  /// In en, this message translates to:
+  /// **'Queen'**
+  String get badgeQueenName;
+
+  /// No description provided for @badgeQueenDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'For the queen lesson.'**
+  String get badgeQueenDesc;
+
+  /// No description provided for @badgeKingName.
+  ///
+  /// In en, this message translates to:
+  /// **'King'**
+  String get badgeKingName;
+
+  /// No description provided for @badgeKingDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'For the king lesson.'**
+  String get badgeKingDesc;
+
+  /// No description provided for @badgeKnightName.
+  ///
+  /// In en, this message translates to:
+  /// **'Knight'**
+  String get badgeKnightName;
+
+  /// No description provided for @badgeKnightDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'For the knight lesson.'**
+  String get badgeKnightDesc;
+
+  /// No description provided for @badgeChessPlayerName.
+  ///
+  /// In en, this message translates to:
+  /// **'Chess player'**
+  String get badgeChessPlayerName;
+
+  /// No description provided for @badgeChessPlayerDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'For every lesson about the rules.'**
+  String get badgeChessPlayerDesc;
+
+  /// No description provided for @badgeFirstMatchName.
+  ///
+  /// In en, this message translates to:
+  /// **'First match'**
+  String get badgeFirstMatchName;
+
+  /// No description provided for @badgeFirstMatchDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'For the first finished match.'**
+  String get badgeFirstMatchDesc;
+
+  /// No description provided for @badgeFirstWinName.
+  ///
+  /// In en, this message translates to:
+  /// **'First win'**
+  String get badgeFirstWinName;
+
+  /// No description provided for @badgeFirstWinDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'For the first match you won.'**
+  String get badgeFirstWinDesc;
+
+  /// No description provided for @badgePersistentName.
+  ///
+  /// In en, this message translates to:
+  /// **'Persistent'**
+  String get badgePersistentName;
+
+  /// No description provided for @badgePersistentDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'For ten finished matches.'**
+  String get badgePersistentDesc;
+
+  /// No description provided for @badgeHunterName.
+  ///
+  /// In en, this message translates to:
+  /// **'Hunter'**
+  String get badgeHunterName;
+
+  /// No description provided for @badgeHunterDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'For ten mini-games won.'**
+  String get badgeHunterDesc;
+
+  /// No description provided for @badgeCollectorName.
+  ///
+  /// In en, this message translates to:
+  /// **'Collector'**
+  String get badgeCollectorName;
+
+  /// No description provided for @badgeCollectorDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'For fifty stars.'**
+  String get badgeCollectorDesc;
 }
 
 class _AppLocalizationsDelegate

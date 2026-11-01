@@ -645,4 +645,82 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get matchBadgePersistent => 'Odznaka: wytrwały gracz!';
+
+  @override
+  String get badgesAll => 'Wszystkie odznaki';
+
+  @override
+  String get badgesYours => 'Twoje odznaki. Dotknij, a powiem, za co są!';
+
+  @override
+  String get badgePawnName => 'Pion';
+
+  @override
+  String get badgePawnDesc => 'Za lekcję o pionie.';
+
+  @override
+  String get badgeRookName => 'Wieża';
+
+  @override
+  String get badgeRookDesc => 'Za lekcję o wieży.';
+
+  @override
+  String get badgeBishopName => 'Goniec';
+
+  @override
+  String get badgeBishopDesc => 'Za lekcję o gońcu.';
+
+  @override
+  String get badgeQueenName => 'Hetman';
+
+  @override
+  String get badgeQueenDesc => 'Za lekcję o hetmanie.';
+
+  @override
+  String get badgeKingName => 'Król';
+
+  @override
+  String get badgeKingDesc => 'Za lekcję o królu.';
+
+  @override
+  String get badgeKnightName => 'Skoczek';
+
+  @override
+  String get badgeKnightDesc => 'Za lekcję o skoczku.';
+
+  @override
+  String get badgeChessPlayerName => 'Szachista';
+
+  @override
+  String get badgeChessPlayerDesc => 'Za wszystkie lekcje o zasadach.';
+
+  @override
+  String get badgeFirstMatchName => 'Pierwsza partia';
+
+  @override
+  String get badgeFirstMatchDesc => 'Za pierwszą dokończoną partię.';
+
+  @override
+  String get badgeFirstWinName => 'Pierwsze zwycięstwo';
+
+  @override
+  String get badgeFirstWinDesc => 'Za pierwszą wygraną partię.';
+
+  @override
+  String get badgePersistentName => 'Wytrwały';
+
+  @override
+  String get badgePersistentDesc => 'Za dziesięć dokończonych partii.';
+
+  @override
+  String get badgeHunterName => 'Łowca';
+
+  @override
+  String get badgeHunterDesc => 'Za dziesięć wygranych mini-gier.';
+
+  @override
+  String get badgeCollectorName => 'Kolekcjoner';
+
+  @override
+  String get badgeCollectorDesc => 'Za pięćdziesiąt gwiazdek.';
 }

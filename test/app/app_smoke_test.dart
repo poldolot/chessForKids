@@ -204,4 +204,18 @@ void main() {
     expect(find.byType(GamesScreen), findsOneWidget);
     expect(find.byKey(const Key('game-pawnWar')), findsOneWidget);
   });
+
+  testWidgets('back from the menu returns to the profiles, back again leaves', (
+    tester,
+  ) async {
+    await seedProfile(lastId: 'keep');
+    final state = await pumpApp(tester);
+    expect(find.byType(MainMenuScreen), findsOneWidget);
+    expect(await tester.binding.handlePopRoute(), isTrue);
+    await tester.pumpAndSettle();
+    expect(find.byType(ProfilePickerScreen), findsOneWidget);
+    expect(state.currentProfile, isNull);
+    // The picker is the root now: the system may close the app.
+    expect(await tester.binding.handlePopRoute(), isFalse);
+  });
 }

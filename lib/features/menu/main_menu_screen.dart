@@ -11,6 +11,8 @@ import '../games/game_progress.dart';
 import '../learn/lesson_progress.dart';
 import '../profiles/avatar_image.dart';
 import '../profiles/profile_picker_screen.dart';
+import 'badge_strings.dart';
+import 'badges_screen.dart';
 import 'coming_soon_screen.dart';
 import 'menu_tile.dart';
 import 'parent_lock_button.dart';
@@ -64,15 +66,24 @@ int sectionStars(
 }
 
 /// The child's home screen: greeting, three section tiles, badges, parent lock.
-class MainMenuScreen extends StatelessWidget {
+class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key, this.onSection, this.onParentZone});
 
   final ValueChanged<MenuSection>? onSection;
   final VoidCallback? onParentZone;
 
+  @override
+  State<MainMenuScreen> createState() => _MainMenuScreenState();
+}
+
+class _MainMenuScreenState extends State<MainMenuScreen> {
+  /// A badge the child tapped: the bubble names it instead of greeting.
+  String? _badge;
+
   void _openSection(BuildContext context, MenuSection section) {
+    final onSection = widget.onSection;
     if (onSection != null) {
-      onSection!(section);
+      onSection(section);
     } else {
       Navigator.of(
         context,
@@ -118,15 +129,16 @@ class MainMenuScreen extends StatelessWidget {
         const Spacer(),
         ParentLockButton(
           key: const Key('parent-lock'),
-          onUnlocked: () => onParentZone?.call(),
+          onUnlocked: () => widget.onParentZone?.call(),
         ),
       ],
     );
+    final badge = _badge;
     final bubble = TeacherBubble(
       theme: profile.theme,
       avatarIndex: 1,
-      text: greeting,
-      speechKey: 'menu.greeting',
+      text: badge == null ? greeting : badgeLine(l10n, badge),
+      speechKey: badge == null ? 'menu.greeting' : 'menu.badge',
     );
     final tiles = [
       MenuTile(
@@ -162,43 +174,58 @@ class MainMenuScreen extends StatelessWidget {
         onTap: () => _openSection(context, MenuSection.play),
       ),
     ];
-    final badges = _BadgeRow(earned: profile.badges);
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              // Tall screens spread the content out; short ones scroll.
-              if (constraints.maxHeight >= _comfortableHeight) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    header,
-                    const SizedBox(height: 12),
-                    bubble,
-                    const Spacer(),
-                    ...tiles,
-                    const Spacer(),
-                    badges,
-                  ],
+    final badges = _BadgeRow(
+      earned: profile.badges,
+      onTap: (id) => setState(() => _badge = id),
+      onAll: () => Navigator.of(context)
+          .push(MaterialPageRoute<void>(builder: (_) => const BadgesScreen())),
+    );
+    final state = context.read<AppState>();
+    return PopScope(
+      // The system back button goes to the profiles, not out of the app.
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) {
+          state.deselectProfile();
+        }
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                // Tall screens spread the content out; short ones scroll.
+                if (constraints.maxHeight >= _comfortableHeight) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      header,
+                      const SizedBox(height: 12),
+                      bubble,
+                      const Spacer(),
+                      ...tiles,
+                      const Spacer(),
+                      badges,
+                    ],
+                  );
+                }
+                return SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      header,
+                      const SizedBox(height: 12),
+                      bubble,
+                      const SizedBox(height: 20),
+                      ...tiles,
+                      const SizedBox(height: 20),
+                      badges,
+                    ],
+                  ),
                 );
-              }
-              return SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    header,
-                    const SizedBox(height: 12),
-                    bubble,
-                    const SizedBox(height: 20),
-                    ...tiles,
-                    const SizedBox(height: 20),
-                    badges,
-                  ],
-                ),
-              );
-            },
+              },
+            ),
           ),
         ),
       ),
@@ -210,12 +237,19 @@ class MainMenuScreen extends StatelessWidget {
 }
 
 class _BadgeRow extends StatelessWidget {
-  const _BadgeRow({required this.earned});
+  const _BadgeRow({
+    required this.earned,
+    required this.onTap,
+    required this.onAll,
+  });
 
   final Set<String> earned;
+  final ValueChanged<String> onTap;
+  final VoidCallback onAll;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final palette = AppTheme.of(context).ui;
     return Wrap(
       alignment: WrapAlignment.center,
@@ -223,22 +257,52 @@ class _BadgeRow extends StatelessWidget {
       runSpacing: 8,
       children: [
         for (final id in kBadgeIds)
-          Container(
-            key: ValueKey('badge-$id'),
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: earned.contains(id) ? palette.accent : palette.surface,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              _badgeIcons[id],
-              size: 22,
-              color: earned.contains(id)
-                  ? palette.text
-                  : palette.muted.withValues(alpha: 0.35),
+          Semantics(
+            label: badgeName(l10n, id),
+            button: true,
+            child: InkWell(
+              key: ValueKey('badge-$id'),
+              borderRadius: BorderRadius.circular(20),
+              onTap: () => onTap(id),
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: earned.contains(id) ? palette.accent : palette.surface,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  _badgeIcons[id],
+                  size: 22,
+                  color: earned.contains(id)
+                      ? palette.text
+                      : palette.muted.withValues(alpha: 0.35),
+                ),
+              ),
             ),
           ),
+        Semantics(
+          label: l10n.badgesAll,
+          button: true,
+          child: InkWell(
+            key: const Key('badges-all'),
+            borderRadius: BorderRadius.circular(20),
+            onTap: onAll,
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                border: Border.all(color: palette.muted, width: 2),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.more_horiz_rounded,
+                size: 22,
+                color: palette.muted,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

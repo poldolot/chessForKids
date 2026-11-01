@@ -649,4 +649,83 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get matchBadgePersistent => 'Badge: persistent player!';
+
+  @override
+  String get badgesAll => 'All badges';
+
+  @override
+  String get badgesYours =>
+      'Your badges. Tap one and I will tell you what it is for!';
+
+  @override
+  String get badgePawnName => 'Pawn';
+
+  @override
+  String get badgePawnDesc => 'For the pawn lesson.';
+
+  @override
+  String get badgeRookName => 'Rook';
+
+  @override
+  String get badgeRookDesc => 'For the rook lesson.';
+
+  @override
+  String get badgeBishopName => 'Bishop';
+
+  @override
+  String get badgeBishopDesc => 'For the bishop lesson.';
+
+  @override
+  String get badgeQueenName => 'Queen';
+
+  @override
+  String get badgeQueenDesc => 'For the queen lesson.';
+
+  @override
+  String get badgeKingName => 'King';
+
+  @override
+  String get badgeKingDesc => 'For the king lesson.';
+
+  @override
+  String get badgeKnightName => 'Knight';
+
+  @override
+  String get badgeKnightDesc => 'For the knight lesson.';
+
+  @override
+  String get badgeChessPlayerName => 'Chess player';
+
+  @override
+  String get badgeChessPlayerDesc => 'For every lesson about the rules.';
+
+  @override
+  String get badgeFirstMatchName => 'First match';
+
+  @override
+  String get badgeFirstMatchDesc => 'For the first finished match.';
+
+  @override
+  String get badgeFirstWinName => 'First win';
+
+  @override
+  String get badgeFirstWinDesc => 'For the first match you won.';
+
+  @override
+  String get badgePersistentName => 'Persistent';
+
+  @override
+  String get badgePersistentDesc => 'For ten finished matches.';
+
+  @override
+  String get badgeHunterName => 'Hunter';
+
+  @override
+  String get badgeHunterDesc => 'For ten mini-games won.';
+
+  @override
+  String get badgeCollectorName => 'Collector';
+
+  @override
+  String get badgeCollectorDesc => 'For fifty stars.';
 }
