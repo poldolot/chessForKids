@@ -56,10 +56,21 @@ abstract class Speaker extends ChangeNotifier {
 
   /// Says [text]. [key] identifies the line for future recordings.
   /// Does nothing audible while [enabled] is false.
+  ///
+  /// With [interrupt] false the line never cuts a line that is still being
+  /// spoken: it waits for it to finish (a newer waiting line replaces an
+  /// older one). Hints use this so a child tapping around does not keep
+  /// restarting the teacher.
   @mustCallSuper
-  Future<void> say(String text, {required String key}) async {
-    _lastText = text;
-    _lastKey = key;
+  Future<void> say(
+    String text, {
+    required String key,
+    bool interrupt = true,
+  }) async {
+    if (interrupt) {
+      _lastText = text;
+      _lastKey = key;
+    }
   }
 
   /// Says the last text again.
@@ -77,6 +88,9 @@ abstract class Speaker extends ChangeNotifier {
 /// In-memory speaker for tests and for the sandbox screen.
 final class FakeSpeaker extends Speaker {
   final List<(String key, String text)> spoken = [];
+
+  /// Keys of lines spoken with `interrupt: false`.
+  final List<String> nonInterrupting = [];
   String? language;
 
   @override
@@ -88,10 +102,17 @@ final class FakeSpeaker extends Speaker {
   }
 
   @override
-  Future<void> say(String text, {required String key}) async {
-    await super.say(text, key: key);
+  Future<void> say(
+    String text, {
+    required String key,
+    bool interrupt = true,
+  }) async {
+    await super.say(text, key: key, interrupt: interrupt);
     if (enabled) {
       spoken.add((key, text));
+      if (!interrupt) {
+        nonInterrupting.add(key);
+      }
     }
   }
 

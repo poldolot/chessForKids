@@ -108,6 +108,62 @@ void main() {
     expect(speaker.available, isFalse);
   });
 
+  Future<void> platformSays(String method) async {
+    await TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .handlePlatformMessage(
+          'flutter_tts',
+          const StandardMethodCodec().encodeMethodCall(MethodCall(method)),
+          (_) {},
+        );
+  }
+
+  test(
+    'a non-interrupting line waits for the current one and then plays',
+    () async {
+      await speaker.setLanguage('pl');
+      await speaker.say('Pierwsza', key: 'a');
+      await platformSays('speak.onStart');
+      await speaker.say('Podpowiedź', key: 'hint', interrupt: false);
+      expect(named('speak').map((c) => c.arguments), ['Pierwsza']);
+      expect(speaker.lastText, 'Pierwsza');
+      await platformSays('speak.onComplete');
+      await Future<void>.delayed(Duration.zero);
+      expect(named('speak').map((c) => c.arguments), [
+        'Pierwsza',
+        'Podpowiedź',
+      ]);
+    },
+  );
+
+  test('the newest waiting line replaces an older one', () async {
+    await speaker.setLanguage('pl');
+    await speaker.say('Pierwsza', key: 'a');
+    await speaker.say('Stara', key: 'h1', interrupt: false);
+    await speaker.say('Nowa', key: 'h2', interrupt: false);
+    await platformSays('speak.onComplete');
+    await Future<void>.delayed(Duration.zero);
+    expect(named('speak').map((c) => c.arguments), ['Pierwsza', 'Nowa']);
+  });
+
+  test(
+    'a non-interrupting line plays at once when nothing is being spoken',
+    () async {
+      await speaker.setLanguage('pl');
+      await speaker.say('Sama', key: 'h', interrupt: false);
+      expect(named('speak').map((c) => c.arguments), ['Sama']);
+    },
+  );
+
+  test('an interrupting line drops a waiting one', () async {
+    await speaker.setLanguage('pl');
+    await speaker.say('Pierwsza', key: 'a');
+    await speaker.say('Czeka', key: 'h', interrupt: false);
+    await speaker.say('Druga', key: 'b');
+    await platformSays('speak.onComplete');
+    await Future<void>.delayed(Duration.zero);
+    expect(named('speak').map((c) => c.arguments), ['Pierwsza', 'Druga']);
+  });
+
   test('speech rate values are ordered', () {
     expect(SpeechRate.slow.ttsRate, lessThan(SpeechRate.normal.ttsRate));
     expect(SpeechRate.normal.ttsRate, lessThan(SpeechRate.fast.ttsRate));
@@ -119,10 +175,13 @@ void main() {
     await fake.say('a', key: 'k1');
     expect(fake.spoken, [('k1', 'a')]);
     expect(fake.language, 'en');
+    await fake.say('h', key: 'hint', interrupt: false);
+    expect(fake.nonInterrupting, ['hint']);
+    expect(fake.lastText, 'a');
     expect(fake.lastText, 'a');
     fake.enabled = false;
     await fake.say('b', key: 'k2');
-    expect(fake.spoken.length, 1);
+    expect(fake.spoken.length, 2);
     expect(fake.lastText, 'b');
   });
 }

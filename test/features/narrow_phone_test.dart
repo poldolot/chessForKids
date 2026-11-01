@@ -1,4 +1,7 @@
 import 'package:chess_for_kids/data/models.dart';
+import 'package:chess_for_kids/features/learn/learn_screen.dart';
+import 'package:chess_for_kids/features/learn/lesson_screen.dart';
+import 'package:chess_for_kids/features/learn/lessons/catalog.dart';
 import 'package:chess_for_kids/features/menu/main_menu_screen.dart';
 import 'package:chess_for_kids/features/parent/parent_gate_screen.dart';
 import 'package:chess_for_kids/features/profiles/profile_wizard_screen.dart';
@@ -41,5 +44,21 @@ void main() {
 
   testWidgets('parent gate fits a 360x640 phone', (tester) async {
     await pumpNarrow(tester, const ParentGateScreen());
+  });
+
+  testWidgets('learn path and a lesson fit a 360x640 phone', (tester) async {
+    await app.state.createProfile(
+      name: 'Zosia',
+      theme: TeacherTheme.animals,
+      avatarIndex: 1,
+    );
+    await pumpNarrow(tester, const LearnScreen());
+    await tester.pumpWidget(app.wrap(LessonScreen(lesson: lessonById('pawn'))));
+    await tester.pump();
+    expect(tester.takeException(), isNull);
+    await tester.tap(find.byKey(const Key('lesson-next')));
+    await tester.pump();
+    expect(tester.takeException(), isNull);
+    await tester.pumpAndSettle();
   });
 }

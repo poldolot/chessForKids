@@ -8,12 +8,21 @@ import 'speaker.dart';
 /// voice for the chosen language leaves [available] false and the app silent,
 /// never broken.
 final class TtsSpeaker extends Speaker {
-  TtsSpeaker([FlutterTts? tts]) : _tts = tts ?? FlutterTts();
+  TtsSpeaker([FlutterTts? tts]) : _tts = tts ?? FlutterTts() {
+    _tts.setStartHandler(() => _speaking = true);
+    _tts.setCompletionHandler(_onFinished);
+    _tts.setCancelHandler(_onFinished);
+    _tts.setErrorHandler((_) => _onFinished());
+  }
 
   static const Map<String, String> _locales = {'pl': 'pl-PL', 'en': 'en-US'};
 
   final FlutterTts _tts;
   bool _available = false;
+  bool _speaking = false;
+
+  /// A non-interrupting line waiting for the current one to finish.
+  (String text, String key)? _pending;
 
   /// The language set-up in flight; speech waits for it instead of being
   /// dropped while the engine is still initialising.
@@ -44,12 +53,28 @@ final class TtsSpeaker extends Speaker {
   }
 
   @override
-  Future<void> say(String text, {required String key}) async {
-    await super.say(text, key: key);
+  Future<void> say(
+    String text, {
+    required String key,
+    bool interrupt = true,
+  }) async {
+    await super.say(text, key: key, interrupt: interrupt);
     await _languageJob;
     if (!enabled || !_available) {
       return;
     }
+    if (!interrupt && _speaking) {
+      _pending = (text, key);
+      return;
+    }
+    if (interrupt) {
+      _pending = null;
+    }
+    await _speak(text);
+  }
+
+  Future<void> _speak(String text) async {
+    _speaking = true;
     await _guard(() async {
       await _tts.setSpeechRate(rate.ttsRate);
       await _tts.stop();
@@ -58,8 +83,19 @@ final class TtsSpeaker extends Speaker {
     });
   }
 
+  void _onFinished() {
+    _speaking = false;
+    final pending = _pending;
+    if (pending != null && enabled && _available) {
+      _pending = null;
+      _speak(pending.$1);
+    }
+  }
+
   @override
   Future<void> stop() async {
+    _pending = null;
+    _speaking = false;
     await _guard(() async {
       await _tts.stop();
       return true;

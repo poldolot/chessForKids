@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../core/speaker.dart';
+import '../features/learn/learn_screen.dart';
 import '../features/menu/coming_soon_screen.dart';
 import '../features/menu/main_menu_screen.dart';
 import '../features/menu/menu_tile.dart';
@@ -114,7 +115,8 @@ class _Home extends StatelessWidget {
   void _openSection(BuildContext context, MenuSection section) {
     final Widget screen = switch (section) {
       MenuSection.play => const SandboxScreen(),
-      MenuSection.learn || MenuSection.miniGames => const ComingSoonScreen(),
+      MenuSection.learn => const LearnScreen(),
+      MenuSection.miniGames => const ComingSoonScreen(),
     };
     Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => screen));
   }

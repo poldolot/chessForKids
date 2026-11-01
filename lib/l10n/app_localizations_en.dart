@@ -216,4 +216,290 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get undo => 'Undo';
+
+  @override
+  String get learnTitle => 'Learn';
+
+  @override
+  String get learnCommonNext => 'Next';
+
+  @override
+  String get learnCommonTryAgain => 'Try again!';
+
+  @override
+  String get learnCommonWellDone => 'Well done!';
+
+  @override
+  String get learnCommonTapDot => 'Tap a yellow dot to move.';
+
+  @override
+  String get learnCommonCaptureFrame =>
+      'Capture the black piece in the red frame.';
+
+  @override
+  String get learnCommonLocked => 'Finish the previous lesson first.';
+
+  @override
+  String get learnCommonStarsCollect => 'Collect all the stars!';
+
+  @override
+  String get learnCommonLimitHint =>
+      'Few moves left! Aim straight for the stars.';
+
+  @override
+  String get learnCommonBadge => 'You earned a new badge!';
+
+  @override
+  String get learnCommonPlay => 'Play';
+
+  @override
+  String get learnCommonAllDone => 'All lessons done. You are a champion!';
+
+  @override
+  String get learnPawnTitle => 'Pawn';
+
+  @override
+  String get learnPawnIntro =>
+      'This is the pawn. Small but brave. It only moves forward.';
+
+  @override
+  String get learnPawnMove =>
+      'A pawn moves one square. From its start it may move two!';
+
+  @override
+  String get learnPawnCapture =>
+      'A pawn captures diagonally. Never straight ahead!';
+
+  @override
+  String get learnPawnPractice => 'Move your pawns and capture what you can!';
+
+  @override
+  String get learnPawnHint => 'A pawn captures only diagonally.';
+
+  @override
+  String get learnRookTitle => 'Rook';
+
+  @override
+  String get learnRookIntro => 'This is the rook. Strong as a castle.';
+
+  @override
+  String get learnRookMove => 'The rook goes straight: up, down, left, right.';
+
+  @override
+  String get learnRookCapture => 'The rook captures what stands in its way.';
+
+  @override
+  String get learnRookPractice => 'Collect the stars in five moves!';
+
+  @override
+  String get learnRookHint => 'A rook never moves diagonally.';
+
+  @override
+  String get learnBishopTitle => 'Bishop';
+
+  @override
+  String get learnBishopIntro => 'This is the bishop. It runs on diagonals.';
+
+  @override
+  String get learnBishopMove =>
+      'The bishop moves only diagonally and always stays on its color.';
+
+  @override
+  String get learnBishopCapture => 'The bishop captures along a diagonal.';
+
+  @override
+  String get learnBishopPractice => 'Collect the stars along the diagonals!';
+
+  @override
+  String get learnBishopHint => 'A bishop moves only diagonally.';
+
+  @override
+  String get learnQueenTitle => 'Queen';
+
+  @override
+  String get learnQueenIntro => 'This is the queen. The strongest piece!';
+
+  @override
+  String get learnQueenMove =>
+      'The queen moves straight and diagonally, like a rook and bishop together.';
+
+  @override
+  String get learnQueenCapture => 'The queen captures in every direction.';
+
+  @override
+  String get learnQueenPractice => 'Collect the stars from every corner!';
+
+  @override
+  String get learnQueenHint =>
+      'A queen moves straight or diagonally, never like a knight.';
+
+  @override
+  String get learnKingTitle => 'King';
+
+  @override
+  String get learnKingIntro =>
+      'This is the king. The most important one. Protect him!';
+
+  @override
+  String get learnKingMove => 'The king takes just one step, in any direction.';
+
+  @override
+  String get learnKingCapture => 'The king can capture a piece next to him.';
+
+  @override
+  String get learnKingPractice =>
+      'Cross to the other side. Avoid the red squares, they are attacked!';
+
+  @override
+  String get learnKingHint => 'The king would be in danger there.';
+
+  @override
+  String get learnKnightTitle => 'Knight';
+
+  @override
+  String get learnKnightIntro =>
+      'This is the knight, the horse. It jumps over other pieces!';
+
+  @override
+  String get learnKnightMove =>
+      'The knight jumps in an L: two squares straight and one to the side.';
+
+  @override
+  String get learnKnightCapture => 'The knight captures where it lands.';
+
+  @override
+  String get learnKnightPractice => 'Hop through the maze to the stars!';
+
+  @override
+  String get learnKnightHint => 'A knight only jumps in an L.';
+
+  @override
+  String get learnSetupTitle => 'Setup';
+
+  @override
+  String get learnSetupIntro =>
+      'Every piece has its place. The queen likes her own color!';
+
+  @override
+  String get learnSetupTask => 'Drag the pieces onto their shadows.';
+
+  @override
+  String get learnSetupPawns => 'The pawns line up by themselves. Done!';
+
+  @override
+  String get learnCheckTitle => 'Check';
+
+  @override
+  String get learnCheckIntro =>
+      'When someone attacks the king, it\'s check. Save the king!';
+
+  @override
+  String get learnCheckDemo => 'The rook attacks the king. Check!';
+
+  @override
+  String get learnCheckEscape => 'Run with the king!';
+
+  @override
+  String get learnCheckCapture => 'Capture the piece that gives check!';
+
+  @override
+  String get learnCheckBlock => 'Shield the king with another piece!';
+
+  @override
+  String get learnCheckHint => 'The king is still in danger. Try another way.';
+
+  @override
+  String get learnMateTitle => 'Checkmate';
+
+  @override
+  String get learnMateIntro =>
+      'When the king cannot escape, it\'s checkmate. Game over!';
+
+  @override
+  String get learnMateTask => 'Give checkmate in one move!';
+
+  @override
+  String get learnMateHint =>
+      'That was not checkmate. The king can still escape.';
+
+  @override
+  String get learnStalemateTitle => 'Stalemate';
+
+  @override
+  String get learnStalemateIntro =>
+      'When the king is not in check but has no move, it\'s stalemate. A draw!';
+
+  @override
+  String get learnStalemateDemo =>
+      'Look: the black king has no move. Stalemate, a draw!';
+
+  @override
+  String get learnStalemateTask => 'Now you: give checkmate, not stalemate!';
+
+  @override
+  String get learnStalemateHint =>
+      'Oops, that\'s stalemate. A draw! Try another move.';
+
+  @override
+  String get learnCastlingTitle => 'Castling';
+
+  @override
+  String get learnCastlingIntro =>
+      'The king and rook can hide together. That\'s castling.';
+
+  @override
+  String get learnCastlingDemo =>
+      'The king moves two squares and the rook jumps beside him.';
+
+  @override
+  String get learnCastlingTask =>
+      'Castle: tap the king, then the square two away.';
+
+  @override
+  String get learnCastlingHint =>
+      'That\'s not castling. The king must move two squares.';
+
+  @override
+  String get learnEnPassantTitle => 'En passant';
+
+  @override
+  String get learnEnPassantIntro =>
+      'A pawn that jumped two squares can be captured in passing.';
+
+  @override
+  String get learnEnPassantDemo =>
+      'The black pawn jumped two squares next to the white one.';
+
+  @override
+  String get learnEnPassantTask => 'Capture it in passing, diagonally!';
+
+  @override
+  String get learnEnPassantHint =>
+      'Capture diagonally, where the pawn would have stopped after one step.';
+
+  @override
+  String get learnPromotionTitle => 'Promotion';
+
+  @override
+  String get learnPromotionIntro =>
+      'A pawn that reaches the end turns into another piece!';
+
+  @override
+  String get learnPromotionTask => 'Take the pawn to the end and pick a piece.';
+
+  @override
+  String get learnPromotionKnight => 'Now turn the pawn into a knight!';
+
+  @override
+  String get learnValuesTitle => 'Values';
+
+  @override
+  String get learnValuesIntro =>
+      'Every piece is worth something. The queen the most!';
+
+  @override
+  String get learnValuesTask => 'Which piece is worth more? Tap it.';
+
+  @override
+  String get learnValuesHint => 'No, the other one is worth more.';
 }

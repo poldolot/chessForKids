@@ -141,6 +141,20 @@ void main() {
     );
   });
 
+  test('section stars for learn follow the lesson progress', () {
+    const base = Profile(
+      id: 'x',
+      name: '',
+      theme: TeacherTheme.ufo,
+      avatarIndex: 1,
+    );
+    expect(sectionStars(base, MenuSection.learn), 0);
+    expect(
+      sectionStars(base.copyWith(stars: {'lesson:pawn': 2}), MenuSection.learn),
+      1,
+    );
+  });
+
   test('section stars for play grow with match stars', () {
     const base = Profile(
       id: 'x',
@@ -151,6 +165,6 @@ void main() {
     expect(sectionStars(base, MenuSection.play), 0);
     expect(sectionStars(base.copyWith(matchStars: 10), MenuSection.play), 1);
     expect(sectionStars(base.copyWith(matchStars: 45), MenuSection.play), 3);
-    expect(sectionStars(base, MenuSection.learn), 0);
+    expect(sectionStars(base, MenuSection.miniGames), 0);
   });
 }

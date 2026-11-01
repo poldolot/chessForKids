@@ -23,9 +23,9 @@ nagrania lektora w planach. Polski i angielski od startu.
 
 ## Stan prac
 
-Gotowy szkielet aplikacji: profile, menu główne, strefa rodzica, głos, polski i angielski
-oraz interaktywna szachownica. Silnik reguł szachowych jest kompletny i przetestowany.
-Dalej: lekcje, mini‑gry i komputerowy przeciwnik.
+Gotowy moduł Nauka: 14 lekcji (sześć figur, osiem zasad) z gwiazdkami, odznakami
+i głosem po polsku i angielsku, na bazie szkieletu aplikacji (profile, menu, strefa
+rodzica) i przetestowanego silnika reguł. Dalej: mini‑gry i komputerowy przeciwnik.
 
 ## Licencja
 

@@ -68,9 +68,16 @@ class _InteractiveBoardState extends State<InteractiveBoard> {
   /// not slid there again.
   Move? _draggedMove;
 
+  /// Set after a move is reported and cleared when the new position arrives
+  /// (or after a frame), so a quick second tap is not read against the old
+  /// position.
+  bool _pendingMove = false;
+
   bool get _canMove {
     final mover = widget.movableColor ?? widget.position.sideToMove;
-    return widget.enabled && mover == widget.position.sideToMove;
+    return widget.enabled &&
+        !_pendingMove &&
+        mover == widget.position.sideToMove;
   }
 
   @override
@@ -78,6 +85,7 @@ class _InteractiveBoardState extends State<InteractiveBoard> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.position != widget.position) {
       _clear();
+      _pendingMove = false;
     }
   }
 
@@ -159,6 +167,12 @@ class _InteractiveBoardState extends State<InteractiveBoard> {
     setState(() {
       _clear();
       _draggedMove = dragged ? move : null;
+      _pendingMove = true;
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _pendingMove) {
+        setState(() => _pendingMove = false);
+      }
     });
     widget.onMove(move);
   }

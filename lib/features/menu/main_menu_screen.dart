@@ -6,6 +6,7 @@ import '../../data/models.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../../widgets/teacher_bubble.dart';
+import '../learn/lesson_progress.dart';
 import '../profiles/avatar_image.dart';
 import '../profiles/profile_picker_screen.dart';
 import 'coming_soon_screen.dart';
@@ -28,6 +29,9 @@ const List<String> kBadgeIds = [
   'collector',
 ];
 
+/// Icon shown for each badge id, in the menu and on the celebration screen.
+IconData badgeIcon(String id) => _badgeIcons[id] ?? Icons.emoji_events_rounded;
+
 const Map<String, IconData> _badgeIcons = {
   'pawn': Icons.looks_one_rounded,
   'rook': Icons.castle_rounded,
@@ -43,12 +47,13 @@ const Map<String, IconData> _badgeIcons = {
   'collector': Icons.auto_awesome_rounded,
 };
 
-/// Stars shown on a section tile (0–3). Lessons and mini-games fill in their
-/// own rules in later plans; matches earn one tile star per ten match stars.
+/// Stars shown on a section tile (0–3). Mini-games fill in their own rule in
+/// plan 4; matches earn one tile star per ten match stars.
 int sectionStars(Profile profile, MenuSection section) {
   return switch (section) {
     MenuSection.play => (profile.matchStars ~/ 10).clamp(0, 3),
-    MenuSection.learn || MenuSection.miniGames => 0,
+    MenuSection.learn => learnSectionStars(profile),
+    MenuSection.miniGames => 0,
   };
 }
 

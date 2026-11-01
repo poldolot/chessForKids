@@ -2,6 +2,7 @@ import 'package:chess_for_kids/app/app.dart';
 import 'package:chess_for_kids/core/speaker.dart';
 import 'package:chess_for_kids/data/models.dart';
 import 'package:chess_for_kids/features/board/piece_image.dart';
+import 'package:chess_for_kids/features/learn/learn_screen.dart';
 import 'package:chess_for_kids/features/menu/main_menu_screen.dart';
 import 'package:chess_for_kids/features/parent/parent_gate_screen.dart';
 import 'package:chess_for_kids/features/profiles/profile_picker_screen.dart';
@@ -207,4 +208,14 @@ void main() {
       expect(find.byType(ProfileWizardScreen), findsNothing);
     },
   );
+
+  testWidgets('learn tile opens the lesson path', (tester) async {
+    devicePolish(tester);
+    await seedProfile(lastId: 'keep');
+    await pumpApp(tester);
+    await tester.tap(find.byKey(const Key('tile-learn')));
+    await tester.pumpAndSettle();
+    expect(find.byType(LearnScreen), findsOneWidget);
+    expect(find.byKey(const Key('lesson-pawn')), findsOneWidget);
+  });
 }

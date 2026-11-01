@@ -22,9 +22,10 @@ with recorded voice planned later. Polish and English at launch.
 
 ## Status
 
-App shell ready: profiles, main menu, parent zone, speech, Polish and English, and
-an interactive board widget. The chess rules engine is complete and tested. Lessons,
-mini-games and the computer opponent come next.
+Learn section ready: 14 lessons (six pieces, eight rules) with stars, badges and
+spoken guidance in Polish and English, on top of the app shell (profiles, menu,
+parent zone) and a tested chess rules engine. Mini-games and the computer opponent
+come next.
 
 ## License
 
