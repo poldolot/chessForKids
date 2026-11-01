@@ -258,5 +258,9 @@
   "badgeHunterName": "Hunter",
   "badgeHunterDesc": "For ten mini-games won.",
   "badgeCollectorName": "Collector",
-  "badgeCollectorDesc": "For fifty stars."
+  "badgeCollectorDesc": "For fifty stars.",
+  "computerLevel": "Computer level in matches",
+  "levelVeryEasy": "Very easy",
+  "levelEasy": "Easy",
+  "levelNormal": "Normal"
 }

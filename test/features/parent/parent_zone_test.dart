@@ -1,3 +1,4 @@
+import 'package:chess_for_kids/ai/ai.dart';
 import 'package:chess_for_kids/core/speaker.dart';
 import 'package:chess_for_kids/data/models.dart';
 import 'package:chess_for_kids/features/parent/parent_zone_screen.dart';
@@ -45,7 +46,12 @@ void main() {
 
   Future<void> reveal(WidgetTester tester, Finder finder) async {
     if (finder.evaluate().isEmpty ||
-        !tester.getRect(finder).overlaps(const Rect.fromLTWH(0, 0, 800, 600))) {
+        !const Rect.fromLTWH(
+          0,
+          0,
+          800,
+          600,
+        ).contains(tester.getCenter(finder))) {
       await tester.scrollUntilVisible(
         finder,
         120,
@@ -100,6 +106,10 @@ void main() {
     await pumpZone(tester);
     await tapKey(tester, 'child-random');
     expect(app.state.settings.childColor, ChildColor.random);
+    await tapKey(tester, 'level-veryEasy');
+    expect(app.state.currentProfile!.matchLevel, MatchLevel.veryEasy);
+    await tapKey(tester, 'level-normal');
+    expect(app.state.currentProfile!.matchLevel, MatchLevel.normal);
     await tapKey(tester, 'unlock-minigames');
     expect(app.state.currentProfile!.unlockAllMiniGames, isTrue);
   });

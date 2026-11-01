@@ -223,5 +223,9 @@
   "badgeHunterName": "Łowca",
   "badgeHunterDesc": "Za dziesięć wygranych mini-gier.",
   "badgeCollectorName": "Kolekcjoner",
-  "badgeCollectorDesc": "Za pięćdziesiąt gwiazdek."
+  "badgeCollectorDesc": "Za pięćdziesiąt gwiazdek.",
+  "computerLevel": "Poziom komputera w partii",
+  "levelVeryEasy": "Bardzo łatwy",
+  "levelEasy": "Łatwy",
+  "levelNormal": "Normalny"
 }

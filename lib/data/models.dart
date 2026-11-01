@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 
+import '../ai/level.dart';
+
 import '../core/speaker.dart';
 
 /// Visual theme of the teachers and avatars.
@@ -121,6 +123,7 @@ final class Profile {
     this.savedGameJson,
     this.miniGameWins = 0,
     this.introducedGames = const {},
+    this.matchLevel = MatchLevel.easy,
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) {
@@ -149,6 +152,10 @@ final class Profile {
       matchesWon: json['matchesWon'] as int? ?? 0,
       unlockAllMiniGames: json['unlockAllMiniGames'] as bool? ?? false,
       savedGameJson: json['savedGameJson'] as String?,
+      matchLevel: MatchLevel.values.firstWhere(
+        (l) => l.name == json['matchLevel'],
+        orElse: () => MatchLevel.easy,
+      ),
       miniGameWins: json['miniGameWins'] as int? ?? 0,
       introducedGames: (json['introducedGames'] as List<dynamic>? ?? const [])
           .cast<String>()
@@ -177,6 +184,9 @@ final class Profile {
   /// A match in progress, serialized by the match feature.
   final String? savedGameJson;
 
+  /// Strength of the computer in this child's matches (parent zone).
+  final MatchLevel matchLevel;
+
   /// Mini-game boards won or finished.
   final int miniGameWins;
 
@@ -198,6 +208,7 @@ final class Profile {
     'matchesWon': matchesWon,
     'unlockAllMiniGames': unlockAllMiniGames,
     'savedGameJson': savedGameJson,
+    'matchLevel': matchLevel.name,
     'miniGameWins': miniGameWins,
     'introducedGames': introducedGames.toList(),
   };
@@ -215,6 +226,7 @@ final class Profile {
     bool? unlockAllMiniGames,
     String? savedGameJson,
     bool clearSavedGame = false,
+    MatchLevel? matchLevel,
     int? miniGameWins,
     Set<String>? introducedGames,
   }) {
@@ -230,6 +242,7 @@ final class Profile {
       matchesPlayed: matchesPlayed ?? this.matchesPlayed,
       matchesWon: matchesWon ?? this.matchesWon,
       unlockAllMiniGames: unlockAllMiniGames ?? this.unlockAllMiniGames,
+      matchLevel: matchLevel ?? this.matchLevel,
       savedGameJson: clearSavedGame
           ? null
           : (savedGameJson ?? this.savedGameJson),
@@ -253,6 +266,7 @@ final class Profile {
       other.matchesWon == matchesWon &&
       other.unlockAllMiniGames == unlockAllMiniGames &&
       other.savedGameJson == savedGameJson &&
+      other.matchLevel == matchLevel &&
       other.miniGameWins == miniGameWins &&
       setEquals(other.introducedGames, introducedGames);
 

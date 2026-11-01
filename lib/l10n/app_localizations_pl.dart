@@ -723,4 +723,16 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get badgeCollectorDesc => 'Za pięćdziesiąt gwiazdek.';
+
+  @override
+  String get computerLevel => 'Poziom komputera w partii';
+
+  @override
+  String get levelVeryEasy => 'Bardzo łatwy';
+
+  @override
+  String get levelEasy => 'Łatwy';
+
+  @override
+  String get levelNormal => 'Normalny';
 }

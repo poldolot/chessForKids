@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:chess_for_kids/core/speaker.dart';
+import 'package:chess_for_kids/ai/ai.dart';
 import 'package:chess_for_kids/data/models.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -21,6 +22,31 @@ void main() {
     expect(const Settings().childColor, ChildColor.white);
     expect(s.copyWith(languageCode: 'en').languageCode, 'en');
     expect(s.copyWith(clearLanguage: true).languageCode, isNull);
+  });
+
+  test('profile match level defaults to easy and survives a round trip', () {
+    const p = Profile(
+      id: 'p',
+      name: 'A',
+      theme: TeacherTheme.ufo,
+      avatarIndex: 1,
+    );
+    expect(p.matchLevel, MatchLevel.easy);
+    final hard = p.copyWith(matchLevel: MatchLevel.normal);
+    expect(
+      Profile.fromJson(roundTrip(hard.toJson())).matchLevel,
+      MatchLevel.normal,
+    );
+    expect(
+      Profile.fromJson({
+        'id': 'p',
+        'name': 'A',
+        'theme': 'ufo',
+        'avatarIndex': 1,
+        'matchLevel': 'nope',
+      }).matchLevel,
+      MatchLevel.easy,
+    );
   });
 
   test('profile round-trip keeps progress and computes total stars', () {

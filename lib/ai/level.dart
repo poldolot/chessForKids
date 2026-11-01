@@ -1,9 +1,13 @@
 /// Strength of the computer opponent. The match code takes the level as a
 /// parameter so a picker can be added later without touching the engine.
 enum MatchLevel {
+  /// For the youngest: half the moves are careless and a whole minor piece
+  /// counts as "good enough", so pieces get given away all the time; it
+  /// still takes a mate in one and never walks into one it could avoid.
+  veryEasy(depth: 2, noise: 300, blunder: 0.5),
+
   /// For a beginner child: shallow, a wide window of "good enough" moves
-  /// and a real chance of a careless move, but it still takes a mate in
-  /// one and never walks into one it could avoid.
+  /// and a real chance of a careless move.
   easy(depth: 2, noise: 100, blunder: 0.25),
 
   /// Steady play within a narrow window; no careless moves.

@@ -1441,6 +1441,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'For fifty stars.'**
   String get badgeCollectorDesc;
+
+  /// No description provided for @computerLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Computer level in matches'**
+  String get computerLevel;
+
+  /// No description provided for @levelVeryEasy.
+  ///
+  /// In en, this message translates to:
+  /// **'Very easy'**
+  String get levelVeryEasy;
+
+  /// No description provided for @levelEasy.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy'**
+  String get levelEasy;
+
+  /// No description provided for @levelNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get levelNormal;
 }
 
 class _AppLocalizationsDelegate

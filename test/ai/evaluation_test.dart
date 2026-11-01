@@ -10,6 +10,14 @@ void main() {
     expect(MatchLevel.normal.depth, 2);
     expect(MatchLevel.normal.noise, 60);
     expect(MatchLevel.normal.blunder, 0);
+    expect(MatchLevel.veryEasy.depth, 2);
+    expect(MatchLevel.veryEasy.noise, 300);
+    expect(MatchLevel.veryEasy.blunder, 0.5);
+    expect(MatchLevel.values, [
+      MatchLevel.veryEasy,
+      MatchLevel.easy,
+      MatchLevel.normal,
+    ]);
   });
 
   test('piece values are centipawns of the conventional values', () {

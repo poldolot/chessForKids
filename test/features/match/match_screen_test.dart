@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:chess_for_kids/ai/ai.dart';
 import 'package:chess_for_kids/data/models.dart';
 import 'package:chess_for_kids/engine/engine.dart';
 import 'package:chess_for_kids/features/board/piece_image.dart';
@@ -231,6 +232,25 @@ void main() {
     expect(tester.takeException(), isNull);
     await tapMove(tester, 'e2', 'e4');
     expect(tester.takeException(), isNull);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('a new match uses the level chosen for the profile', (
+    tester,
+  ) async {
+    await app.state.updateProfile(
+      app.state.currentProfile!.copyWith(matchLevel: MatchLevel.veryEasy),
+    );
+    await tester.pumpWidget(
+      app.wrap(MatchScreen(thinkingDelay: delay, random: Random(1))),
+    );
+    await tester.pump();
+    await tester.pump();
+    await tapMove(tester, 'e2', 'e4');
+    expect(
+      app.state.currentProfile!.savedGameJson,
+      contains('"level":"veryEasy"'),
+    );
     await tester.pumpAndSettle();
   });
 }

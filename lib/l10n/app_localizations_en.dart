@@ -728,4 +728,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get badgeCollectorDesc => 'For fifty stars.';
+
+  @override
+  String get computerLevel => 'Computer level in matches';
+
+  @override
+  String get levelVeryEasy => 'Very easy';
+
+  @override
+  String get levelEasy => 'Easy';
+
+  @override
+  String get levelNormal => 'Normal';
 }

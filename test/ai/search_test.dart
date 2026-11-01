@@ -87,25 +87,33 @@ void main() {
     expect(missed, lessThan(40));
   });
 
-  test('easy never walks into a mate in one that could be avoided', () {
-    for (var seed = 0; seed < 20; seed++) {
-      final random = Random(seed);
-      final game = Game();
-      for (var ply = 0; ply < 60 && !game.result.isOver; ply++) {
-        final before = game.position;
-        final move = chooseMove(
-          before,
-          level: MatchLevel.easy,
-          random: random,
-        )!;
-        final after = before.play(move);
-        if (matingMoves(after).isNotEmpty) {
-          final unavoidable = game.legalMoves().every(
-            (m) => matingMoves(before.play(m)).isNotEmpty,
-          );
-          expect(unavoidable, isTrue, reason: '${before.fen} $move');
+  test('very easy gives pieces away far more often than easy', () {
+    final p = fen('4k3/8/8/3q4/8/8/8/3RK3 w - - 0 1');
+    int missed(MatchLevel level) => [
+      for (var seed = 0; seed < 80; seed++)
+        if (pick(p, seed: seed, level: level) != uci('d1d5')) 1,
+    ].length;
+    expect(missed(MatchLevel.veryEasy), greaterThan(missed(MatchLevel.easy)));
+    expect(missed(MatchLevel.veryEasy), greaterThan(30));
+  });
+
+  test('no level walks into a mate in one that could be avoided', () {
+    for (final level in [MatchLevel.veryEasy, MatchLevel.easy]) {
+      for (var seed = 0; seed < 20; seed++) {
+        final random = Random(seed);
+        final game = Game();
+        for (var ply = 0; ply < 60 && !game.result.isOver; ply++) {
+          final before = game.position;
+          final move = chooseMove(before, level: level, random: random)!;
+          final after = before.play(move);
+          if (matingMoves(after).isNotEmpty) {
+            final unavoidable = game.legalMoves().every(
+              (m) => matingMoves(before.play(m)).isNotEmpty,
+            );
+            expect(unavoidable, isTrue, reason: '$level ${before.fen} $move');
+          }
+          game.play(move);
         }
-        game.play(move);
       }
     }
   });

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../ai/ai.dart';
 import '../../app/theme/app_theme.dart';
 import '../../core/speaker.dart';
 import '../../data/models.dart';
@@ -191,6 +192,29 @@ class ParentZoneScreen extends StatelessWidget {
               ),
             ],
           ),
+          if (state.currentProfile case final profile?)
+            _Section(
+              title: l10n.computerLevel,
+              children: [
+                SegmentedButton<MatchLevel>(
+                  segments: [
+                    for (final level in MatchLevel.values)
+                      ButtonSegment(
+                        value: level,
+                        label: Text(switch (level) {
+                          MatchLevel.veryEasy => l10n.levelVeryEasy,
+                          MatchLevel.easy => l10n.levelEasy,
+                          MatchLevel.normal => l10n.levelNormal,
+                        }, key: Key('level-${level.name}')),
+                      ),
+                  ],
+                  selected: {profile.matchLevel},
+                  onSelectionChanged: (s) => state.updateProfile(
+                    profile.copyWith(matchLevel: s.first),
+                  ),
+                ),
+              ],
+            ),
           if (state.currentProfile case final profile?)
             _Section(
               title: l10n.miniGamesSettings,

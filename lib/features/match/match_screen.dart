@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../ai/ai.dart';
 import '../../app/theme/app_theme.dart';
 import '../../core/speaker.dart';
 import '../../data/models.dart';
@@ -101,9 +102,13 @@ class _MatchScreenState extends State<MatchScreen> {
   }
 
   MatchSession _newSession() {
-    final settings = context.read<AppState>().settings;
+    final state = context.read<AppState>();
     return MatchSession(
-      childColor: MatchSession.pickChildColor(settings.childColor, _random),
+      childColor: MatchSession.pickChildColor(
+        state.settings.childColor,
+        _random,
+      ),
+      level: state.currentProfile?.matchLevel ?? MatchLevel.easy,
       random: _random,
     );
   }
