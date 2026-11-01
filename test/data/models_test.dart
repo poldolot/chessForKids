@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:chess_for_kids/core/speaker.dart';
 import 'package:chess_for_kids/ai/ai.dart';
+import 'package:chess_for_kids/core/speaker.dart';
 import 'package:chess_for_kids/data/models.dart';
 import 'package:flutter_test/flutter_test.dart';
 
