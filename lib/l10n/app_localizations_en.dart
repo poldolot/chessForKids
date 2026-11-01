@@ -277,6 +277,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get learnPawnHint => 'A pawn captures only diagonally.';
 
   @override
+  String get learnPawnMoveHint => 'From its first square a pawn can jump two!';
+
+  @override
   String get learnRookTitle => 'Rook';
 
   @override

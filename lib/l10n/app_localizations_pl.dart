@@ -276,6 +276,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get learnPawnHint => 'Pion bije tylko na ukos.';
 
   @override
+  String get learnPawnMoveHint => 'Z pierwszego pola pion może skoczyć o dwa!';
+
+  @override
   String get learnRookTitle => 'Wieża';
 
   @override

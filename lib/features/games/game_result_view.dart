@@ -10,12 +10,14 @@ import '../../data/models.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../../widgets/teacher_bubble.dart';
+import '../board/board_highlights.dart';
 import '../board/board_view.dart';
 import '../menu/main_menu_screen.dart' show badgeIcon;
 import 'game_model.dart';
 import 'game_progress.dart';
 import 'game_strings.dart';
 import 'mini_game_session.dart';
+import 'widgets/game_layout.dart';
 
 /// Wins needed for the hunter badge.
 const int kHunterWins = 10;
@@ -23,8 +25,9 @@ const int kHunterWins = 10;
 /// Total stars needed for the collector badge.
 const int kCollectorStars = 50;
 
-/// The end of a mini-game board: records the result once, shows the final
-/// position, the stars one by one and a badge when one was just earned.
+/// The end of a mini-game board: records the result once, keeps the final
+/// position where the board was, shows the stars one by one and a badge
+/// when one was just earned.
 class GameResultView extends StatefulWidget {
   const GameResultView({
     super.key,
@@ -143,110 +146,79 @@ class _GameResultViewState extends State<GameResultView> {
         ? null
         : nextBoard(widget.game, widget.board, profile);
     final lineKey = _won ? 'games.common.won' : 'games.common.lost';
-    return Column(
+    return GameLayout(
       key: const Key('game-result'),
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        TeacherBubble(
-          theme: theme,
-          avatarIndex: 2,
-          text: gameLine(l10n, lineKey),
-          speechKey: lineKey,
-        ),
-        const SizedBox(height: 10),
-        Expanded(
-          child: Center(
-            child: BoardView(
-              position: widget.session.position,
-              animateMove: widget.session.lastMove,
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            for (var i = 0; i < 3; i++)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6),
-                child: i < _shownStars
-                    ? TweenAnimationBuilder<double>(
-                        key: Key('result-star-$i'),
-                        tween: Tween(begin: 0.2, end: 1),
-                        duration: const Duration(milliseconds: 350),
-                        curve: Curves.elasticOut,
-                        builder: (context, scale, child) =>
-                            Transform.scale(scale: scale, child: child),
-                        child: Icon(
-                          Icons.star_rounded,
-                          size: 56,
-                          color: palette.accentDeep,
-                        ),
-                      )
-                    : Icon(
-                        Icons.star_outline_rounded,
-                        size: 56,
-                        color: palette.muted.withValues(alpha: 0.4),
+      bubble: TeacherBubble(
+        theme: theme,
+        avatarIndex: 2,
+        text: gameLine(l10n, lineKey),
+        speechKey: lineKey,
+      ),
+      slot: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          for (var i = 0; i < 3; i++)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              child: i < _shownStars
+                  ? TweenAnimationBuilder<double>(
+                      key: Key('result-star-$i'),
+                      tween: Tween(begin: 0.2, end: 1),
+                      duration: const Duration(milliseconds: 350),
+                      curve: Curves.elasticOut,
+                      builder: (context, scale, child) =>
+                          Transform.scale(scale: scale, child: child),
+                      child: Icon(
+                        Icons.star_rounded,
+                        size: GameLayout.slotHeight,
+                        color: palette.accentDeep,
                       ),
-              ),
-          ],
-        ),
-        if (_badge != null && _badgeShown) ...[
-          const SizedBox(height: 12),
-          Container(
-            key: const Key('result-badge'),
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: palette.surface,
-              borderRadius: BorderRadius.circular(22),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: 56,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    color: palette.accent,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    badgeIcon(_badge!),
-                    size: 32,
-                    color: palette.text,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Flexible(
-                  child: Text(
-                    gameLine(l10n, _badgeKey(_badge!)),
-                    style: TextStyle(
-                      color: palette.text,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
+                    )
+                  : Icon(
+                      Icons.star_outline_rounded,
+                      size: GameLayout.slotHeight,
+                      color: palette.muted.withValues(alpha: 0.4),
                     ),
-                  ),
+            ),
+        ],
+      ),
+      board: BoardView(
+        position: widget.session.position,
+        highlights: BoardHighlights(lastMove: widget.session.lastMove),
+      ),
+      overlay: _badge != null && _badgeShown
+          ? _BadgeCard(badge: _badge!, text: gameLine(l10n, _badgeKey(_badge!)))
+          : null,
+      controls: Row(
+        children: [
+          if (next != null) ...[
+            _RoundButton(
+              key: const Key('result-back'),
+              icon: Icons.arrow_back_rounded,
+              tooltip: gameLine(l10n, 'games.common.back'),
+              onPressed: widget.onBack,
+            ),
+            const SizedBox(width: 12),
+            _RoundButton(
+              key: const Key('result-again'),
+              icon: Icons.replay_rounded,
+              tooltip: gameLine(l10n, 'games.common.again'),
+              onPressed: widget.onAgain,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: FilledButton.icon(
+                key: const Key('result-next'),
+                onPressed: () => widget.onNext(next),
+                icon: const Icon(Icons.play_arrow_rounded, size: 28),
+                label: Text(gameLine(l10n, 'games.common.next')),
+                style: FilledButton.styleFrom(
+                  backgroundColor: palette.accent,
+                  minimumSize: const Size.fromHeight(GameLayout.controlsHeight),
                 ),
-              ],
+              ),
             ),
-          ),
-        ],
-        const SizedBox(height: 12),
-        if (next != null) ...[
-          FilledButton.icon(
-            key: const Key('result-next'),
-            onPressed: () => widget.onNext(next),
-            icon: const Icon(Icons.play_arrow_rounded, size: 28),
-            label: Text(gameLine(l10n, 'games.common.next')),
-            style: FilledButton.styleFrom(
-              backgroundColor: palette.accent,
-              minimumSize: const Size.fromHeight(60),
-            ),
-          ),
-          const SizedBox(height: 10),
-        ],
-        Row(
-          children: [
+          ] else ...[
             Expanded(
               child: OutlinedButton.icon(
                 key: const Key('result-back'),
@@ -254,25 +226,109 @@ class _GameResultViewState extends State<GameResultView> {
                 icon: const Icon(Icons.arrow_back_rounded),
                 label: Text(gameLine(l10n, 'games.common.back')),
                 style: OutlinedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(kMinTouchTarget),
+                  minimumSize: const Size.fromHeight(GameLayout.controlsHeight),
                 ),
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: OutlinedButton.icon(
+              child: FilledButton.icon(
                 key: const Key('result-again'),
                 onPressed: widget.onAgain,
                 icon: const Icon(Icons.replay_rounded),
                 label: Text(gameLine(l10n, 'games.common.again')),
-                style: OutlinedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(kMinTouchTarget),
+                style: FilledButton.styleFrom(
+                  backgroundColor: palette.accent,
+                  minimumSize: const Size.fromHeight(GameLayout.controlsHeight),
                 ),
               ),
             ),
           ],
+        ],
+      ),
+    );
+  }
+}
+
+/// A square outlined icon button the size of the controls strip.
+class _RoundButton extends StatelessWidget {
+  const _RoundButton({
+    super.key,
+    required this.icon,
+    required this.tooltip,
+    required this.onPressed,
+  });
+
+  final IconData icon;
+  final String tooltip;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: GameLayout.controlsHeight,
+      height: GameLayout.controlsHeight,
+      child: OutlinedButton(
+        onPressed: onPressed,
+        style: OutlinedButton.styleFrom(
+          padding: EdgeInsets.zero,
+          minimumSize: const Size.square(kMinTouchTarget),
         ),
-      ],
+        child: Tooltip(message: tooltip, child: Icon(icon, size: 30)),
+      ),
+    );
+  }
+}
+
+class _BadgeCard extends StatelessWidget {
+  const _BadgeCard({required this.badge, required this.text});
+
+  final String badge;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = AppTheme.of(context).ui;
+    return Container(
+      key: const Key('result-badge'),
+      margin: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: palette.surface.withValues(alpha: 0.95),
+        borderRadius: BorderRadius.circular(22),
+        boxShadow: [
+          BoxShadow(
+            color: palette.text.withValues(alpha: 0.2),
+            blurRadius: 16,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              color: palette.accent,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(badgeIcon(badge), size: 32, color: palette.text),
+          ),
+          const SizedBox(width: 16),
+          Flexible(
+            child: Text(
+              text,
+              style: TextStyle(
+                color: palette.text,
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

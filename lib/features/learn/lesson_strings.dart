@@ -22,6 +22,7 @@ String learnLine(AppLocalizations l10n, String key) {
     'learn.pawn.capture' => l10n.learnPawnCapture,
     'learn.pawn.practice' => l10n.learnPawnPractice,
     'learn.pawn.hint' => l10n.learnPawnHint,
+    'learn.pawn.moveHint' => l10n.learnPawnMoveHint,
     'learn.rook.title' => l10n.learnRookTitle,
     'learn.rook.intro' => l10n.learnRookIntro,
     'learn.rook.move' => l10n.learnRookMove,

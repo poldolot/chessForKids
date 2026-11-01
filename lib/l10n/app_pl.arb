@@ -84,6 +84,7 @@
   "learnPawnCapture": "Pion bije na ukos. Prosto nie bije!",
   "learnPawnPractice": "Ruszaj pionkami i bij, co się da!",
   "learnPawnHint": "Pion bije tylko na ukos.",
+  "learnPawnMoveHint": "Z pierwszego pola pion może skoczyć o dwa!",
   "learnRookTitle": "Wieża",
   "learnRookIntro": "To jest wieża. Mocna jak zamek.",
   "learnRookMove": "Wieża jedzie prosto: w górę, w dół, w lewo, w prawo.",

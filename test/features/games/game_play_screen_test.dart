@@ -233,4 +233,37 @@ void main() {
     expect(find.byKey(const Key('move-dot')), findsWidgets);
     await tester.pumpAndSettle();
   });
+
+  Future<void> expectBoardStaysPut(WidgetTester tester) async {
+    await pumpPlay(tester, 'rookRoads', 0);
+    final before = tester.getRect(sq('a1'));
+    final boardBefore = tester.getRect(sq('h8'));
+    for (final m in [
+      ('a1', 'a8'),
+      ('a8', 'h8'),
+      ('h8', 'h1'),
+      ('h1', 'd1'),
+      ('d1', 'd4'),
+    ]) {
+      await tapMove(tester, m.$1, m.$2);
+    }
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('game-result')), findsOneWidget);
+    expect(tester.getRect(sq('a1')), before);
+    expect(tester.getRect(sq('h8')), boardBefore);
+    expect(tester.takeException(), isNull);
+  }
+
+  testWidgets('the board stays where it was when the result appears', (
+    tester,
+  ) async {
+    await expectBoardStaysPut(tester);
+  });
+
+  testWidgets('the board stays put on a 360x640 phone too', (tester) async {
+    tester.view.physicalSize = const Size(360, 640);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await expectBoardStaysPut(tester);
+  });
 }

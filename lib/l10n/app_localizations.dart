@@ -602,6 +602,12 @@ abstract class AppLocalizations {
   /// **'A pawn captures only diagonally.'**
   String get learnPawnHint;
 
+  /// No description provided for @learnPawnMoveHint.
+  ///
+  /// In en, this message translates to:
+  /// **'From its first square a pawn can jump two!'**
+  String get learnPawnMoveHint;
+
   /// No description provided for @learnRookTitle.
   ///
   /// In en, this message translates to:

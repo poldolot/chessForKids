@@ -224,10 +224,11 @@ void main() {
     addTearDown(tester.view.reset);
     await pumpResult(tester, finished(rook, 0, tour));
     expect(tester.takeException(), isNull);
-    expect(
-      tester.getSize(find.byKey(const Key('result-next'))).width,
-      greaterThan(300),
-    );
+    // Back and again shrink to icons so the main button keeps its label.
+    final next = tester.getSize(find.byKey(const Key('result-next')));
+    final back = tester.getSize(find.byKey(const Key('result-back')));
+    expect(next.width, greaterThan(150));
+    expect(back.width, 60);
     await tester.pumpAndSettle();
   });
 }

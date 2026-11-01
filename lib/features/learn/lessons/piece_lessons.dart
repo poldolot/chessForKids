@@ -65,13 +65,16 @@ Lesson _pieceLesson(String id, PieceType type, List<LessonStep> tasks) {
 }
 
 final Lesson pawnLesson = _pieceLesson('pawn', PieceType.pawn, [
-  // Three moves, at least one of them the two-square start.
+  // Three moves, at least one of them the two-square start. Four pawns and
+  // a limit of four moves: single steps alone run out and the board resets
+  // instead of locking with no double step left.
   BoardTaskStep(
     lineKey: 'learn.pawn.move',
-    fen: '8/8/8/8/8/8/4P3/8 w - - 0 1',
+    fen: '8/8/8/8/8/8/P1P1P1P1/8 w - - 0 1',
     goal: (s) => s.goodMoves >= 3 && s.doubleSteps >= 1,
     solution: _moves('e2e4 e4e5 e5e6'),
-    hintKey: 'learn.pawn.hint',
+    moveLimit: 4,
+    hintKey: 'learn.pawn.moveHint',
   ),
   _capture('pawn', '8/8/8/2p1p3/3p1p2/4P3/8/8 w - - 0 1', 'e3d4 d4c5'),
   // Five plain moves and three captures; walking past a capture is a

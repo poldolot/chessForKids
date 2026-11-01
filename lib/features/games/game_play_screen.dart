@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../app/constants.dart';
 import '../../app/theme/app_theme.dart';
 import '../../core/speaker.dart';
 import '../../data/models.dart';
@@ -18,6 +17,7 @@ import 'game_model.dart';
 import 'game_result_view.dart';
 import 'game_strings.dart';
 import 'mini_game_session.dart';
+import 'widgets/game_layout.dart';
 import 'widgets/progress_bar.dart';
 
 /// One board of a mini-game being played.
@@ -50,29 +50,24 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
   Move? _hint;
   Timer? _hintTimer;
   Timer? _opponentTimer;
-  String? _openingKey;
+  late final String _openingKey;
 
   @override
   void initState() {
     super.initState();
     _session.addListener(_onSession);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) {
-        return;
-      }
-      final state = context.read<AppState>();
-      final profile = state.currentProfile;
-      final introduced =
-          profile?.introducedGames.contains(widget.game.id) ?? true;
-      setState(() {
-        _openingKey = introduced
-            ? 'games.common.yourMove'
-            : widget.game.introKey;
+    final state = context.read<AppState>();
+    final introduced =
+        state.currentProfile?.introducedGames.contains(widget.game.id) ?? true;
+    _openingKey = introduced ? 'games.common.yourMove' : widget.game.introKey;
+    if (!introduced) {
+      // Writing the profile notifies listeners; not during the first build.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          state.markGameIntroduced(widget.game.id);
+        }
       });
-      if (!introduced) {
-        state.markGameIntroduced(widget.game.id);
-      }
-    });
+    }
   }
 
   @override
@@ -138,6 +133,11 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
     }
   }
 
+  void _undo() {
+    _clearHint();
+    _session.undo();
+  }
+
   void _again() {
     _clearHint();
     _opponentTimer?.cancel();
@@ -197,71 +197,61 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
     MiniGameSession session,
     Move? hint,
   ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        if (_openingKey case final key?)
-          TeacherBubble(
-            theme: profile?.theme ?? TeacherTheme.animals,
-            avatarIndex: 3,
-            text: gameLine(l10n, key),
-            speechKey: key,
-          )
-        else
-          const SizedBox(height: 64),
-        const SizedBox(height: 10),
-        ProgressBar(key: const Key('game-progress'), value: session.progress),
-        const SizedBox(height: 10),
-        Expanded(
-          child: Center(
-            child: InteractiveBoard(
-              position: session.position,
-              onMove: _onMove,
-              rules: widget.board.rules,
-              movableColor: MiniGameSession.childColor,
-              moveFilter: session.allows,
-              onRejected: _onRejected,
-              lastMove: session.lastMove,
-              enabled: !session.awaitingOpponent,
-              extraHighlights: BoardHighlights(
-                stars: session.starsLeft,
-                danger: session.danger,
-                selected: hint?.from,
-                moveTargets: hint == null ? const {} : {hint.to},
+    return GameLayout(
+      bubble: TeacherBubble(
+        theme: profile?.theme ?? TeacherTheme.animals,
+        avatarIndex: 3,
+        text: gameLine(l10n, _openingKey),
+        speechKey: _openingKey,
+      ),
+      slot: ProgressBar(
+        key: const Key('game-progress'),
+        value: session.progress,
+      ),
+      board: InteractiveBoard(
+        position: session.position,
+        onMove: _onMove,
+        rules: widget.board.rules,
+        movableColor: MiniGameSession.childColor,
+        moveFilter: session.allows,
+        onRejected: _onRejected,
+        lastMove: session.lastMove,
+        enabled: !session.awaitingOpponent,
+        extraHighlights: BoardHighlights(
+          stars: session.starsLeft,
+          danger: session.danger,
+          selected: hint?.from,
+          moveTargets: hint == null ? const {} : {hint.to},
+        ),
+      ),
+      controls: Row(
+        children: [
+          Expanded(
+            child: OutlinedButton.icon(
+              key: const Key('game-undo'),
+              onPressed: session.canUndo ? _undo : null,
+              icon: const Icon(Icons.undo_rounded),
+              label: Text(gameLine(l10n, 'games.common.undo')),
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size.fromHeight(GameLayout.controlsHeight),
               ),
             ),
           ),
-        ),
-        const SizedBox(height: 10),
-        Row(
-          children: [
-            Expanded(
-              child: OutlinedButton.icon(
-                key: const Key('game-undo'),
-                onPressed: session.canUndo ? session.undo : null,
-                icon: const Icon(Icons.undo_rounded),
-                label: Text(gameLine(l10n, 'games.common.undo')),
-                style: OutlinedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(kMinTouchTarget),
-                ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: FilledButton.icon(
+              key: const Key('game-hint'),
+              onPressed: session.awaitingOpponent ? null : _showHint,
+              icon: const Icon(Icons.lightbulb_rounded),
+              label: Text(gameLine(l10n, 'games.common.hint')),
+              style: FilledButton.styleFrom(
+                backgroundColor: palette.accent,
+                minimumSize: const Size.fromHeight(GameLayout.controlsHeight),
               ),
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: FilledButton.icon(
-                key: const Key('game-hint'),
-                onPressed: session.awaitingOpponent ? null : _showHint,
-                icon: const Icon(Icons.lightbulb_rounded),
-                label: Text(gameLine(l10n, 'games.common.hint')),
-                style: FilledButton.styleFrom(
-                  backgroundColor: palette.accent,
-                  minimumSize: const Size.fromHeight(kMinTouchTarget),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 }

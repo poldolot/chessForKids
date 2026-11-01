@@ -112,6 +112,7 @@
   "learnPawnCapture": "A pawn captures diagonally. Never straight ahead!",
   "learnPawnPractice": "Move your pawns and capture what you can!",
   "learnPawnHint": "A pawn captures only diagonally.",
+  "learnPawnMoveHint": "From its first square a pawn can jump two!",
   "learnRookTitle": "Rook",
   "learnRookIntro": "This is the rook. Strong as a castle.",
   "learnRookMove": "The rook goes straight: up, down, left, right.",

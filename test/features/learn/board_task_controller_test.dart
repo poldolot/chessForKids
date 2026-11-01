@@ -1,6 +1,7 @@
 import 'package:chess_for_kids/engine/engine.dart';
 import 'package:chess_for_kids/features/learn/board_task_controller.dart';
 import 'package:chess_for_kids/features/learn/lesson_model.dart';
+import 'package:chess_for_kids/features/learn/lessons/catalog.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Square sq(String s) => Square.parse(s);
@@ -223,4 +224,21 @@ void main() {
     );
     expect(lesson.taskCount, 2);
   });
+
+  test(
+    'pawn move task: four single steps reset the board instead of locking it',
+    () {
+      final task = lessonById('pawn').steps.whereType<BoardTaskStep>().first;
+      final c = BoardTaskController(task);
+      expect(c.onMove(uci('e2e3')), TaskEvent.good);
+      expect(c.onMove(uci('e3e4')), TaskEvent.good);
+      expect(c.onMove(uci('e4e5')), TaskEvent.good);
+      expect(c.onMove(uci('a2a3')), TaskEvent.reset);
+      expect(c.state.position.pieceAt(sq('e2')), isNotNull);
+      expect(c.state.position.pieceAt(sq('a2')), isNotNull);
+      expect(c.onMove(uci('e2e4')), TaskEvent.good);
+      expect(c.onMove(uci('e4e5')), TaskEvent.good);
+      expect(c.onMove(uci('e5e6')), TaskEvent.complete);
+    },
+  );
 }
