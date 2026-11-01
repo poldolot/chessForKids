@@ -37,29 +37,34 @@ void main() {
     );
   });
 
-  test('hunt boards with other pieces need the queen lesson', () {
+  test('hunt levels with other pieces need the queen lesson', () {
     final hunt = gameById(games, 'hunt');
     final knightOnly = fresh.copyWith(lessonsDone: {'knight'});
-    expect(isBoardUnlocked(hunt, hunt.boards[0], knightOnly), isTrue);
-    expect(isBoardUnlocked(hunt, hunt.boards[2], knightOnly), isFalse);
+    expect(isLevelUnlocked(hunt, hunt.levels[0], knightOnly), isTrue);
+    expect(isLevelUnlocked(hunt, hunt.levels[2], knightOnly), isFalse);
     expect(
-      isBoardUnlocked(
+      isLevelUnlocked(
         hunt,
-        hunt.boards[2],
+        hunt.levels[2],
         knightOnly.copyWith(lessonsDone: {'knight', 'queen'}),
       ),
       isTrue,
     );
     expect(
-      isBoardUnlocked(
+      isLevelUnlocked(
         hunt,
-        hunt.boards[2],
+        hunt.levels[2],
         fresh.copyWith(unlockAllMiniGames: true),
       ),
       isTrue,
     );
-    expect(nextBoard(hunt, hunt.boards[1], knightOnly), isNull);
-    expect(nextBoard(hunt, hunt.boards[0], knightOnly)?.index, 1);
+    expect(nextLevel(hunt, hunt.levels[1], knightOnly), isNull);
+    expect(nextLevel(hunt, hunt.levels[0], knightOnly)?.index, 1);
+    final rook = gameById(games, 'rookRoads');
+    expect(
+      nextLevel(rook, rook.levels[4], fresh.copyWith(unlockAllMiniGames: true)),
+      isNull,
+    );
   });
 
   test('stars for moves follow par', () {
@@ -77,12 +82,15 @@ void main() {
     expect(gamesSectionStars(one, games), 1);
     final all = {
       for (final g in games)
-        for (final b in g.boards) gameStarsKey(g, b): 3,
+        for (final l in g.levels) gameStarsKey(g, l.index): 3,
     };
     expect(gamesSectionStars(fresh.copyWith(stars: all), games), 3);
-    expect(
-      gameStarsKey(gameById(games, 'hunt'), gameById(games, 'hunt').boards[2]),
-      'game:hunt:2',
+    expect(gameStarsKey(gameById(games, 'hunt'), 2), 'game:hunt:2');
+    // Stars earned on the old fixed boards count for the same levels.
+    final old = fresh.copyWith(
+      stars: {'game:rookRoads:1': 2, 'game:hunt:4': 3},
     );
+    expect(gameEarnedStars(gameById(games, 'rookRoads'), old), 2);
+    expect(gameEarnedStars(gameById(games, 'hunt'), old), 3);
   });
 }

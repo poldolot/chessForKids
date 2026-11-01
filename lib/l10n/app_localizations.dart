@@ -1007,7 +1007,7 @@ abstract class AppLocalizations {
   /// No description provided for @gamesCommonBoards.
   ///
   /// In en, this message translates to:
-  /// **'Boards'**
+  /// **'Levels'**
   String get gamesCommonBoards;
 
   /// No description provided for @gamesCommonHint.
@@ -1031,7 +1031,7 @@ abstract class AppLocalizations {
   /// No description provided for @gamesCommonNext.
   ///
   /// In en, this message translates to:
-  /// **'Next'**
+  /// **'Next level'**
   String get gamesCommonNext;
 
   /// No description provided for @gamesCommonBack.

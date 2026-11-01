@@ -14,7 +14,7 @@ const List<MiniGameKind> kGameOrder = [
   MiniGameKind.hunt,
 ];
 
-/// Asset file of a game's boards.
+/// Asset file of a game's levels.
 String gameAssetPath(MiniGameKind kind) {
   final file = switch (kind) {
     MiniGameKind.pawnWar => 'pawn_war',
@@ -57,22 +57,21 @@ IconData _gameIcon(MiniGameKind kind) => switch (kind) {
   MiniGameKind.hunt => Icons.track_changes_rounded,
 };
 
-/// Loads every game with its boards from [bundle].
+/// Loads every game with its levels from [bundle].
 Future<List<MiniGame>> loadMiniGames(AssetBundle bundle) async {
   final games = <MiniGame>[];
   for (final kind in kGameOrder) {
     final text = await bundle.loadString(gameAssetPath(kind));
     final json = jsonDecode(text) as Map<String, dynamic>;
-    final rules = gameRules(kind);
-    final boards = [
-      for (final (i, b) in (json['boards'] as List<dynamic>).indexed)
-        GameBoard.fromJson(i, b as Map<String, dynamic>, rules: rules),
+    final levels = [
+      for (final (i, l) in (json['levels'] as List<dynamic>).indexed)
+        GameLevel.fromJson(i, l as Map<String, dynamic>),
     ];
     games.add(
       MiniGame(
         kind: kind,
         unlockedByLesson: gameUnlockLesson(kind),
-        boards: boards,
+        levels: levels,
         piece: _gamePiece(kind),
         icon: _gameIcon(kind),
       ),

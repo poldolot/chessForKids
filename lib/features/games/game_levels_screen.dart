@@ -13,9 +13,9 @@ import 'game_progress.dart';
 import 'game_strings.dart';
 import 'games_screen.dart';
 
-/// The boards of one game, with stars and locks.
-class GameBoardsScreen extends StatelessWidget {
-  const GameBoardsScreen({super.key, required this.game});
+/// The levels of one game, with stars and locks.
+class GameLevelsScreen extends StatelessWidget {
+  const GameLevelsScreen({super.key, required this.game});
 
   final MiniGame game;
 
@@ -52,15 +52,17 @@ class GameBoardsScreen extends StatelessWidget {
                   spacing: 14,
                   runSpacing: 14,
                   children: [
-                    for (final board in game.boards)
+                    for (final level in game.levels)
                       SizedBox(
                         width: 150,
                         height: 120,
-                        child: _BoardTile(
+                        child: _LevelTile(
                           game: game,
-                          board: board,
-                          unlocked: isBoardUnlocked(game, board, profile),
-                          stars: profile.stars[gameStarsKey(game, board)] ?? 0,
+                          level: level,
+                          unlocked: isLevelUnlocked(game, level, profile),
+                          stars:
+                              profile.stars[gameStarsKey(game, level.index)] ??
+                              0,
                           palette: palette,
                         ),
                       ),
@@ -75,17 +77,17 @@ class GameBoardsScreen extends StatelessWidget {
   }
 }
 
-class _BoardTile extends StatelessWidget {
-  const _BoardTile({
+class _LevelTile extends StatelessWidget {
+  const _LevelTile({
     required this.game,
-    required this.board,
+    required this.level,
     required this.unlocked,
     required this.stars,
     required this.palette,
   });
 
   final MiniGame game;
-  final GameBoard board;
+  final GameLevel level;
   final bool unlocked;
   final int stars;
   final UiPalette palette;
@@ -93,7 +95,7 @@ class _BoardTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      key: Key('board-${board.index}'),
+      key: Key('level-${level.index}'),
       color: unlocked ? palette.surface : palette.muted.withValues(alpha: 0.15),
       borderRadius: BorderRadius.circular(22),
       child: InkWell(
@@ -102,24 +104,24 @@ class _BoardTile extends StatelessWidget {
           if (!unlocked) {
             openLockedLesson(
               context,
-              board.unlockedByLesson ?? game.unlockedByLesson,
+              level.unlockedByLesson ?? game.unlockedByLesson,
             );
             return;
           }
           Navigator.of(context).push(
             MaterialPageRoute<void>(
-              builder: (_) => GamePlayScreen(game: game, board: board),
+              builder: (_) => GamePlayScreen(game: game, level: level),
             ),
           );
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // The board number as dots, nothing to read.
+            // The level number as dots, nothing to read.
             Wrap(
               spacing: 4,
               children: [
-                for (var i = 0; i <= board.index; i++)
+                for (var i = 0; i <= level.index; i++)
                   Container(
                     width: 12,
                     height: 12,
@@ -136,7 +138,7 @@ class _BoardTile extends StatelessWidget {
             else
               Icon(
                 Icons.lock_rounded,
-                key: Key('board-${board.index}-locked'),
+                key: Key('level-${level.index}-locked'),
                 color: palette.muted,
                 size: 28,
               ),

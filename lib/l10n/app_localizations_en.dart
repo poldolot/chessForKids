@@ -501,7 +501,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gamesTitle => 'Mini-games';
 
   @override
-  String get gamesCommonBoards => 'Boards';
+  String get gamesCommonBoards => 'Levels';
 
   @override
   String get gamesCommonHint => 'Try this!';
@@ -513,7 +513,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gamesCommonAgain => 'Again';
 
   @override
-  String get gamesCommonNext => 'Next';
+  String get gamesCommonNext => 'Next level';
 
   @override
   String get gamesCommonBack => 'Back';

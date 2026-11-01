@@ -2,12 +2,14 @@ import 'dart:math';
 
 import 'package:chess_for_kids/data/models.dart';
 import 'package:chess_for_kids/features/board/piece_image.dart';
+import 'package:chess_for_kids/features/games/board_generator.dart';
 import 'package:chess_for_kids/features/games/game_catalog.dart';
 import 'package:chess_for_kids/features/games/game_play_screen.dart';
 import 'package:chess_for_kids/features/games/widgets/progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/fixed_boards.dart';
 import '../../support/test_app.dart';
 
 void main() {
@@ -34,7 +36,8 @@ void main() {
       app.wrap(
         GamePlayScreen(
           game: game,
-          board: game.boards[board],
+          level: game.levels[board],
+          board: fixedBoard(gameId, board),
           opponentDelay: const Duration(milliseconds: 300),
           random: Random(1),
         ),
@@ -203,7 +206,8 @@ void main() {
                 MaterialPageRoute<void>(
                   builder: (_) => GamePlayScreen(
                     game: game,
-                    board: game.boards[0],
+                    level: game.levels[0],
+                    board: fixedBoard('rookRoads', 0),
                     random: Random(1),
                   ),
                 ),
@@ -265,5 +269,24 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
     await expectBoardStaysPut(tester);
+  });
+
+  testWidgets('without a board the screen generates one for its level', (
+    tester,
+  ) async {
+    final game = gameById(app.games, 'bishopTracks');
+    await tester.pumpWidget(
+      app.wrap(
+        GamePlayScreen(game: game, level: game.levels[2], random: Random(3)),
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+    final expected = generateBoard(game.kind, game.levels[2], Random(3));
+    for (final s in expected.stars) {
+      expect(find.byKey(Key('star-${s.name}')), findsOneWidget);
+    }
+    expect(expected.stars.length, 5);
+    await tester.pumpAndSettle();
   });
 }

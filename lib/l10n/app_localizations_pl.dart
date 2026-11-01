@@ -498,7 +498,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get gamesTitle => 'Mini-gry';
 
   @override
-  String get gamesCommonBoards => 'Plansze';
+  String get gamesCommonBoards => 'Poziomy';
 
   @override
   String get gamesCommonHint => 'Spróbuj tak!';
@@ -510,7 +510,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get gamesCommonAgain => 'Jeszcze raz';
 
   @override
-  String get gamesCommonNext => 'Następna';
+  String get gamesCommonNext => 'Następny poziom';
 
   @override
   String get gamesCommonBack => 'Wróć';

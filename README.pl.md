@@ -23,7 +23,7 @@ nagrania lektora w planach. Polski i angielski od startu.
 
 ## Stan prac
 
-Wszystkie trzy działy v1 są gotowe: Nauka (14 lekcji), Mini‑gry (pięć gier) i Partia
+Wszystkie trzy działy v1 są gotowe: Nauka (14 lekcji), Mini‑gry (pięć gier po pięć poziomów; każda plansza jest losowana na nowo i sprawdzana, czy da się ją rozwiązać) i Partia
 z prostym komputerem (pełne reguły FIDE, podpowiedzi, cofanie, poddanie, zapis
 i wznowienie partii, gwiazdki i odznaki), z głosem po polsku i angielsku, na bazie
 szkieletu aplikacji (profile, menu, strefa rodzica) i przetestowanego silnika reguł.

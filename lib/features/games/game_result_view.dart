@@ -44,8 +44,8 @@ class GameResultView extends StatefulWidget {
   final MiniGameSession session;
   final VoidCallback onAgain;
 
-  /// Called with the next unlocked board; the button is hidden when none.
-  final ValueChanged<GameBoard> onNext;
+  /// Called with the next unlocked level; the button is hidden when none.
+  final ValueChanged<GameLevel> onNext;
   final VoidCallback onBack;
 
   @override
@@ -95,7 +95,7 @@ class _GameResultViewState extends State<GameResultView> {
   Future<void> _record() async {
     final state = context.read<AppState>();
     await state.recordMiniGame(
-      key: gameStarsKey(widget.game, widget.board),
+      key: gameStarsKey(widget.game, widget.board.index),
       stars: _stars,
       won: _won,
     );
@@ -149,7 +149,11 @@ class _GameResultViewState extends State<GameResultView> {
     final theme = profile?.theme ?? TeacherTheme.animals;
     final next = profile == null
         ? null
-        : nextBoard(widget.game, widget.board, profile);
+        : nextLevel(
+            widget.game,
+            widget.game.levels[widget.board.index],
+            profile,
+          );
     final lineKey = _won ? 'games.common.won' : 'games.common.lost';
     return GameLayout(
       key: const Key('game-result'),

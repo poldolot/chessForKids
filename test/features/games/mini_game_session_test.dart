@@ -1,11 +1,14 @@
 import 'dart:math';
 
 import 'package:chess_for_kids/engine/engine.dart';
+import 'package:chess_for_kids/features/games/board_generator.dart';
 import 'package:chess_for_kids/features/games/game_catalog.dart';
 import 'package:chess_for_kids/features/games/game_model.dart';
 import 'package:chess_for_kids/features/games/mini_game_session.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../../support/fixed_boards.dart';
 
 Square sq(String s) => Square.parse(s);
 Move uci(String s) => Move.parseUci(s);
@@ -19,7 +22,7 @@ void main() {
     final game = gameById(games, id);
     return MiniGameSession(
       game,
-      custom ?? game.boards[board],
+      custom ?? fixedBoard(id, board),
       random: Random(1),
     );
   }
@@ -226,8 +229,10 @@ void main() {
 
   test('hint is always a legal allowed move and for collect games finishes within par', () {
     for (final id in ['rookRoads', 'bishopTracks', 'kingRace', 'hunt']) {
-      for (final b in gameById(games, id).boards) {
-        final s = session(id, b.index);
+      final game = gameById(games, id);
+      for (final level in game.levels) {
+        final b = generateBoard(game.kind, level, Random(level.index + 1));
+        final s = MiniGameSession(game, b, random: Random(1));
         var guard = 0;
         while (s.outcome == SessionOutcome.playing && guard++ < 40) {
           final h = s.hint();

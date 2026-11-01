@@ -14,6 +14,8 @@ import '../../widgets/game_layout.dart';
 import '../../widgets/teacher_bubble.dart';
 import '../board/board_highlights.dart';
 import '../board/interactive_board.dart';
+import 'board_generator.dart';
+import 'game_catalog.dart';
 import 'game_model.dart';
 import 'game_result_view.dart';
 import 'game_strings.dart';
@@ -25,13 +27,17 @@ class GamePlayScreen extends StatefulWidget {
   const GamePlayScreen({
     super.key,
     required this.game,
-    required this.board,
+    required this.level,
+    this.board,
     this.opponentDelay = const Duration(milliseconds: 600),
     this.random,
   });
 
   final MiniGame game;
-  final GameBoard board;
+  final GameLevel level;
+
+  /// A ready board for [level]; `null` generates one (tests pass fixed ones).
+  final GameBoard? board;
   final Duration opponentDelay;
   final Random? random;
 
@@ -42,10 +48,20 @@ class GamePlayScreen extends StatefulWidget {
 class _GamePlayScreenState extends State<GamePlayScreen> {
   static const Duration _hintDuration = Duration(seconds: 2);
 
-  late final MiniGameSession _session = MiniGameSession(
+  late final Random _random = widget.random ?? Random();
+  late GameBoard _board = widget.board ?? _generate();
+  late MiniGameSession _session = MiniGameSession(
     widget.game,
-    widget.board,
-    random: widget.random,
+    _board,
+    random: _random,
+  );
+
+  GameBoard _generate({GameBoard? avoid}) => generateBoard(
+    widget.game.kind,
+    widget.level,
+    _random,
+    rules: gameRules(widget.game.kind),
+    avoid: avoid,
   );
   Move? _hint;
   Timer? _hintTimer;
@@ -138,18 +154,25 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
     _session.undo();
   }
 
+  /// A fresh board of the same level.
   void _again() {
     _clearHint();
     _opponentTimer?.cancel();
-    _session.restart();
+    _session.removeListener(_onSession);
+    _session.dispose();
+    setState(() {
+      _board = _generate(avoid: _board);
+      _session = MiniGameSession(widget.game, _board, random: _random);
+    });
+    _session.addListener(_onSession);
   }
 
-  void _next(GameBoard board) {
+  void _next(GameLevel level) {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute<void>(
         builder: (_) => GamePlayScreen(
           game: widget.game,
-          board: board,
+          level: level,
           opponentDelay: widget.opponentDelay,
           random: widget.random,
         ),
@@ -178,7 +201,7 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
               : GameResultView(
                   key: ValueKey(session.position),
                   game: widget.game,
-                  board: widget.board,
+                  board: _board,
                   session: session,
                   onAgain: _again,
                   onNext: _next,
@@ -211,7 +234,7 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
       board: InteractiveBoard(
         position: session.position,
         onMove: _onMove,
-        rules: widget.board.rules,
+        rules: _board.rules,
         movableColor: MiniGameSession.childColor,
         moveFilter: session.allows,
         onRejected: _onRejected,

@@ -1,64 +1,29 @@
 {
-  "boards": [
+  "levels": [
     {
-      "fen": "8/8/8/8/8/8/8/2B5 w - - 0 1",
-      "stars": [
-        "a3",
-        "f8",
-        "h6",
-        "e3",
-        "a7"
-      ],
-      "par": 5,
-      "limit": 8
+      "stars": 3,
+      "obstacles": 0,
+      "slack": 3
     },
     {
-      "fen": "8/8/8/8/8/8/8/5B2 w - - 0 1",
-      "stars": [
-        "a6",
-        "h7",
-        "e8",
-        "b5",
-        "g2"
-      ],
-      "par": 7,
-      "limit": 10
+      "stars": 4,
+      "obstacles": 0,
+      "slack": 3
     },
     {
-      "fen": "8/8/8/8/8/2P5/8/4B3 w - - 0 1",
-      "stars": [
-        "h4",
-        "b8",
-        "g7",
-        "d8",
-        "a5"
-      ],
-      "par": 7,
-      "limit": 10
+      "stars": 5,
+      "obstacles": 1,
+      "slack": 3
     },
     {
-      "fen": "8/8/8/8/8/8/3P4/2B5 w - - 0 1",
-      "stars": [
-        "a3",
-        "f8",
-        "h6",
-        "e3",
-        "a7"
-      ],
-      "par": 5,
-      "limit": 8
+      "stars": 5,
+      "obstacles": 2,
+      "slack": 2
     },
     {
-      "fen": "8/8/8/8/4p3/8/8/2B5 w - - 0 1",
-      "stars": [
-        "a3",
-        "c5",
-        "f8",
-        "h2",
-        "d4"
-      ],
-      "par": 6,
-      "limit": 9
+      "stars": 6,
+      "obstacles": 3,
+      "slack": 2
     }
   ]
 }

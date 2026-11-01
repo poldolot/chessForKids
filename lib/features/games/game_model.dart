@@ -5,7 +5,7 @@ import '../../engine/engine.dart';
 /// The five mini-games of the first version.
 enum MiniGameKind { pawnWar, rookRoads, bishopTracks, kingRace, hunt }
 
-/// One board of a mini-game, loaded from `assets/games/<game>.json`.
+/// One playable board of a mini-game, generated for a level (or fixed).
 final class GameBoard {
   const GameBoard({
     required this.index,
@@ -16,28 +16,6 @@ final class GameBoard {
     this.unlockedByLesson,
     this.rules = GameRules.standard,
   });
-
-  factory GameBoard.fromJson(
-    int index,
-    Map<String, dynamic> json, {
-    required GameRules rules,
-  }) {
-    final fen = json['fen'];
-    if (fen is! String) {
-      throw FormatException('Board $index has no fen', json);
-    }
-    return GameBoard(
-      index: index,
-      fen: fen,
-      stars: (json['stars'] as List<dynamic>? ?? const [])
-          .map((s) => Square.parse(s as String))
-          .toSet(),
-      moveLimit: json['limit'] as int?,
-      par: json['par'] as int?,
-      unlockedByLesson: json['unlock'] as String?,
-      rules: rules,
-    );
-  }
 
   final int index;
   final String fen;
@@ -81,19 +59,95 @@ final class GameBoard {
   }
 }
 
-/// A mini-game: metadata in code, boards from assets.
+/// Difficulty of one level of a mini-game, from `assets/games/<game>.json`.
+final class GameLevel {
+  const GameLevel({
+    required this.index,
+    this.stars = 0,
+    this.obstacles = 0,
+    this.slack = 3,
+    this.blockers = const {},
+    this.hunter,
+    this.prey,
+    this.trapped = false,
+    this.limit,
+    this.fen,
+    this.unlockedByLesson,
+  });
+
+  factory GameLevel.fromJson(int index, Map<String, dynamic> json) {
+    PieceType? type(Object? letter) =>
+        letter is String ? PieceType.fromLetter(letter) : null;
+    final blockers = <PieceType, int>{};
+    if (json['blockers'] case final Map<String, dynamic> raw) {
+      for (final e in raw.entries) {
+        final t = PieceType.fromLetter(e.key);
+        if (t == null) {
+          throw FormatException('Unknown blocker ${e.key}', json);
+        }
+        blockers[t] = e.value as int;
+      }
+    }
+    return GameLevel(
+      index: index,
+      stars: json['stars'] as int? ?? 0,
+      obstacles: json['obstacles'] as int? ?? 0,
+      slack: json['slack'] as int? ?? 3,
+      blockers: blockers,
+      hunter: type(json['hunter']),
+      prey: type(json['prey']),
+      trapped: json['trapped'] as bool? ?? false,
+      limit: json['limit'] as int?,
+      fen: json['fen'] as String?,
+      unlockedByLesson: json['unlock'] as String?,
+    );
+  }
+
+  final int index;
+
+  /// Collect games: stars to place.
+  final int stars;
+
+  /// Collect games: white pawns in the way.
+  final int obstacles;
+
+  /// Moves allowed beyond par.
+  final int slack;
+
+  /// King race: black pieces in the way, by type.
+  final Map<PieceType, int> blockers;
+
+  /// Hunt: the child's piece and the fleeing piece.
+  final PieceType? hunter;
+  final PieceType? prey;
+
+  /// Hunt: the prey is boxed in by its own pawns.
+  final bool trapped;
+
+  /// Hunt: fixed move limit.
+  final int? limit;
+
+  /// A fixed board instead of a generated one (pawn war).
+  final String? fen;
+
+  /// A lesson this level needs beyond the game's own.
+  final String? unlockedByLesson;
+}
+
+/// A mini-game: metadata in code, levels from assets; boards are generated
+/// per level when the child plays.
 final class MiniGame {
   const MiniGame({
     required this.kind,
     required this.unlockedByLesson,
-    required this.boards,
+    required this.levels,
     this.piece,
     this.icon,
   });
 
   final MiniGameKind kind;
   final String unlockedByLesson;
-  final List<GameBoard> boards;
+  final List<GameLevel> levels;
   final Piece? piece;
   final IconData? icon;
 

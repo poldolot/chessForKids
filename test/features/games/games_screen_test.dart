@@ -1,5 +1,5 @@
 import 'package:chess_for_kids/data/models.dart';
-import 'package:chess_for_kids/features/games/game_boards_screen.dart';
+import 'package:chess_for_kids/features/games/game_levels_screen.dart';
 import 'package:chess_for_kids/features/games/game_play_screen.dart';
 import 'package:chess_for_kids/features/games/games_screen.dart';
 import 'package:chess_for_kids/features/games/widgets/game_card.dart';
@@ -95,7 +95,7 @@ void main() {
   );
 
   testWidgets(
-    'an unlocked game opens its board list; pawn war goes straight to play',
+    'an unlocked game opens its level list; pawn war goes straight to play',
     (tester) async {
       await app.state.updateProfile(
         app.state.currentProfile!.copyWith(unlockAllMiniGames: true),
@@ -103,11 +103,11 @@ void main() {
       await pumpGames(tester);
       await tester.tap(card('rookRoads'));
       await tester.pumpAndSettle();
-      expect(find.byType(GameBoardsScreen), findsOneWidget);
+      expect(find.byType(GameLevelsScreen), findsOneWidget);
       expect(app.speaker.spoken.last.$1, 'games.common.boards');
-      expect(find.byKey(const Key('board-0')), findsOneWidget);
-      expect(find.byKey(const Key('board-4')), findsOneWidget);
-      Navigator.of(tester.element(find.byType(GameBoardsScreen))).pop();
+      expect(find.byKey(const Key('level-0')), findsOneWidget);
+      expect(find.byKey(const Key('level-4')), findsOneWidget);
+      Navigator.of(tester.element(find.byType(GameLevelsScreen))).pop();
       await tester.pumpAndSettle();
       await tester.tap(card('pawnWar'));
       await tester.pumpAndSettle();
@@ -130,15 +130,15 @@ void main() {
   });
 
   testWidgets(
-    'hunt boards with other pieces stay locked without the queen lesson',
+    'hunt levels with other pieces stay locked without the queen lesson',
     (tester) async {
       await app.state.markLessonDone('knight');
       await pumpGames(tester);
       await tester.tap(card('hunt'));
       await tester.pumpAndSettle();
-      expect(find.byKey(const Key('board-2-locked')), findsOneWidget);
-      expect(find.byKey(const Key('board-0-locked')), findsNothing);
-      await tester.tap(find.byKey(const Key('board-2')));
+      expect(find.byKey(const Key('level-2-locked')), findsOneWidget);
+      expect(find.byKey(const Key('level-0-locked')), findsNothing);
+      await tester.tap(find.byKey(const Key('level-2')));
       await tester.pumpAndSettle();
       expect(find.byType(GamePlayScreen), findsNothing);
       expect(
@@ -148,13 +148,13 @@ void main() {
       expect(find.byType(LessonScreen), findsOneWidget);
       Navigator.of(tester.element(find.byType(LessonScreen))).pop();
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const Key('board-0')));
+      await tester.tap(find.byKey(const Key('level-0')));
       await tester.pumpAndSettle();
       expect(find.byType(GamePlayScreen), findsOneWidget);
     },
   );
 
-  testWidgets('board list shows the best stars per board', (tester) async {
+  testWidgets('level list shows the best stars per level', (tester) async {
     await app.state.updateProfile(
       app.state.currentProfile!.copyWith(
         unlockAllMiniGames: true,
@@ -166,7 +166,7 @@ void main() {
     await tester.pumpAndSettle();
     final row = tester.widget<StarRow>(
       find.descendant(
-        of: find.byKey(const Key('board-1')),
+        of: find.byKey(const Key('level-1')),
         matching: find.byType(StarRow),
       ),
     );
@@ -187,7 +187,7 @@ void main() {
       expect(tester.widget<GameCard>(card('rookRoads')).unlocked, isTrue);
       await tester.tap(card('rookRoads'));
       await tester.pumpAndSettle();
-      expect(find.byType(GameBoardsScreen), findsOneWidget);
+      expect(find.byType(GameLevelsScreen), findsOneWidget);
     },
   );
 }

@@ -262,3 +262,63 @@ Move? huntStep(Position position, Square hunter, Square prey) {
   }
   return best;
 }
+
+/// Breadth-first distance, in moves of [piece] standing on [from], to every
+/// square it can reach over [board] (a position without the moving piece;
+/// every other piece is a fixed obstacle, [avoid] squares are never entered).
+Map<Square, int> reachDistances(
+  Position board,
+  Piece piece,
+  Square from, {
+  Set<Square> avoid = const {},
+}) {
+  final dist = <Square, int>{from: 0};
+  final queue = [from];
+  while (queue.isNotEmpty) {
+    final s = queue.removeAt(0);
+    final p = board.withPiece(s, piece).copyWith(sideToMove: piece.color);
+    for (final m in pseudoLegalMoves(p, from: s)) {
+      if (avoid.contains(m.to) || board.pieceAt(m.to) != null) {
+        continue;
+      }
+      if (!dist.containsKey(m.to)) {
+        dist[m.to] = dist[s]! + 1;
+        queue.add(m.to);
+      }
+    }
+  }
+  return dist;
+}
+
+/// Fewest moves for the piece on [from] to visit every star, trying every
+/// order; `null` when a star cannot be reached.
+int? optimalTour(Position position, Square from, Set<Square> stars) {
+  final piece = position.pieceAt(from);
+  if (piece == null) {
+    return null;
+  }
+  final board = position.withPiece(from, null);
+  final cache = <Square, Map<Square, int>>{};
+  Map<Square, int> from_(Square at) =>
+      cache.putIfAbsent(at, () => reachDistances(board, piece, at));
+  int? best;
+  void visit(Square at, Set<Square> left, int moves) {
+    if (best != null && moves >= best!) {
+      return;
+    }
+    if (left.isEmpty) {
+      best = moves;
+      return;
+    }
+    final d = from_(at);
+    for (final star in left) {
+      final steps = d[star];
+      if (steps != null) {
+        visit(star, {...left}..remove(star), moves + steps);
+      }
+    }
+  }
+
+  visit(from, stars, 0);
+  return best;
+}

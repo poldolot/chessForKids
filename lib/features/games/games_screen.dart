@@ -9,7 +9,7 @@ import '../learn/lesson_screen.dart';
 import '../learn/lesson_strings.dart';
 import '../learn/lessons/catalog.dart';
 import '../profiles/profile_picker_screen.dart';
-import 'game_boards_screen.dart';
+import 'game_levels_screen.dart';
 import 'game_model.dart';
 import 'game_play_screen.dart';
 import 'game_progress.dart';
@@ -38,11 +38,11 @@ void openLockedLesson(BuildContext context, String lessonId) {
   );
 }
 
-/// Where a game starts: straight into play for a single board, otherwise
-/// the board list.
-Widget gameEntryScreen(MiniGame game) => game.boards.length == 1
-    ? GamePlayScreen(game: game, board: game.boards.first)
-    : GameBoardsScreen(game: game);
+/// Where a game starts: straight into play for a single level, otherwise
+/// the level list.
+Widget gameEntryScreen(MiniGame game) => game.levels.length == 1
+    ? GamePlayScreen(game: game, level: game.levels.first)
+    : GameLevelsScreen(game: game);
 
 /// The list of mini-games.
 class GamesScreen extends StatelessWidget {
@@ -88,7 +88,7 @@ class GamesScreen extends StatelessWidget {
                 title: gameLine(l10n, game.titleKey),
                 unlocked: isGameUnlocked(game, profile),
                 earnedStars: gameEarnedStars(game, profile),
-                maxStars: game.boards.length * 3,
+                maxStars: game.levels.length * 3,
                 onTap: () =>
                     _open(context, game, isGameUnlocked(game, profile)),
               ),

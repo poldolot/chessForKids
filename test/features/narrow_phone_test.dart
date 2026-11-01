@@ -1,6 +1,6 @@
 import 'package:chess_for_kids/data/models.dart';
-import 'package:chess_for_kids/features/games/game_boards_screen.dart';
 import 'package:chess_for_kids/features/games/game_catalog.dart';
+import 'package:chess_for_kids/features/games/game_levels_screen.dart';
 import 'package:chess_for_kids/features/games/game_play_screen.dart';
 import 'package:chess_for_kids/features/games/games_screen.dart';
 import 'package:chess_for_kids/features/learn/learn_screen.dart';
@@ -79,11 +79,11 @@ void main() {
     );
     await pumpNarrow(tester, const GamesScreen());
     final rook = gameById(app.games, 'rookRoads');
-    await tester.pumpWidget(app.wrap(GameBoardsScreen(game: rook)));
+    await tester.pumpWidget(app.wrap(GameLevelsScreen(game: rook)));
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(
-      app.wrap(GamePlayScreen(game: rook, board: rook.boards[0])),
+      app.wrap(GamePlayScreen(game: rook, level: rook.levels[0])),
     );
     await tester.pump();
     await tester.pump();

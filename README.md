@@ -22,7 +22,7 @@ with recorded voice planned later. Polish and English at launch.
 
 ## Status
 
-All three sections of v1 are in place: Learn (14 lessons), Mini-games (five games) and
+All three sections of v1 are in place: Learn (14 lessons), Mini-games (five games with five generated levels each: every board is drawn fresh and checked to be solvable) and
 Match against a simple computer opponent (full FIDE rules, hints, undo, resign, saved
 and resumed games, stars and badges), with spoken guidance in Polish and English on top
 of the app shell (profiles, menu, parent zone) and a tested chess rules engine. Next:
