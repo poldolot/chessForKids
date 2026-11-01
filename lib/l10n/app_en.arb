@@ -1,0 +1,97 @@
+{
+  "@@locale": "en",
+  "appTitle": "Chess for Kids",
+  "whoIsPlaying": "Who is playing?",
+  "greeting": "Hi! What shall we play today?",
+  "greetingNamed": "Hi, {name}! What shall we play today?",
+  "@greetingNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "learn": "Learn",
+  "learnSubtitle": "pieces and their moves",
+  "miniGames": "Mini-games",
+  "miniGamesSubtitle": "pawn war, bishop tracks...",
+  "play": "Play",
+  "playSubtitle": "play against the computer",
+  "comingSoon": "Coming soon!",
+  "addProfile": "Add a player",
+  "chooseTeachers": "Choose your teachers",
+  "chooseAvatar": "Choose your picture",
+  "yourName": "Your name",
+  "nameHint": "Type it the way you call your child",
+  "done": "Done",
+  "back": "Back",
+  "parentZone": "Parents",
+  "stars": "Stars",
+  "badges": "Badges",
+  "choosePromotion": "Your pawn grows up! Pick a piece.",
+  "gateTitle": "For parents: solve this",
+  "gateWrong": "Not quite, try another one",
+  "profiles": "Players",
+  "language": "Language",
+  "systemLanguage": "Auto",
+  "polish": "Polski",
+  "english": "English",
+  "voice": "Voice",
+  "voiceEnabled": "Speak out loud",
+  "speechRate": "Speech speed",
+  "slow": "Slow",
+  "normal": "Normal",
+  "fast": "Fast",
+  "testVoice": "Test voice",
+  "voiceUnavailable": "No voice for this language is installed. Open your phone's text-to-speech settings and install one.",
+  "colors": "Colors",
+  "uiColors": "App colors",
+  "boardColors": "Board colors",
+  "childPlays": "Child plays",
+  "alwaysWhite": "Always white",
+  "randomColor": "Random color",
+  "miniGamesSettings": "Mini-games",
+  "unlockAllMiniGames": "Unlock all mini-games for this player",
+  "editProfile": "Edit",
+  "resetProgress": "Reset progress",
+  "resetProgressQuestion": "Remove all stars and badges of {name}?",
+  "@resetProgressQuestion": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteProfile": "Delete",
+  "deleteProfileQuestion": "Delete the player {name} and all their progress?",
+  "@deleteProfileQuestion": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "unnamedPlayer": "(no name)",
+  "cancel": "Cancel",
+  "confirm": "Yes",
+  "about": "About",
+  "offlineNotice": "This app never connects to the internet and collects no data.",
+  "licenses": "Licenses",
+  "version": "Version {version}",
+  "@version": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "sandboxTitle": "Free play",
+  "yourMove": "Your move!",
+  "check": "Check! Save the king!",
+  "checkmateWhite": "Checkmate! White wins!",
+  "checkmateBlack": "Checkmate! Black wins!",
+  "stalemate": "Stalemate. It's a draw!",
+  "draw": "It's a draw!",
+  "newGame": "New game",
+  "undo": "Undo"
+}
