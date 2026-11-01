@@ -10,6 +10,7 @@ import '../../data/models.dart';
 import '../../engine/engine.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
+import '../../widgets/game_layout.dart';
 import '../../widgets/teacher_bubble.dart';
 import '../board/board_highlights.dart';
 import '../board/interactive_board.dart';
@@ -17,7 +18,6 @@ import 'game_model.dart';
 import 'game_result_view.dart';
 import 'game_strings.dart';
 import 'mini_game_session.dart';
-import 'widgets/game_layout.dart';
 import 'widgets/progress_bar.dart';
 
 /// One board of a mini-game being played.
