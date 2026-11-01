@@ -6,9 +6,6 @@ import '../../data/models.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../../widgets/teacher_bubble.dart';
-import '../games/game_catalog.dart';
-import '../games/game_model.dart';
-import '../games/games_screen.dart';
 import 'celebrate_view.dart';
 import 'lesson_model.dart';
 import 'lesson_strings.dart';
@@ -174,13 +171,6 @@ class _LessonScreenState extends State<LessonScreen> {
                     lesson: lesson,
                     mistakes: _mistakes,
                     onNext: _finish,
-                    playBuilder: switch (gameForLesson(
-                      context.read<List<MiniGame>>(),
-                      lesson.id,
-                    )) {
-                      final game? => (_) => gameEntryScreen(game),
-                      null => null,
-                    },
                   ),
                 ),
             ],

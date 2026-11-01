@@ -542,12 +542,6 @@ abstract class AppLocalizations {
   /// **'You earned a new badge!'**
   String get learnCommonBadge;
 
-  /// No description provided for @learnCommonPlay.
-  ///
-  /// In en, this message translates to:
-  /// **'Play'**
-  String get learnCommonPlay;
-
   /// No description provided for @learnCommonAllDone.
   ///
   /// In en, this message translates to:

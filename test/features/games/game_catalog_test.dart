@@ -77,17 +77,4 @@ void main() {
       await expectLater(rootBundle.loadString(gameAssetPath(kind)), completes);
     }
   });
-
-  test(
-    'gameForLesson maps piece lessons to games and rule lessons to none',
-    () {
-      expect(gameForLesson(games, 'pawn')?.id, 'pawnWar');
-      expect(gameForLesson(games, 'rook')?.id, 'rookRoads');
-      expect(gameForLesson(games, 'bishop')?.id, 'bishopTracks');
-      expect(gameForLesson(games, 'king')?.id, 'kingRace');
-      expect(gameForLesson(games, 'knight')?.id, 'hunt');
-      expect(gameForLesson(games, 'queen'), isNull);
-      expect(gameForLesson(games, 'setup'), isNull);
-    },
-  );
 }

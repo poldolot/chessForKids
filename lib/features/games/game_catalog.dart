@@ -85,13 +85,3 @@ MiniGame gameById(List<MiniGame> games, String id) => games.firstWhere(
   (g) => g.id == id,
   orElse: () => throw ArgumentError.value(id, 'id', 'Unknown game'),
 );
-
-/// The game a lesson unlocks, if any (the celebration offers to play it).
-MiniGame? gameForLesson(List<MiniGame> games, String lessonId) {
-  for (final game in games) {
-    if (game.unlockedByLesson == lessonId) {
-      return game;
-    }
-  }
-  return null;
-}

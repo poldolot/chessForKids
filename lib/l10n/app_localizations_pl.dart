@@ -243,9 +243,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get learnCommonBadge => 'Masz nową odznakę!';
 
   @override
-  String get learnCommonPlay => 'Zagraj';
-
-  @override
   String get learnCommonAllDone =>
       'Wszystkie lekcje zrobione. Jesteś mistrzem!';
 

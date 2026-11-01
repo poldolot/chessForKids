@@ -244,9 +244,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get learnCommonBadge => 'You earned a new badge!';
 
   @override
-  String get learnCommonPlay => 'Play';
-
-  @override
   String get learnCommonAllDone => 'All lessons done. You are a champion!';
 
   @override

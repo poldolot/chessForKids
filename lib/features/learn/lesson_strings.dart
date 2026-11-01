@@ -14,7 +14,6 @@ String learnLine(AppLocalizations l10n, String key) {
     'learn.common.starsCollect' => l10n.learnCommonStarsCollect,
     'learn.common.limitHint' => l10n.learnCommonLimitHint,
     'learn.common.badge' => l10n.learnCommonBadge,
-    'learn.common.play' => l10n.learnCommonPlay,
     'learn.common.allDone' => l10n.learnCommonAllDone,
     'learn.pawn.title' => l10n.learnPawnTitle,
     'learn.pawn.intro' => l10n.learnPawnIntro,

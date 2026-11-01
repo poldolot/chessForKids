@@ -22,15 +22,11 @@ class CelebrateView extends StatefulWidget {
     required this.lesson,
     required this.mistakes,
     required this.onNext,
-    this.playBuilder,
   });
 
   final Lesson lesson;
   final int mistakes;
   final VoidCallback onNext;
-
-  /// When set, a "Play" button opens the mini-game this lesson unlocked.
-  final WidgetBuilder? playBuilder;
 
   @override
   State<CelebrateView> createState() => _CelebrateViewState();
@@ -193,34 +189,15 @@ class _CelebrateViewState extends State<CelebrateView> {
             ),
           ),
         const Spacer(),
-        Row(
-          children: [
-            if (widget.playBuilder case final play?) ...[
-              Expanded(
-                child: OutlinedButton.icon(
-                  key: const Key('celebrate-play'),
-                  onPressed: () =>
-                      Navigator.of(context)
-                          .push(MaterialPageRoute<void>(builder: play)),
-                  icon: const Icon(Icons.sports_esports_rounded),
-                  label: Text(learnLine(l10n, 'learn.common.play')),
-                ),
-              ),
-              const SizedBox(width: 12),
-            ],
-            Expanded(
-              child: FilledButton.icon(
-                key: const Key('celebrate-next'),
-                onPressed: widget.onNext,
-                icon: const Icon(Icons.play_arrow_rounded, size: 28),
-                label: Text(learnLine(l10n, 'learn.common.next')),
-                style: FilledButton.styleFrom(
-                  backgroundColor: palette.accent,
-                  minimumSize: const Size.fromHeight(60),
-                ),
-              ),
-            ),
-          ],
+        FilledButton.icon(
+          key: const Key('celebrate-next'),
+          onPressed: widget.onNext,
+          icon: const Icon(Icons.play_arrow_rounded, size: 28),
+          label: Text(learnLine(l10n, 'learn.common.next')),
+          style: FilledButton.styleFrom(
+            backgroundColor: palette.accent,
+            minimumSize: const Size.fromHeight(60),
+          ),
         ),
       ],
     );
