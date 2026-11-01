@@ -6,9 +6,14 @@ All notable changes to Chess for Kids are listed here. The format follows
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-01
+
 ### Changed
 - Match hints always come from the normal computer level, however easy the
   child's opponent is set, so a hint is never a careless move.
+
+### Added
+- This changelog.
 
 ## [0.1.0] - 2026-11-01
 
@@ -33,5 +38,6 @@ First complete version for local testing (debug-signed APK).
 - GitHub Actions: analysis, tests and an APK on every push; the APK is attached
   to the release for `v*` tags.
 
-[Unreleased]: https://github.com/poldolot/chessForKids/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/poldolot/chessForKids/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/poldolot/chessForKids/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/poldolot/chessForKids/releases/tag/v0.1.0
