@@ -152,14 +152,29 @@ void main() {
     expect(seen, {PieceColor.white, PieceColor.black});
   });
 
-  test('the hint never suggests a careless move', () {
-    for (var seed = 0; seed < 60; seed++) {
+  test('the hint plays at the normal level whatever the profile level', () {
+    for (final level in MatchLevel.values) {
+      for (var seed = 0; seed < 40; seed++) {
+        final s = MatchSession(
+          childColor: PieceColor.white,
+          level: level,
+          // A free pawn: worth taking, but inside the very easy level's
+          // window of "good enough" moves.
+          start: Position.fromFen('4k3/8/8/3p4/8/8/8/3RK3 w - - 0 1'),
+          random: Random(seed),
+        );
+        expect(s.hint(), uci('d1d5'), reason: '$level seed $seed');
+      }
+    }
+    // A defended rook is left alone even when the computer itself is sloppy.
+    for (var seed = 0; seed < 40; seed++) {
       final s = MatchSession(
         childColor: PieceColor.white,
-        start: Position.fromFen('4k3/8/8/3q4/8/8/8/3RK3 w - - 0 1'),
+        level: MatchLevel.veryEasy,
+        start: Position.fromFen('3rk3/8/8/8/8/8/8/Q3K3 w - - 0 1'),
         random: Random(seed),
       );
-      expect(s.hint(), uci('d1d5'), reason: 'seed $seed');
+      expect(s.hint(), isNot(uci('a1d8')), reason: 'seed $seed');
     }
   });
 }

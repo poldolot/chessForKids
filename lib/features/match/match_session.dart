@@ -136,15 +136,16 @@ final class MatchSession extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// The move the computer would play for the child, without playing it;
-  /// a hint is never one of the level's careless moves.
+  /// A sound move for the child, without playing it. Hints always come
+  /// from the normal level, however sloppy the computer itself plays, so
+  /// the child never gets a careless suggestion.
   Move? hint() {
     if (!childToMove) {
       return null;
     }
     return chooseMove(
       position,
-      level: level,
+      level: MatchLevel.normal,
       random: _random,
       rules: _game.rules,
       careless: false,
