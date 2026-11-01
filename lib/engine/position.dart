@@ -223,5 +223,36 @@ final class Position {
   }
 
   @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! Position ||
+        other.sideToMove != sideToMove ||
+        other.castling != castling ||
+        other.enPassant != enPassant ||
+        other.halfmoveClock != halfmoveClock ||
+        other.fullmoveNumber != fullmoveNumber) {
+      return false;
+    }
+    for (var i = 0; i < 64; i++) {
+      if (other.squares[i] != squares[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    Object.hashAll(squares),
+    sideToMove,
+    castling,
+    enPassant,
+    halfmoveClock,
+    fullmoveNumber,
+  );
+
+  @override
   String toString() => fen;
 }

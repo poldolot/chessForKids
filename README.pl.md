@@ -23,7 +23,9 @@ nagrania lektora w planach. Polski i angielski od startu.
 
 ## Stan prac
 
-Faza projektowania. Kodu jeszcze nie ma.
+Gotowy szkielet aplikacji: profile, menu główne, strefa rodzica, głos, polski i angielski
+oraz interaktywna szachownica. Silnik reguł szachowych jest kompletny i przetestowany.
+Dalej: lekcje, mini‑gry i komputerowy przeciwnik.
 
 ## Licencja
 

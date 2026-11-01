@@ -83,6 +83,19 @@ void main() {
 }
 
 void passTests() {
+  test('positions with the same content are equal', () {
+    expect(Position.fromFen(kInitialFen), Position.initial());
+    expect(Position.fromFen(kInitialFen).hashCode, Position.initial().hashCode);
+    expect(
+      Position.initial(),
+      isNot(Position.initial().play(Move.parseUci('e2e4'))),
+    );
+    expect(
+      Position.initial(),
+      isNot(Position.initial().copyWith(sideToMove: PieceColor.black)),
+    );
+  });
+
   test('pass flips the side to move and clears the en passant square', () {
     final afterE4 = Position.initial().play(Move.parseUci('e2e4'));
     final passed = afterE4.pass();

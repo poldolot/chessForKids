@@ -1,0 +1,325 @@
+import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
+
+import '../../app/theme/app_theme.dart';
+import '../../engine/engine.dart';
+import 'board_highlights.dart';
+import 'piece_image.dart';
+
+typedef DragEndCallback = void Function(Square from, Square? to);
+
+/// Draws a position with highlights and reports taps and drags.
+///
+/// Presentation only: it knows nothing about legality. Every square carries
+/// `Key('sq-<name>')`; highlight children carry `move-dot`, `capture-frame`,
+/// `selected-frame`, `last-move` and `check-<square>` keys. A piece being
+/// dragged is drawn as `drag-ghost`, a piece sliding after a move as
+/// `sliding-piece`; both live in an overlay above every square.
+class BoardView extends StatefulWidget {
+  const BoardView({
+    super.key,
+    required this.position,
+    this.orientation = PieceColor.white,
+    this.highlights = const BoardHighlights(),
+    this.onSquareTap,
+    this.onDragStart,
+    this.onDragEnd,
+    this.animateMove,
+    this.size,
+  });
+
+  final Position position;
+
+  /// The color whose pieces are drawn at the bottom.
+  final PieceColor orientation;
+  final BoardHighlights highlights;
+  final ValueChanged<Square>? onSquareTap;
+
+  /// Called when a drag starts on a square; must return true to allow the
+  /// drag. Without this callback pieces cannot be dragged at all.
+  final bool Function(Square square)? onDragStart;
+  final DragEndCallback? onDragEnd;
+
+  /// A move whose piece slides from `from` to `to` when the board first
+  /// shows this value.
+  final Move? animateMove;
+
+  /// Side length; defaults to the shorter side of the available space.
+  final double? size;
+
+  @override
+  State<BoardView> createState() => _BoardViewState();
+}
+
+class _BoardViewState extends State<BoardView> {
+  Square? _dragFrom;
+  Offset? _dragPosition;
+
+  /// Where the finger first touched; onPanStart fires only after the pointer
+  /// has already moved past the drag threshold.
+  Offset? _touchDown;
+
+  /// The move currently sliding, until its animation has finished.
+  Move? _sliding;
+
+  static const Duration _slideDuration = Duration(milliseconds: 220);
+
+  @override
+  void initState() {
+    super.initState();
+    _sliding = widget.animateMove;
+  }
+
+  @override
+  void didUpdateWidget(BoardView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.animateMove != oldWidget.animateMove) {
+      _sliding = widget.animateMove;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final side =
+            widget.size ??
+            math.min(constraints.maxWidth, constraints.maxHeight);
+        final square = side / 8;
+        final reduceMotion = MediaQuery.disableAnimationsOf(context);
+        final sliding = reduceMotion ? null : _sliding;
+        return SizedBox(
+          width: side,
+          height: side,
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTapUp: (d) {
+              final s = _squareAt(d.localPosition, square);
+              if (s != null) {
+                widget.onSquareTap?.call(s);
+              }
+            },
+            onPanDown: (d) => _touchDown = d.localPosition,
+            onPanStart: (d) => _startDrag(
+              _touchDown ?? d.localPosition,
+              d.localPosition,
+              square,
+            ),
+            onPanUpdate: (d) {
+              if (_dragFrom != null) {
+                setState(() => _dragPosition = d.localPosition);
+              }
+            },
+            onPanEnd: (_) => _endDrag(square),
+            onPanCancel: () => _endDrag(square, cancelled: true),
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                _grid(
+                  square,
+                  hidden: {?_dragFrom, if (sliding != null) sliding.to},
+                ),
+                if (sliding != null) _slidingPiece(sliding, square),
+                if (_dragFrom != null && _dragPosition != null)
+                  Positioned(
+                    left: _dragPosition!.dx - square * 0.6,
+                    top: _dragPosition!.dy - square * 0.6,
+                    child: IgnorePointer(
+                      child: PieceImage(
+                        widget.position.pieceAt(_dragFrom!)!,
+                        key: const Key('drag-ghost'),
+                        size: square * 1.2,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _slidingPiece(Move move, double square) {
+    final piece = widget.position.pieceAt(move.to);
+    if (piece == null) {
+      return const SizedBox.shrink();
+    }
+    final from = _offsetOf(move.from, square);
+    final to = _offsetOf(move.to, square);
+    return TweenAnimationBuilder<double>(
+      key: ValueKey('slide-${move.uci}'),
+      tween: Tween(begin: 0, end: 1),
+      duration: _slideDuration,
+      curve: Curves.easeOutCubic,
+      onEnd: () {
+        if (mounted && _sliding == move) {
+          setState(() => _sliding = null);
+        }
+      },
+      builder: (context, t, child) {
+        final at = Offset.lerp(from, to, t)!;
+        return Positioned(left: at.dx, top: at.dy, child: child!);
+      },
+      child: IgnorePointer(
+        child: SizedBox(
+          width: square,
+          height: square,
+          child: Padding(
+            padding: EdgeInsets.all(square * 0.06),
+            child: PieceImage(piece, key: const Key('sliding-piece')),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _startDrag(Offset origin, Offset current, double square) {
+    final s = _squareAt(origin, square);
+    if (s == null || widget.position.pieceAt(s) == null) {
+      return;
+    }
+    if (widget.onDragStart?.call(s) != true) {
+      return;
+    }
+    setState(() {
+      _dragFrom = s;
+      _dragPosition = current;
+    });
+  }
+
+  void _endDrag(double square, {bool cancelled = false}) {
+    _touchDown = null;
+    final from = _dragFrom;
+    if (from == null) {
+      return;
+    }
+    final to = cancelled || _dragPosition == null
+        ? null
+        : _squareAt(_dragPosition!, square);
+    setState(() {
+      _dragFrom = null;
+      _dragPosition = null;
+    });
+    widget.onDragEnd?.call(from, to);
+  }
+
+  Square? _squareAt(Offset local, double square) {
+    final c = (local.dx / square).floor();
+    final r = (local.dy / square).floor();
+    if (c < 0 || c > 7 || r < 0 || r > 7) {
+      return null;
+    }
+    return widget.orientation == PieceColor.white
+        ? Square.fromFileRank(c, 7 - r)
+        : Square.fromFileRank(7 - c, r);
+  }
+
+  Offset _offsetOf(Square s, double square) {
+    final white = widget.orientation == PieceColor.white;
+    final c = white ? s.file : 7 - s.file;
+    final r = white ? 7 - s.rank : s.rank;
+    return Offset(c * square, r * square);
+  }
+
+  Widget _grid(double square, {required Set<Square> hidden}) {
+    final palette = AppTheme.of(context).board;
+    return Column(
+      children: [
+        for (var row = 0; row < 8; row++)
+          Expanded(
+            child: Row(
+              children: [
+                for (var col = 0; col < 8; col++)
+                  Expanded(
+                    child: _squareWidget(
+                      widget.orientation == PieceColor.white
+                          ? Square.fromFileRank(col, 7 - row)
+                          : Square.fromFileRank(7 - col, row),
+                      square,
+                      palette,
+                      hidden,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _squareWidget(
+    Square s,
+    double square,
+    BoardPalette palette,
+    Set<Square> hidden,
+  ) {
+    final h = widget.highlights;
+    final piece = widget.position.pieceAt(s);
+    final isLast =
+        h.lastMove != null && (h.lastMove!.from == s || h.lastMove!.to == s);
+    final isCheck = h.checkedKing == s;
+    Color background = s.isLight ? palette.light : palette.dark;
+    if (isLast) {
+      background = Color.alphaBlend(
+        palette.lastMove.withValues(alpha: 0.6),
+        background,
+      );
+    }
+    if (isCheck) {
+      background = Color.alphaBlend(
+        palette.check.withValues(alpha: 0.7),
+        background,
+      );
+    }
+    return Container(
+      key: Key('sq-${s.name}'),
+      color: background,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          if (isLast) const SizedBox.shrink(key: Key('last-move')),
+          if (isCheck) SizedBox.shrink(key: Key('check-${s.name}')),
+          if (h.selected == s)
+            Container(
+              key: const Key('selected-frame'),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: palette.selected,
+                  width: square * 0.09,
+                ),
+              ),
+            ),
+          if (h.captureTargets.contains(s))
+            Container(
+              key: const Key('capture-frame'),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: palette.capture,
+                  width: square * 0.09,
+                ),
+              ),
+            ),
+          if (piece != null && !hidden.contains(s))
+            Padding(
+              padding: EdgeInsets.all(square * 0.06),
+              child: PieceImage(piece),
+            ),
+          if (h.moveTargets.contains(s))
+            Center(
+              child: Container(
+                key: const Key('move-dot'),
+                width: square * 0.34,
+                height: square * 0.34,
+                decoration: BoxDecoration(
+                  color: palette.moveDot,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}

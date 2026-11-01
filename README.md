@@ -22,7 +22,9 @@ with recorded voice planned later. Polish and English at launch.
 
 ## Status
 
-Design phase. No code yet.
+App shell ready: profiles, main menu, parent zone, speech, Polish and English, and
+an interactive board widget. The chess rules engine is complete and tested. Lessons,
+mini-games and the computer opponent come next.
 
 ## License
 
