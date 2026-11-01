@@ -8,13 +8,17 @@ void main() {
   Position fen(String f) => Position.fromFen(f);
   Move uci(String u) => Move.parseUci(u);
 
-  Move? pick(Position p, {int seed = 1}) =>
-      chooseMove(p, level: MatchLevel.easy, random: Random(seed));
+  Move? pick(
+    Position p, {
+    int seed = 1,
+    MatchLevel level = MatchLevel.normal,
+  }) => chooseMove(p, level: level, random: Random(seed));
 
   test('mate in one is always played, whatever the seed', () {
     final p = fen('6k1/5ppp/8/8/8/8/8/R3K3 w - - 0 1');
     for (var seed = 0; seed < 20; seed++) {
       expect(pick(p, seed: seed), uci('a1a8'), reason: 'seed $seed');
+      expect(pick(p, seed: seed, level: MatchLevel.easy), uci('a1a8'));
     }
     expect(matingMoves(p), [uci('a1a8')]);
   });
@@ -69,5 +73,40 @@ void main() {
     final watch = Stopwatch()..start();
     pick(Position.initial());
     expect(watch.elapsedMilliseconds, lessThan(2000));
+  });
+
+  test('easy sometimes lets a free queen go, normal never does', () {
+    final p = fen('4k3/8/8/3q4/8/8/8/3RK3 w - - 0 1');
+    var missed = 0;
+    for (var seed = 0; seed < 60; seed++) {
+      if (pick(p, seed: seed, level: MatchLevel.easy) != uci('d1d5')) {
+        missed++;
+      }
+    }
+    expect(missed, greaterThan(0));
+    expect(missed, lessThan(40));
+  });
+
+  test('easy never walks into a mate in one that could be avoided', () {
+    for (var seed = 0; seed < 20; seed++) {
+      final random = Random(seed);
+      final game = Game();
+      for (var ply = 0; ply < 60 && !game.result.isOver; ply++) {
+        final before = game.position;
+        final move = chooseMove(
+          before,
+          level: MatchLevel.easy,
+          random: random,
+        )!;
+        final after = before.play(move);
+        if (matingMoves(after).isNotEmpty) {
+          final unavoidable = game.legalMoves().every(
+            (m) => matingMoves(before.play(m)).isNotEmpty,
+          );
+          expect(unavoidable, isTrue, reason: '${before.fen} $move');
+        }
+        game.play(move);
+      }
+    }
   });
 }

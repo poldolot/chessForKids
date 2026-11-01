@@ -180,4 +180,18 @@ void main() {
     final state = await AppState.load(repo);
     expect(() => state.addStars('x', 1), throwsStateError);
   });
+
+  test(
+    'saveMatch stores and clears the saved game of the current profile',
+    () async {
+      final state = await loadWithProfile();
+      await state.saveMatch('{"moves":["e2e4"]}');
+      expect(state.currentProfile!.savedGameJson, '{"moves":["e2e4"]}');
+      final reloaded = await AppState.load(repo);
+      expect(reloaded.currentProfile!.savedGameJson, '{"moves":["e2e4"]}');
+      await state.saveMatch(null);
+      expect(state.currentProfile!.savedGameJson, isNull);
+      expect((await AppState.load(repo)).currentProfile!.savedGameJson, isNull);
+    },
+  );
 }

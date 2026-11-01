@@ -440,12 +440,6 @@ abstract class AppLocalizations {
   /// **'Version {version}'**
   String version(String version);
 
-  /// No description provided for @sandboxTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Free play'**
-  String get sandboxTitle;
-
   /// No description provided for @yourMove.
   ///
   /// In en, this message translates to:
@@ -481,12 +475,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'It\'s a draw!'**
   String get draw;
-
-  /// No description provided for @newGame.
-  ///
-  /// In en, this message translates to:
-  /// **'New game'**
-  String get newGame;
 
   /// No description provided for @undo.
   ///
@@ -1195,6 +1183,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'First the lesson: {lesson}. Come, I\'ll show you!'**
   String gamesCommonLocked(String lesson);
+
+  /// No description provided for @matchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Match'**
+  String get matchTitle;
+
+  /// No description provided for @matchIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'You play white. Your move!'**
+  String get matchIntro;
+
+  /// No description provided for @matchIntroBlack.
+  ///
+  /// In en, this message translates to:
+  /// **'You play black. The computer starts.'**
+  String get matchIntroBlack;
+
+  /// No description provided for @matchThinking.
+  ///
+  /// In en, this message translates to:
+  /// **'Thinking…'**
+  String get matchThinking;
+
+  /// No description provided for @matchCheckByYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Check! The king must run!'**
+  String get matchCheckByYou;
+
+  /// No description provided for @matchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Try this!'**
+  String get matchHint;
+
+  /// No description provided for @matchResign.
+  ///
+  /// In en, this message translates to:
+  /// **'Resign'**
+  String get matchResign;
+
+  /// No description provided for @matchResignQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Give up the game?'**
+  String get matchResignQuestion;
+
+  /// No description provided for @matchYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get matchYes;
+
+  /// No description provided for @matchNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get matchNo;
+
+  /// No description provided for @matchWon.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkmate! You win! Well done!'**
+  String get matchWon;
+
+  /// No description provided for @matchLost.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkmate. The computer won this time. Try again!'**
+  String get matchLost;
+
+  /// No description provided for @matchResigned.
+  ///
+  /// In en, this message translates to:
+  /// **'You gave up. Next time!'**
+  String get matchResigned;
+
+  /// No description provided for @matchAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Play again'**
+  String get matchAgain;
+
+  /// No description provided for @matchBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get matchBack;
+
+  /// No description provided for @matchBadgeFirstMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Badge: first match!'**
+  String get matchBadgeFirstMatch;
+
+  /// No description provided for @matchBadgeFirstWin.
+  ///
+  /// In en, this message translates to:
+  /// **'Badge: first win!'**
+  String get matchBadgeFirstWin;
+
+  /// No description provided for @matchBadgePersistent.
+  ///
+  /// In en, this message translates to:
+  /// **'Badge: persistent player!'**
+  String get matchBadgePersistent;
 }
 
 class _AppLocalizationsDelegate

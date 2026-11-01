@@ -85,14 +85,12 @@
       }
     }
   },
-  "sandboxTitle": "Free play",
   "yourMove": "Your move!",
   "check": "Check! Save the king!",
   "checkmateWhite": "Checkmate! White wins!",
   "checkmateBlack": "Checkmate! Black wins!",
   "stalemate": "Stalemate. It's a draw!",
   "draw": "It's a draw!",
-  "newGame": "New game",
   "undo": "Undo",
   "learnTitle": "Learn",
   "learnCommonNext": "Next",
@@ -217,5 +215,23 @@
         "type": "String"
       }
     }
-  }
+  },
+  "matchTitle": "Match",
+  "matchIntro": "You play white. Your move!",
+  "matchIntroBlack": "You play black. The computer starts.",
+  "matchThinking": "Thinking…",
+  "matchCheckByYou": "Check! The king must run!",
+  "matchHint": "Try this!",
+  "matchResign": "Resign",
+  "matchResignQuestion": "Give up the game?",
+  "matchYes": "Yes",
+  "matchNo": "No",
+  "matchWon": "Checkmate! You win! Well done!",
+  "matchLost": "Checkmate. The computer won this time. Try again!",
+  "matchResigned": "You gave up. Next time!",
+  "matchAgain": "Play again",
+  "matchBack": "Back",
+  "matchBadgeFirstMatch": "Badge: first match!",
+  "matchBadgeFirstWin": "Badge: first win!",
+  "matchBadgePersistent": "Badge: persistent player!"
 }

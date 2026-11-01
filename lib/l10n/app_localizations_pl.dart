@@ -192,9 +192,6 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get sandboxTitle => 'Wolna gra';
-
-  @override
   String get yourMove => 'Twój ruch!';
 
   @override
@@ -211,9 +208,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get draw => 'Remis!';
-
-  @override
-  String get newGame => 'Nowa partia';
 
   @override
   String get undo => 'Cofnij';
@@ -600,4 +594,58 @@ class AppLocalizationsPl extends AppLocalizations {
   String gamesCommonLocked(String lesson) {
     return 'Najpierw lekcja: $lesson. Chodź, pokażę!';
   }
+
+  @override
+  String get matchTitle => 'Partia';
+
+  @override
+  String get matchIntro => 'Grasz białymi. Twój ruch!';
+
+  @override
+  String get matchIntroBlack => 'Grasz czarnymi. Komputer zaczyna.';
+
+  @override
+  String get matchThinking => 'Myślę…';
+
+  @override
+  String get matchCheckByYou => 'Szach! Król ucieka!';
+
+  @override
+  String get matchHint => 'Spróbuj tak!';
+
+  @override
+  String get matchResign => 'Poddaj';
+
+  @override
+  String get matchResignQuestion => 'Poddać partię?';
+
+  @override
+  String get matchYes => 'Tak';
+
+  @override
+  String get matchNo => 'Nie';
+
+  @override
+  String get matchWon => 'Mat! Wygrałeś! Brawo!';
+
+  @override
+  String get matchLost => 'Mat. Tym razem komputer. Spróbuj jeszcze raz!';
+
+  @override
+  String get matchResigned => 'Poddana. Następnym razem się uda!';
+
+  @override
+  String get matchAgain => 'Jeszcze raz';
+
+  @override
+  String get matchBack => 'Wróć';
+
+  @override
+  String get matchBadgeFirstMatch => 'Odznaka: pierwsza partia!';
+
+  @override
+  String get matchBadgeFirstWin => 'Odznaka: pierwsze zwycięstwo!';
+
+  @override
+  String get matchBadgePersistent => 'Odznaka: wytrwały gracz!';
 }

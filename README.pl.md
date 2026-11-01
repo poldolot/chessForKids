@@ -23,11 +23,11 @@ nagrania lektora w planach. Polski i angielski od startu.
 
 ## Stan prac
 
-Gotowe moduły Nauka i Mini‑gry: 14 lekcji (sześć figur, osiem zasad) i pięć
-mini‑gier (Wojna pionów, Drogi wieży, Tory gońca, Wyścig królem, Polowanie)
-z gwiazdkami, odznakami, podpowiedziami i głosem po polsku i angielsku, na bazie
+Wszystkie trzy działy v1 są gotowe: Nauka (14 lekcji), Mini‑gry (pięć gier) i Partia
+z prostym komputerem (pełne reguły FIDE, podpowiedzi, cofanie, poddanie, zapis
+i wznowienie partii, gwiazdki i odznaki), z głosem po polsku i angielsku, na bazie
 szkieletu aplikacji (profile, menu, strefa rodzica) i przetestowanego silnika reguł.
-Dalej: komputerowy przeciwnik.
+Dalej: wykończenie, dźwięki i wydanie.
 
 ## Licencja
 

@@ -191,9 +191,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get sandboxTitle => 'Free play';
-
-  @override
   String get yourMove => 'Your move!';
 
   @override
@@ -210,9 +207,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get draw => 'It\'s a draw!';
-
-  @override
-  String get newGame => 'New game';
 
   @override
   String get undo => 'Undo';
@@ -604,4 +598,58 @@ class AppLocalizationsEn extends AppLocalizations {
   String gamesCommonLocked(String lesson) {
     return 'First the lesson: $lesson. Come, I\'ll show you!';
   }
+
+  @override
+  String get matchTitle => 'Match';
+
+  @override
+  String get matchIntro => 'You play white. Your move!';
+
+  @override
+  String get matchIntroBlack => 'You play black. The computer starts.';
+
+  @override
+  String get matchThinking => 'Thinking…';
+
+  @override
+  String get matchCheckByYou => 'Check! The king must run!';
+
+  @override
+  String get matchHint => 'Try this!';
+
+  @override
+  String get matchResign => 'Resign';
+
+  @override
+  String get matchResignQuestion => 'Give up the game?';
+
+  @override
+  String get matchYes => 'Yes';
+
+  @override
+  String get matchNo => 'No';
+
+  @override
+  String get matchWon => 'Checkmate! You win! Well done!';
+
+  @override
+  String get matchLost => 'Checkmate. The computer won this time. Try again!';
+
+  @override
+  String get matchResigned => 'You gave up. Next time!';
+
+  @override
+  String get matchAgain => 'Play again';
+
+  @override
+  String get matchBack => 'Back';
+
+  @override
+  String get matchBadgeFirstMatch => 'Badge: first match!';
+
+  @override
+  String get matchBadgeFirstWin => 'Badge: first win!';
+
+  @override
+  String get matchBadgePersistent => 'Badge: persistent player!';
 }

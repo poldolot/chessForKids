@@ -5,12 +5,12 @@ import '../core/speaker.dart';
 import '../features/games/game_model.dart';
 import '../features/games/games_screen.dart';
 import '../features/learn/learn_screen.dart';
+import '../features/match/match_screen.dart';
 import '../features/menu/main_menu_screen.dart';
 import '../features/menu/menu_tile.dart';
 import '../features/parent/parent_gate_screen.dart';
 import '../features/profiles/profile_picker_screen.dart';
 import '../features/profiles/profile_wizard_screen.dart';
-import '../features/sandbox/sandbox_screen.dart';
 import '../l10n/app_localizations.dart';
 import '../state/app_state.dart';
 import 'route_observer.dart';
@@ -120,7 +120,7 @@ class _Home extends StatelessWidget {
 
   void _openSection(BuildContext context, MenuSection section) {
     final Widget screen = switch (section) {
-      MenuSection.play => const SandboxScreen(),
+      MenuSection.play => const MatchScreen(),
       MenuSection.learn => const LearnScreen(),
       MenuSection.miniGames => const GamesScreen(),
     };

@@ -6,11 +6,11 @@ import 'package:chess_for_kids/features/games/game_catalog.dart';
 import 'package:chess_for_kids/features/games/game_model.dart';
 import 'package:chess_for_kids/features/games/games_screen.dart';
 import 'package:chess_for_kids/features/learn/learn_screen.dart';
+import 'package:chess_for_kids/features/match/match_screen.dart';
 import 'package:chess_for_kids/features/menu/main_menu_screen.dart';
 import 'package:chess_for_kids/features/parent/parent_gate_screen.dart';
 import 'package:chess_for_kids/features/profiles/profile_picker_screen.dart';
 import 'package:chess_for_kids/features/profiles/profile_wizard_screen.dart';
-import 'package:chess_for_kids/features/sandbox/sandbox_screen.dart';
 import 'package:chess_for_kids/state/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -118,18 +118,21 @@ void main() {
     expect(speaker.language, 'en');
   });
 
-  testWidgets('play tile opens the sandbox and a move can be made', (
+  testWidgets('play tile opens a match: a move, the reply and undo', (
     tester,
   ) async {
     await seedProfile(lastId: 'keep');
-    await pumpApp(tester);
+    final state = await pumpApp(tester);
     await tester.tap(find.byKey(const Key('tile-play')));
     await tester.pumpAndSettle();
-    expect(find.byType(SandboxScreen), findsOneWidget);
+    expect(find.byType(MatchScreen), findsOneWidget);
     await tester.tap(find.byKey(const Key('sq-e2')));
     await tester.pump();
     await tester.tap(find.byKey(const Key('sq-e4')));
+    await tester.pump();
+    expect(find.byKey(const Key('thinking')), findsOneWidget);
     await tester.pumpAndSettle();
+    expect(find.byKey(const Key('thinking')), findsNothing);
     expect(
       find.descendant(
         of: find.byKey(const Key('sq-e4')),
@@ -137,47 +140,12 @@ void main() {
       ),
       findsOneWidget,
     );
-    expect(
-      find.descendant(
-        of: find.byKey(const Key('sq-e2')),
-        matching: find.byType(PieceImage),
-      ),
-      findsNothing,
-    );
-    await tester.tap(find.byKey(const Key('sandbox-undo')));
+    expect(state.currentProfile!.savedGameJson, contains('"e2e4"'));
+    await tester.tap(find.byKey(const Key('match-undo')));
     await tester.pumpAndSettle();
     expect(
       find.descendant(
         of: find.byKey(const Key('sq-e2')),
-        matching: find.byType(PieceImage),
-      ),
-      findsOneWidget,
-    );
-  });
-
-  testWidgets('sandbox announces check and checkmate', (tester) async {
-    devicePolish(tester);
-    await seedProfile(lastId: 'keep');
-    await pumpApp(tester);
-    await tester.tap(find.byKey(const Key('tile-play')));
-    await tester.pumpAndSettle();
-    Future<void> move(String from, String to) async {
-      await tester.tap(find.byKey(Key('sq-$from')));
-      await tester.pump();
-      await tester.tap(find.byKey(Key('sq-$to')));
-      await tester.pumpAndSettle();
-    }
-
-    await move('f2', 'f3');
-    await move('e7', 'e5');
-    await move('g2', 'g4');
-    await move('d8', 'h4');
-    expect(speaker.spoken.last.$2, 'Mat! Wygrały czarne!');
-    await tester.tap(find.byKey(const Key('sandbox-new')));
-    await tester.pumpAndSettle();
-    expect(
-      find.descendant(
-        of: find.byKey(const Key('sq-f2')),
         matching: find.byType(PieceImage),
       ),
       findsOneWidget,

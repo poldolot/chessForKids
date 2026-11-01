@@ -134,6 +134,17 @@ final class AppState extends ChangeNotifier {
     );
   }
 
+  /// Stores the match in progress of the current profile; `null` clears it.
+  Future<void> saveMatch(String? json) async {
+    final profile = _requireProfile();
+    if (profile.savedGameJson == json) {
+      return;
+    }
+    await updateProfile(
+      profile.copyWith(savedGameJson: json, clearSavedGame: json == null),
+    );
+  }
+
   /// Remembers that the child has heard a game's introduction.
   Future<void> markGameIntroduced(String gameId) async {
     final profile = _requireProfile();

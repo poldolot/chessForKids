@@ -13,18 +13,35 @@ const int _mateScore = 100000;
 /// [depth]) over [evaluate]. Checkmate counts ±[_mateScore] minus the
 /// distance, so a quicker mate wins; stalemate and the other draws count 0.
 /// Among the root moves scoring within [level.noise] of the best one is
-/// drawn with [random]. Pawns promote to queens only.
+/// drawn with [random]. A mate in one is always taken; with probability
+/// [level.blunder] a random move that allows no mate in one is played
+/// instead of searching (never when [careless] is false, e.g. for hints).
+/// Pawns promote to queens only.
 Move? chooseMove(
   Position position, {
   required MatchLevel level,
   required Random random,
   GameRules rules = GameRules.standard,
   int? depth,
+  bool careless = true,
 }) {
   final side = position.sideToMove;
   final moves = _candidates(position, rules);
   if (moves.isEmpty) {
     return null;
+  }
+  final mates = matingMoves(position, rules: rules);
+  if (mates.isNotEmpty) {
+    return mates[random.nextInt(mates.length)];
+  }
+  if (careless && level.blunder > 0 && random.nextDouble() < level.blunder) {
+    final careless = [
+      for (final move in moves)
+        if (matingMoves(position.play(move), rules: rules).isEmpty) move,
+    ];
+    if (careless.isNotEmpty) {
+      return careless[random.nextInt(careless.length)];
+    }
   }
   final scored = <(Move, int)>[];
   var best = -_mateScore * 2;

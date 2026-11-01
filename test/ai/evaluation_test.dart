@@ -3,9 +3,13 @@ import 'package:chess_for_kids/engine/engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('the easy level searches two plies with a small noise window', () {
+  test('levels: easy is forgiving, normal is steady', () {
     expect(MatchLevel.easy.depth, 2);
-    expect(MatchLevel.easy.noise, 60);
+    expect(MatchLevel.easy.noise, 100);
+    expect(MatchLevel.easy.blunder, 0.25);
+    expect(MatchLevel.normal.depth, 2);
+    expect(MatchLevel.normal.noise, 60);
+    expect(MatchLevel.normal.blunder, 0);
   });
 
   test('piece values are centipawns of the conventional values', () {

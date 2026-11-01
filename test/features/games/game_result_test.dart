@@ -109,6 +109,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 900));
     expect(find.byKey(const Key('result-badge')), findsOneWidget);
     expect(app.speaker.spoken.last.$1, 'games.common.badgeHunter');
+    expect(app.speaker.nonInterrupting, contains('games.common.badgeHunter'));
     await tester.pumpAndSettle();
   });
 

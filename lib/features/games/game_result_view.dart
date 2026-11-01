@@ -131,9 +131,14 @@ class _GameResultViewState extends State<GameResultView> {
       ? 'games.common.badgeHunter'
       : 'games.common.badgeCollector';
 
+  /// Queued behind the result line rather than cutting it off.
   void _say(String key) {
     final l10n = AppLocalizations.of(context);
-    context.read<Speaker>().say(gameLine(l10n, key), key: key);
+    context.read<Speaker>().say(
+      gameLine(l10n, key),
+      key: key,
+      interrupt: false,
+    );
   }
 
   @override
