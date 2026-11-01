@@ -60,6 +60,26 @@ void main() {
     expect(back.toJson()['version'], 1);
   });
 
+  test('mini-game wins and introductions round-trip and default to empty', () {
+    const p = Profile(
+      id: 'p',
+      name: '',
+      theme: TeacherTheme.animals,
+      avatarIndex: 1,
+      miniGameWins: 4,
+      introducedGames: {'pawnWar'},
+    );
+    expect(Profile.fromJson(roundTrip(p.toJson())), p);
+    final old = Profile.fromJson(const {
+      'id': 'x',
+      'name': '',
+      'theme': 'ufo',
+      'avatarIndex': 4,
+    });
+    expect(old.miniGameWins, 0);
+    expect(old.introducedGames, isEmpty);
+  });
+
   test('newer version is rejected, missing fields fall back to defaults', () {
     expect(
       () => AppData.fromJson(const {'version': 99}),

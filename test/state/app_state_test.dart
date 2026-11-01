@@ -151,6 +151,31 @@ void main() {
     },
   );
 
+  test('recordMiniGame keeps the best stars and counts every win', () async {
+    final state = await loadWithProfile();
+    await state.recordMiniGame(key: 'game:rookRoads:0', stars: 3, won: true);
+    await state.recordMiniGame(key: 'game:rookRoads:0', stars: 1, won: true);
+    await state.recordMiniGame(key: 'game:pawnWar:0', stars: 1, won: false);
+    final p = state.currentProfile!;
+    expect(p.stars['game:rookRoads:0'], 3);
+    expect(p.stars['game:pawnWar:0'], 1);
+    expect(p.miniGameWins, 2);
+  });
+
+  test(
+    'markGameIntroduced is idempotent and resetProgress clears game progress',
+    () async {
+      final state = await loadWithProfile();
+      await state.markGameIntroduced('pawnWar');
+      await state.markGameIntroduced('pawnWar');
+      await state.recordMiniGame(key: 'game:pawnWar:0', stars: 2, won: true);
+      expect(state.currentProfile!.introducedGames, {'pawnWar'});
+      await state.resetProgress(state.currentProfile!.id);
+      expect(state.currentProfile!.introducedGames, isEmpty);
+      expect(state.currentProfile!.miniGameWins, 0);
+    },
+  );
+
   test('progress mutations without a current profile throw', () async {
     final state = await AppState.load(repo);
     expect(() => state.addStars('x', 1), throwsStateError);

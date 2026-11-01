@@ -119,6 +119,8 @@ final class Profile {
     this.matchesWon = 0,
     this.unlockAllMiniGames = false,
     this.savedGameJson,
+    this.miniGameWins = 0,
+    this.introducedGames = const {},
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) {
@@ -147,6 +149,10 @@ final class Profile {
       matchesWon: json['matchesWon'] as int? ?? 0,
       unlockAllMiniGames: json['unlockAllMiniGames'] as bool? ?? false,
       savedGameJson: json['savedGameJson'] as String?,
+      miniGameWins: json['miniGameWins'] as int? ?? 0,
+      introducedGames: (json['introducedGames'] as List<dynamic>? ?? const [])
+          .cast<String>()
+          .toSet(),
     );
   }
 
@@ -171,6 +177,12 @@ final class Profile {
   /// A match in progress, serialized by the match feature.
   final String? savedGameJson;
 
+  /// Mini-game boards won or finished.
+  final int miniGameWins;
+
+  /// Games whose spoken introduction the child has already heard.
+  final Set<String> introducedGames;
+
   int get totalStars => stars.values.fold(0, (a, b) => a + b) + matchStars;
 
   Map<String, dynamic> toJson() => {
@@ -186,6 +198,8 @@ final class Profile {
     'matchesWon': matchesWon,
     'unlockAllMiniGames': unlockAllMiniGames,
     'savedGameJson': savedGameJson,
+    'miniGameWins': miniGameWins,
+    'introducedGames': introducedGames.toList(),
   };
 
   Profile copyWith({
@@ -201,6 +215,8 @@ final class Profile {
     bool? unlockAllMiniGames,
     String? savedGameJson,
     bool clearSavedGame = false,
+    int? miniGameWins,
+    Set<String>? introducedGames,
   }) {
     return Profile(
       id: id,
@@ -217,6 +233,8 @@ final class Profile {
       savedGameJson: clearSavedGame
           ? null
           : (savedGameJson ?? this.savedGameJson),
+      miniGameWins: miniGameWins ?? this.miniGameWins,
+      introducedGames: introducedGames ?? this.introducedGames,
     );
   }
 
@@ -234,7 +252,9 @@ final class Profile {
       other.matchesPlayed == matchesPlayed &&
       other.matchesWon == matchesWon &&
       other.unlockAllMiniGames == unlockAllMiniGames &&
-      other.savedGameJson == savedGameJson;
+      other.savedGameJson == savedGameJson &&
+      other.miniGameWins == miniGameWins &&
+      setEquals(other.introducedGames, introducedGames);
 
   @override
   int get hashCode => Object.hash(
@@ -247,6 +267,7 @@ final class Profile {
     matchesWon,
     unlockAllMiniGames,
     savedGameJson,
+    miniGameWins,
   );
 }
 

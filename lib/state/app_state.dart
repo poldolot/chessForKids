@@ -118,6 +118,33 @@ final class AppState extends ChangeNotifier {
     );
   }
 
+  /// Records a finished mini-game board: best stars per key, every win counted.
+  Future<void> recordMiniGame({
+    required String key,
+    required int stars,
+    required bool won,
+  }) async {
+    final profile = _requireProfile();
+    final best = profile.stars[key] ?? 0;
+    await updateProfile(
+      profile.copyWith(
+        stars: stars > best ? {...profile.stars, key: stars} : null,
+        miniGameWins: profile.miniGameWins + (won ? 1 : 0),
+      ),
+    );
+  }
+
+  /// Remembers that the child has heard a game's introduction.
+  Future<void> markGameIntroduced(String gameId) async {
+    final profile = _requireProfile();
+    if (profile.introducedGames.contains(gameId)) {
+      return;
+    }
+    await updateProfile(
+      profile.copyWith(introducedGames: {...profile.introducedGames, gameId}),
+    );
+  }
+
   Future<void> awardBadge(String id) async {
     final profile = _requireProfile();
     if (profile.badges.contains(id)) {
