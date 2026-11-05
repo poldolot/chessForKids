@@ -8,6 +8,9 @@ import '../lesson_model.dart';
 /// One stop on the lesson path: picture, lock, stars and a pulse on the
 /// lesson the child should do next.
 class LessonNode extends StatefulWidget {
+  /// Diameter of the icon disc.
+  static const double circleSize = 88;
+
   const LessonNode({
     super.key,
     required this.lesson,
@@ -58,8 +61,8 @@ class _LessonNodeState extends State<LessonNode> {
         customBorder: const CircleBorder(),
         onTap: _tap,
         child: SizedBox(
-          width: 88,
-          height: 88,
+          width: LessonNode.circleSize,
+          height: LessonNode.circleSize,
           child: Stack(
             alignment: Alignment.center,
             children: [

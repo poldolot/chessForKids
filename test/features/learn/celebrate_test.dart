@@ -58,6 +58,11 @@ void main() {
       app.speaker.spoken.map((s) => s.$1),
       containsAllInOrder(['learn.common.wellDone', 'learn.common.badge']),
     );
+    final badgeLine = app.speaker.spoken.lastWhere(
+      (s) => s.$1 == 'learn.common.badge',
+    );
+    expect(badgeLine.$2, 'Masz nową odznakę: Wieża!');
+    expect(find.text('Masz nową odznakę: Wieża!'), findsOneWidget);
     expect(find.byKey(const Key('celebrate-badge')), findsOneWidget);
     await tester.pumpAndSettle();
   });

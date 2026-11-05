@@ -145,4 +145,19 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('learn-more')), findsNothing);
   });
+
+  testWidgets(
+    'each lesson icon starts a fifth of the way up the previous one',
+    (tester) async {
+      await pumpLearn(tester);
+      final pawn = tester.getTopLeft(node('pawn')).dy;
+      final rook = tester.getTopLeft(node('rook')).dy;
+      expect(rook - pawn, closeTo(LessonNode.circleSize * 4 / 5, 0.5));
+      expect(
+        tester.getTopLeft(node('bishop')).dy - rook,
+        closeTo(LessonNode.circleSize * 4 / 5, 0.5),
+      );
+      await tester.pumpAndSettle();
+    },
+  );
 }

@@ -23,6 +23,11 @@ class LearnScreen extends StatefulWidget {
 }
 
 class _LearnScreenState extends State<LearnScreen> {
+  /// The nodes zigzag left and right, so each one may start a fifth of the
+  /// way up the previous icon (stars not counted): a tight, winding path.
+  static const double _stride = LessonNode.circleSize * 4 / 5;
+  static const double _nodeHeight = LessonNode.circleSize + 30;
+
   final ScrollController _scroll = ScrollController();
   bool _moreBelow = false;
 
@@ -113,31 +118,39 @@ class _LearnScreenState extends State<LearnScreen> {
                       _updateMore();
                       return false;
                     },
-                    child: ListView.builder(
+                    child: SingleChildScrollView(
                       controller: _scroll,
                       padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-                      itemCount: lessons.length,
-                      itemBuilder: (context, index) {
-                        final lesson = lessons[index];
-                        final unlocked = isLessonUnlocked(lesson, profile);
-                        final node = LessonNode(
-                          key: Key('lesson-${lesson.id}'),
-                          lesson: lesson,
-                          unlocked: unlocked,
-                          stars: profile.stars[starsKey(lesson)] ?? 0,
-                          isNext: next?.id == lesson.id,
-                          onTap: () => _open(context, lesson, unlocked),
-                        );
-                        return Padding(
-                          padding: EdgeInsets.zero,
-                          child: Align(
-                            alignment: index.isEven
-                                ? const Alignment(-0.5, 0)
-                                : const Alignment(0.5, 0),
-                            child: node,
-                          ),
-                        );
-                      },
+                      child: SizedBox(
+                        height: (lessons.length - 1) * _stride + _nodeHeight,
+                        child: Stack(
+                          children: [
+                            for (final (index, lesson) in lessons.indexed)
+                              Positioned(
+                                top: index * _stride,
+                                left: 0,
+                                right: 0,
+                                child: Align(
+                                  alignment: index.isEven
+                                      ? const Alignment(-0.5, 0)
+                                      : const Alignment(0.5, 0),
+                                  child: LessonNode(
+                                    key: Key('lesson-${lesson.id}'),
+                                    lesson: lesson,
+                                    unlocked: isLessonUnlocked(lesson, profile),
+                                    stars: profile.stars[starsKey(lesson)] ?? 0,
+                                    isNext: next?.id == lesson.id,
+                                    onTap: () => _open(
+                                      context,
+                                      lesson,
+                                      isLessonUnlocked(lesson, profile),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                   if (_moreBelow)

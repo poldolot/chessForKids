@@ -6,6 +6,14 @@ All notable changes to Chess for Kids are listed here. The format follows
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-11-05
+
+### Changed
+- The lesson celebration names the badge it announces: "You earned a new
+  badge: Rook!"
+- The lesson path winds tighter: each icon starts a fifth of the way up the
+  previous one.
+
 ## [0.2.0] - 2026-11-05
 
 ### Changed
@@ -63,7 +71,8 @@ First complete version for local testing (debug-signed APK).
 - GitHub Actions: analysis, tests and an APK on every push; the APK is attached
   to the release for `v*` tags.
 
-[Unreleased]: https://github.com/poldolot/chessForKids/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/poldolot/chessForKids/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/poldolot/chessForKids/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/poldolot/chessForKids/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/poldolot/chessForKids/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/poldolot/chessForKids/releases/tag/v0.1.0

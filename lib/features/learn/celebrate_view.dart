@@ -9,6 +9,7 @@ import '../../data/models.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../../widgets/teacher_bubble.dart';
+import '../menu/badge_strings.dart';
 import '../menu/main_menu_screen.dart';
 import 'lesson_model.dart';
 import 'lesson_progress.dart';
@@ -102,7 +103,18 @@ class _CelebrateViewState extends State<CelebrateView> {
 
   void _say(String key) {
     final l10n = AppLocalizations.of(context);
-    context.read<Speaker>().say(learnLine(l10n, key), key: key);
+    context.read<Speaker>().say(_badgeText(l10n), key: key);
+  }
+
+  /// "You earned a new badge: Rook!" — the generic line plus the name.
+  String _badgeText(AppLocalizations l10n) {
+    final line = learnLine(l10n, 'learn.common.badge');
+    final badge = _badge;
+    if (badge == null) {
+      return line;
+    }
+    final base = line.endsWith('!') ? line.substring(0, line.length - 1) : line;
+    return '$base: ${badgeName(l10n, badge)}!';
   }
 
   @override
@@ -177,7 +189,7 @@ class _CelebrateViewState extends State<CelebrateView> {
                 const SizedBox(width: 16),
                 Flexible(
                   child: Text(
-                    learnLine(l10n, 'learn.common.badge'),
+                    _badgeText(l10n),
                     style: TextStyle(
                       color: palette.text,
                       fontSize: 18,
