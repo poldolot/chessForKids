@@ -189,7 +189,7 @@ void main() {
       avatarIndex: 1,
     );
     expect(sectionStars(base, MenuSection.play), 0);
-    expect(sectionStars(base.copyWith(matchStars: 10), MenuSection.play), 1);
+    expect(sectionStars(base.copyWith(matchStars: 10), MenuSection.play), 2);
     expect(sectionStars(base.copyWith(matchStars: 45), MenuSection.play), 3);
     expect(sectionStars(base, MenuSection.miniGames), 0);
   });
@@ -248,5 +248,39 @@ void main() {
     expect(avatar.theme, TeacherTheme.animals);
     expect(avatar.index, 2);
     await tester.pumpAndSettle();
+  });
+
+  test('the match tile earns its first star with the first finished match', () {
+    Profile withStars(int n) => Profile(
+      id: 'p',
+      name: '',
+      theme: TeacherTheme.animals,
+      avatarIndex: 1,
+      matchStars: n,
+    );
+    expect(sectionStars(withStars(0), MenuSection.play), 0);
+    expect(sectionStars(withStars(1), MenuSection.play), 1);
+    expect(sectionStars(withStars(9), MenuSection.play), 1);
+    expect(sectionStars(withStars(10), MenuSection.play), 2);
+    expect(sectionStars(withStars(29), MenuSection.play), 2);
+    expect(sectionStars(withStars(30), MenuSection.play), 3);
+  });
+
+  testWidgets('tiles show a progress bar; the match bar grows with points', (
+    tester,
+  ) async {
+    await app.state.recordMatch(stars: 3, won: true);
+    await app.state.recordMatch(stars: 3, won: true);
+    await pumpMenu(tester);
+    expect(find.byKey(const Key('tile-progress')), findsNWidgets(3));
+    final play = tester.widget<MenuTile>(find.byKey(const Key('tile-play')));
+    expect(play.progress, closeTo(6 / 30, 1e-9));
+    expect(play.stars, 1);
+    final learn = tester.widget<MenuTile>(find.byKey(const Key('tile-learn')));
+    expect(learn.progress, 0);
+    expect(play.counter, '6/30');
+    expect(learn.counter, '0/42');
+    expect(find.text('6/30'), findsOneWidget);
+    expect(find.byKey(const Key('tile-counter')), findsNWidgets(3));
   });
 }

@@ -10,6 +10,7 @@ import '../../widgets/teacher_bubble.dart';
 import '../games/game_model.dart';
 import '../games/game_progress.dart';
 import '../learn/lesson_progress.dart';
+import '../learn/lessons/catalog.dart';
 import '../profiles/profile_picker_screen.dart';
 import 'badge_strings.dart';
 import 'badges_screen.dart';
@@ -59,11 +60,55 @@ int sectionStars(
   List<MiniGame> games = const [],
 }) {
   return switch (section) {
-    MenuSection.play => (profile.matchStars ~/ 10).clamp(0, 3),
+    MenuSection.play => switch (profile.matchStars) {
+      0 => 0,
+      < 10 => 1,
+      < kMatchStarsForFullTile => 2,
+      _ => 3,
+    },
     MenuSection.learn => learnSectionStars(profile),
     MenuSection.miniGames => gamesSectionStars(profile, games),
   };
 }
+
+/// Match points needed for the third star on the Partia tile.
+const int kMatchStarsForFullTile = 30;
+
+/// 0..1, how far [section] is towards its full three stars.
+double sectionProgress(
+  Profile profile,
+  MenuSection section, {
+  List<MiniGame> games = const [],
+}) {
+  switch (section) {
+    case MenuSection.learn:
+      final max = lessons.length * 3;
+      return max == 0 ? 0 : learnEarnedStars(profile) / max;
+    case MenuSection.miniGames:
+      final max = gamesMaxStars(games);
+      return max == 0 ? 0 : gamesEarnedStars(profile, games) / max;
+    case MenuSection.play:
+      return (profile.matchStars / kMatchStarsForFullTile).clamp(0, 1);
+  }
+}
+
+/// Stars earned and the section's total, shown under the tile's stars as
+/// "25/30". Match points are capped at the amount that fills the tile.
+(int earned, int max) sectionCounter(
+  Profile profile,
+  MenuSection section, {
+  List<MiniGame> games = const [],
+}) => switch (section) {
+  MenuSection.learn => (learnEarnedStars(profile), lessons.length * 3),
+  MenuSection.miniGames => (
+    gamesEarnedStars(profile, games),
+    gamesMaxStars(games),
+  ),
+  MenuSection.play => (
+    profile.matchStars.clamp(0, kMatchStarsForFullTile),
+    kMatchStarsForFullTile,
+  ),
+};
 
 /// The child's home screen: greeting, three section tiles, badges, parent lock.
 class MainMenuScreen extends StatefulWidget {
@@ -75,6 +120,8 @@ class MainMenuScreen extends StatefulWidget {
   @override
   State<MainMenuScreen> createState() => _MainMenuScreenState();
 }
+
+String _counterText((int, int) counter) => '${counter.$1}/${counter.$2}';
 
 class _MainMenuScreenState extends State<MainMenuScreen> {
   /// A badge the child tapped: the bubble names it instead of greeting.
@@ -149,6 +196,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
         icon: Icons.menu_book_rounded,
         color: palette.learn,
         stars: sectionStars(profile, MenuSection.learn),
+        progress: sectionProgress(profile, MenuSection.learn),
+        counter: _counterText(sectionCounter(profile, MenuSection.learn)),
         onTap: () => _openSection(context, MenuSection.learn),
       ),
       const SizedBox(height: 14),
@@ -160,6 +209,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
         icon: Icons.sports_esports_rounded,
         color: palette.games,
         stars: sectionStars(profile, MenuSection.miniGames, games: games),
+        progress: sectionProgress(profile, MenuSection.miniGames, games: games),
+        counter: _counterText(
+          sectionCounter(profile, MenuSection.miniGames, games: games),
+        ),
         onTap: () => _openSection(context, MenuSection.miniGames),
       ),
       const SizedBox(height: 14),
@@ -171,6 +224,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
         icon: Icons.emoji_events_rounded,
         color: palette.play,
         stars: sectionStars(profile, MenuSection.play),
+        progress: sectionProgress(profile, MenuSection.play),
+        counter: _counterText(sectionCounter(profile, MenuSection.play)),
         onTap: () => _openSection(context, MenuSection.play),
       ),
     ];

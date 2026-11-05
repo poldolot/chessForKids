@@ -191,4 +191,34 @@ void main() {
     await tester.pumpAndSettle();
     expect(app.state.currentProfile!.matchStars, 1);
   });
+
+  testWidgets('on a tall screen the result card sits above the board', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(400, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await pumpResult(tester, resigned());
+    final card = tester.getRect(
+      find.byKey(const Key('result-icon-consolation')),
+    );
+    final board = tester.getRect(sq('a8'));
+    expect(card.bottom, lessThanOrEqualTo(board.top));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('on a short screen the card lies over the board and closes', (
+    tester,
+  ) async {
+    await pumpResult(tester, resigned());
+    final card = tester.getRect(
+      find.byKey(const Key('result-icon-consolation')),
+    );
+    final board = tester.getRect(sq('a8'));
+    expect(card.top, greaterThan(board.top));
+    await tester.tap(find.byKey(const Key('overlay-card')));
+    await tester.pump();
+    expect(find.byKey(const Key('result-icon-consolation')), findsNothing);
+    await tester.pumpAndSettle();
+  });
 }

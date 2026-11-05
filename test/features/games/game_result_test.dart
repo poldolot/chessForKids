@@ -248,4 +248,17 @@ void main() {
     expect(back.width, 60);
     await tester.pumpAndSettle();
   });
+
+  testWidgets('the result card can be closed with a tap', (tester) async {
+    await app.state.updateProfile(
+      app.state.currentProfile!.copyWith(miniGameWins: 9),
+    );
+    await pumpResult(tester, finished(rook, 0, tour));
+    await tester.pump(const Duration(milliseconds: 900));
+    expect(find.byKey(const Key('result-badge')), findsOneWidget);
+    await tester.tap(find.byKey(const Key('overlay-card')));
+    await tester.pump();
+    expect(find.byKey(const Key('result-badge')), findsNothing);
+    await tester.pumpAndSettle();
+  });
 }

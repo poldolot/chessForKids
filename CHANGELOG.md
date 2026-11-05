@@ -6,6 +6,21 @@ All notable changes to Chess for Kids are listed here. The format follows
 
 ## [Unreleased]
 
+## [0.2.3] - 2026-11-05
+
+### Changed
+- The parent zone button is a gear instead of a lock.
+- The version shown in the parent zone follows the real one (a test keeps it
+  equal to pubspec.yaml).
+- The result card after a match or a mini-game sits above the board on tall
+  screens; on short screens it lies over the board and a tap closes it.
+- The Partia tile earns its first star with the first finished match, the
+  second at 10 points and the third at 30.
+
+### Added
+- Every menu tile shows a progress bar and an "earned/total" counter under
+  its stars.
+
 ## [0.2.2] - 2026-11-05
 
 ### Changed
@@ -90,7 +105,8 @@ First complete version for local testing (debug-signed APK).
 - GitHub Actions: analysis, tests and an APK on every push; the APK is attached
   to the release for `v*` tags.
 
-[Unreleased]: https://github.com/poldolot/chessForKids/compare/v0.2.2...HEAD
+[Unreleased]: https://github.com/poldolot/chessForKids/compare/v0.2.3...HEAD
+[0.2.3]: https://github.com/poldolot/chessForKids/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/poldolot/chessForKids/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/poldolot/chessForKids/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/poldolot/chessForKids/compare/v0.1.1...v0.2.0

@@ -196,7 +196,11 @@ class _GameResultViewState extends State<GameResultView> {
         highlights: BoardHighlights(lastMove: widget.session.lastMove),
       ),
       overlay: _badge != null && _badgeShown
-          ? _BadgeCard(badge: _badge!, text: gameLine(l10n, _badgeKey(_badge!)))
+          ? _BadgeCard(
+              key: const Key('result-badge'),
+              badge: _badge!,
+              text: gameLine(l10n, _badgeKey(_badge!)),
+            )
           : null,
       controls: Row(
         children: [
@@ -290,7 +294,7 @@ class _RoundButton extends StatelessWidget {
 }
 
 class _BadgeCard extends StatelessWidget {
-  const _BadgeCard({required this.badge, required this.text});
+  const _BadgeCard({super.key, required this.badge, required this.text});
 
   final String badge;
   final String text;
@@ -299,7 +303,6 @@ class _BadgeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final palette = AppTheme.of(context).ui;
     return Container(
-      key: const Key('result-badge'),
       margin: const EdgeInsets.symmetric(horizontal: 24),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(

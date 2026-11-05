@@ -73,7 +73,7 @@ class _ParentLockButtonState extends State<ParentLockButton>
                 track: palette.muted,
               ),
               child: Icon(
-                Icons.lock_outline_rounded,
+                Icons.settings_rounded,
                 color: palette.muted,
                 size: widget.size * 0.45,
               ),

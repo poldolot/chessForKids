@@ -1,6 +1,9 @@
 import '../data/models.dart';
 import '../engine/engine.dart';
 
+/// Version shown in the parent zone; a test keeps it equal to pubspec.yaml.
+const String kAppVersion = '0.2.3';
+
 /// Minimum size of anything a child is expected to tap.
 const double kMinTouchTarget = 56;
 

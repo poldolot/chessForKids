@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../ai/ai.dart';
+import '../../app/constants.dart';
 import '../../app/theme/app_theme.dart';
 import '../../core/speaker.dart';
 import '../../data/models.dart';
@@ -11,7 +12,6 @@ import '../profiles/avatar_image.dart';
 import '../profiles/profile_wizard_screen.dart';
 
 /// Version shown in the About section; kept in sync with pubspec.yaml by hand.
-const String kAppVersion = '0.1.0';
 
 /// Settings for parents: players, language, voice, colors, match color,
 /// mini-game unlocking and the about box.

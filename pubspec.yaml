@@ -1,7 +1,7 @@
 name: chess_for_kids
 description: Offline chess tutor for children aged 5 and up.
 publish_to: 'none'
-version: 0.2.2+5
+version: 0.2.3+6
 
 environment:
   sdk: ^3.13.7
