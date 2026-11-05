@@ -115,6 +115,8 @@ void main() {
       findsOneWidget,
     );
     expect(find.descendant(of: sq('e6'), matching: dots()), findsOneWidget);
+    // A capture square shows the dot too, so every move looks the same.
+    expect(find.descendant(of: sq('d6'), matching: dots()), findsOneWidget);
     await tester.tap(sq('d6'));
     await tester.pump();
     expect(moves, [Move.parseUci('e5d6')]);

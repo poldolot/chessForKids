@@ -2,8 +2,8 @@
   "@@locale": "en",
   "appTitle": "Chess for Kids",
   "whoIsPlaying": "Who is playing?",
-  "greeting": "Hi! What shall we play today?",
-  "greetingNamed": "Hi, {name}! What shall we play today?",
+  "greeting": "Hi! Pick a lesson, a mini-game or a match.",
+  "greetingNamed": "Hi, {name}! Pick a lesson, a mini-game or a match.",
   "@greetingNamed": {
     "placeholders": {
       "name": {

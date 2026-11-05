@@ -126,6 +126,7 @@ Move? pawnWarMove(
   PieceColor side,
   Random random, {
   GameRules rules = const GameRules(enPassant: false, castling: false),
+  double blunder = 0,
 }) {
   final p = position.sideToMove == side
       ? position
@@ -135,6 +136,10 @@ Move? pawnWarMove(
       .toList();
   if (moves.isEmpty) {
     return null;
+  }
+  if (blunder > 0 && random.nextDouble() < blunder) {
+    // A careless opponent for the youngest: any legal move.
+    return _pick(moves, random);
   }
   final promotions = moves.where((m) => m.promotion != null).toList();
   if (promotions.isNotEmpty) {

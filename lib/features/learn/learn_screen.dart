@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../app/theme/app_theme.dart';
 import '../../core/speaker.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
@@ -14,8 +15,54 @@ import 'lessons/catalog.dart';
 import 'widgets/lesson_node.dart';
 
 /// The lesson path: one node per lesson, winding left and right.
-class LearnScreen extends StatelessWidget {
+class LearnScreen extends StatefulWidget {
   const LearnScreen({super.key});
+
+  @override
+  State<LearnScreen> createState() => _LearnScreenState();
+}
+
+class _LearnScreenState extends State<LearnScreen> {
+  final ScrollController _scroll = ScrollController();
+  bool _moreBelow = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scroll.addListener(_updateMore);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _updateMore());
+  }
+
+  @override
+  void dispose() {
+    _scroll.dispose();
+    super.dispose();
+  }
+
+  void _updateMore() {
+    if (!_scroll.hasClients) {
+      return;
+    }
+    final position = _scroll.position;
+    final more = position.maxScrollExtent - position.pixels > 8;
+    if (more != _moreBelow && mounted) {
+      setState(() => _moreBelow = more);
+    }
+  }
+
+  void _scrollDown() {
+    if (!_scroll.hasClients) {
+      return;
+    }
+    _scroll.animateTo(
+      (_scroll.position.pixels + 320).clamp(
+        0,
+        _scroll.position.maxScrollExtent,
+      ),
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
 
   void _open(BuildContext context, Lesson lesson, bool unlocked) {
     if (!unlocked) {
@@ -59,33 +106,129 @@ class LearnScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-                itemCount: lessons.length,
-                itemBuilder: (context, index) {
-                  final lesson = lessons[index];
-                  final unlocked = isLessonUnlocked(lesson, profile);
-                  final node = LessonNode(
-                    key: Key('lesson-${lesson.id}'),
-                    lesson: lesson,
-                    unlocked: unlocked,
-                    stars: profile.stars[starsKey(lesson)] ?? 0,
-                    isNext: next?.id == lesson.id,
-                    onTap: () => _open(context, lesson, unlocked),
-                  );
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6),
-                    child: Align(
-                      alignment: index.isEven
-                          ? const Alignment(-0.5, 0)
-                          : const Alignment(0.5, 0),
-                      child: node,
+              child: Stack(
+                children: [
+                  NotificationListener<ScrollMetricsNotification>(
+                    onNotification: (_) {
+                      _updateMore();
+                      return false;
+                    },
+                    child: ListView.builder(
+                      controller: _scroll,
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                      itemCount: lessons.length,
+                      itemBuilder: (context, index) {
+                        final lesson = lessons[index];
+                        final unlocked = isLessonUnlocked(lesson, profile);
+                        final node = LessonNode(
+                          key: Key('lesson-${lesson.id}'),
+                          lesson: lesson,
+                          unlocked: unlocked,
+                          stars: profile.stars[starsKey(lesson)] ?? 0,
+                          isNext: next?.id == lesson.id,
+                          onTap: () => _open(context, lesson, unlocked),
+                        );
+                        return Padding(
+                          padding: EdgeInsets.zero,
+                          child: Align(
+                            alignment: index.isEven
+                                ? const Alignment(-0.5, 0)
+                                : const Alignment(0.5, 0),
+                            child: node,
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
+                  ),
+                  if (_moreBelow)
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 4,
+                      child: Center(
+                        child: _MoreBelowArrow(
+                          key: const Key('learn-more'),
+                          onTap: _scrollDown,
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// A bouncing chevron telling a child the path goes on below the screen.
+class _MoreBelowArrow extends StatefulWidget {
+  const _MoreBelowArrow({super.key, required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  State<_MoreBelowArrow> createState() => _MoreBelowArrowState();
+}
+
+class _MoreBelowArrowState extends State<_MoreBelowArrow>
+    with SingleTickerProviderStateMixin {
+  /// Bounces a few times, then rests: a loop would never let the screen
+  /// settle (and keeps drawing for nothing).
+  static const int _bounces = 6;
+
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 700),
+  );
+  int _done = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _controller.reverse();
+      } else if (status == AnimationStatus.dismissed && ++_done < _bounces) {
+        _controller.forward();
+      }
+    });
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = AppTheme.of(context).ui;
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) => Transform.translate(
+        offset: Offset(0, reduceMotion ? 0 : 6 * _controller.value),
+        child: child,
+      ),
+      child: Material(
+        color: palette.accent,
+        shape: const CircleBorder(),
+        elevation: 3,
+        child: InkWell(
+          customBorder: const CircleBorder(),
+          onTap: widget.onTap,
+          child: SizedBox(
+            width: 48,
+            height: 48,
+            child: Icon(
+              Icons.keyboard_arrow_down_rounded,
+              size: 34,
+              color: palette.text,
+            ),
+          ),
         ),
       ),
     );

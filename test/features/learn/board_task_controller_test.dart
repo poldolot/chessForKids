@@ -241,4 +241,20 @@ void main() {
       expect(c.onMove(uci('e5e6')), TaskEvent.complete);
     },
   );
+
+  test('pawn practice ends when every black pawn is taken', () {
+    final task = lessonById('pawn').steps.whereType<BoardTaskStep>().last;
+    final c = BoardTaskController(task);
+    for (final u in ['a2a4', 'a4b5', 'c2c4', 'c4d5', 'e2e4', 'e4f5', 'g2g4']) {
+      expect(c.onMove(uci(u)), isNot(TaskEvent.complete), reason: u);
+    }
+    expect(c.onMove(uci('g4h5')), TaskEvent.complete);
+  });
+
+  test('pawn lesson never offers a promotion', () {
+    for (final step in lessonById('pawn').steps.whereType<BoardTaskStep>()) {
+      final p = Position.fromFen('8/4P3/8/8/8/8/8/8 w - - 0 1');
+      expect(step.moveFilter!(p, uci('e7e8q')), isFalse, reason: step.lineKey);
+    }
+  });
 }

@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/theme/app_theme.dart';
+import '../../core/speaker.dart';
 import '../../data/models.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
@@ -40,9 +43,16 @@ class LessonScreen extends StatefulWidget {
 }
 
 class _LessonScreenState extends State<LessonScreen> {
+  /// How long at most a first explanation holds the Next button, in case
+  /// the speech engine never reports the end of the line.
+  static const Duration _maxHold = Duration(seconds: 20);
+
   int _index = 0;
   int _mistakes = 0;
   bool _stepDone = false;
+  bool _firstVisit = false;
+  bool _holdExpired = false;
+  Timer? _holdTimer;
 
   Lesson get lesson => widget.lesson;
   bool get _celebrating => _index >= lesson.steps.length;
@@ -51,12 +61,34 @@ class _LessonScreenState extends State<LessonScreen> {
   @override
   void initState() {
     super.initState();
+    final profile = context.read<AppState>().currentProfile;
+    _firstVisit = !(profile?.lessonsDone.contains(lesson.id) ?? false);
     _enterStep();
+  }
+
+  @override
+  void dispose() {
+    _holdTimer?.cancel();
+    super.dispose();
   }
 
   void _enterStep() {
     _stepDone = _step is IntroStep;
+    _holdTimer?.cancel();
+    _holdExpired = false;
+    if (_holdsForSpeech) {
+      _holdTimer = Timer(_maxHold, () {
+        if (mounted) {
+          setState(() => _holdExpired = true);
+        }
+      });
+    }
   }
+
+  /// The first time a child meets a lesson, the explanation is heard to the
+  /// end before Next works; later visits (and tasks) are never held.
+  bool get _holdsForSpeech =>
+      _firstVisit && _step is IntroStep && !_holdExpired;
 
   void _next() {
     if (_celebrating) {
@@ -155,14 +187,19 @@ class _LessonScreenState extends State<LessonScreen> {
                 const SizedBox(height: 12),
                 Expanded(child: _stepView(step)),
                 const SizedBox(height: 12),
-                FilledButton.icon(
-                  key: const Key('lesson-next'),
-                  onPressed: _stepDone ? _next : null,
-                  icon: const Icon(Icons.play_arrow_rounded, size: 28),
-                  label: Text(l10n.learnCommonNext),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: palette.accent,
-                    minimumSize: const Size.fromHeight(60),
+                ValueListenableBuilder<bool>(
+                  valueListenable: context.read<Speaker>().speaking,
+                  builder: (context, speaking, _) => FilledButton.icon(
+                    key: const Key('lesson-next'),
+                    onPressed: _stepDone && !(_holdsForSpeech && speaking)
+                        ? _next
+                        : null,
+                    icon: const Icon(Icons.play_arrow_rounded, size: 28),
+                    label: Text(l10n.learnCommonNext),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: palette.accent,
+                      minimumSize: const Size.fromHeight(60),
+                    ),
                   ),
                 ),
               ] else

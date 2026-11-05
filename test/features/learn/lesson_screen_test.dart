@@ -139,4 +139,44 @@ void main() {
     expect(tester.widget<StepDots>(find.byType(StepDots)).current, 2);
     await tester.pumpAndSettle();
   });
+
+  FilledButton nextButton(WidgetTester tester) =>
+      tester.widget<FilledButton>(find.byKey(const Key('lesson-next')));
+
+  testWidgets('a first explanation holds Next until it has been spoken', (
+    tester,
+  ) async {
+    app.speaker.speaking.value = true;
+    await pumpLesson(tester, 'rook');
+    expect(nextButton(tester).onPressed, isNull);
+    app.speaker.speaking.value = false;
+    await tester.pump();
+    expect(nextButton(tester).onPressed, isNotNull);
+    await tester.tap(find.byKey(const Key('lesson-next')));
+    await tester.pump();
+    // Task steps are never held, whatever the speaker does.
+    app.speaker.speaking.value = true;
+    await tester.pump();
+    expect(find.byType(BoardTaskView), findsOneWidget);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('a lesson done before is never held', (tester) async {
+    await app.state.markLessonDone('rook');
+    app.speaker.speaking.value = true;
+    await pumpLesson(tester, 'rook');
+    expect(nextButton(tester).onPressed, isNotNull);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the hold gives up after twenty seconds without an end', (
+    tester,
+  ) async {
+    app.speaker.speaking.value = true;
+    await pumpLesson(tester, 'rook');
+    expect(nextButton(tester).onPressed, isNull);
+    await tester.pump(const Duration(seconds: 21));
+    expect(nextButton(tester).onPressed, isNotNull);
+    await tester.pumpAndSettle();
+  });
 }

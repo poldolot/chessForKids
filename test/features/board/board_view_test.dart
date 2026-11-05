@@ -78,7 +78,8 @@ void main() {
           size: 320,
         ),
       );
-      expect(find.byKey(const Key('move-dot')), findsNWidgets(2));
+      // Plain targets and capture targets both get a dot.
+      expect(find.byKey(const Key('move-dot')), findsNWidgets(3));
       expect(
         find.descendant(
           of: sq('e4'),

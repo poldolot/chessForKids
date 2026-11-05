@@ -380,7 +380,7 @@ class _BoardViewState extends State<BoardView> {
                 ),
               ),
             )
-          else if (h.moveTargets.contains(s))
+          else if (h.moveTargets.contains(s) || h.captureTargets.contains(s))
             Center(
               child: Container(
                 key: const Key('move-dot'),

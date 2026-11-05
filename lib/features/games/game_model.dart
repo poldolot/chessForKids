@@ -15,10 +15,14 @@ final class GameBoard {
     this.par,
     this.unlockedByLesson,
     this.rules = GameRules.standard,
+    this.blunder = 0,
   });
 
   final int index;
   final String fen;
+
+  /// Pawn war: chance (0..1) that the opponent plays a random move.
+  final double blunder;
   final Set<Square> stars;
 
   /// Moves allowed before the board resets; `null` means unlimited.
@@ -72,6 +76,7 @@ final class GameLevel {
     this.trapped = false,
     this.limit,
     this.fen,
+    this.blunder = 0,
     this.unlockedByLesson,
   });
 
@@ -99,6 +104,7 @@ final class GameLevel {
       trapped: json['trapped'] as bool? ?? false,
       limit: json['limit'] as int?,
       fen: json['fen'] as String?,
+      blunder: (json['blunder'] as num?)?.toDouble() ?? 0,
       unlockedByLesson: json['unlock'] as String?,
     );
   }
@@ -129,6 +135,9 @@ final class GameLevel {
 
   /// A fixed board instead of a generated one (pawn war).
   final String? fen;
+
+  /// Pawn war: chance (0..1) that the opponent plays a random move.
+  final double blunder;
 
   /// A lesson this level needs beyond the game's own.
   final String? unlockedByLesson;

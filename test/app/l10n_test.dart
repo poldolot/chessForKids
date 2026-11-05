@@ -8,7 +8,10 @@ void main() {
     final pl = await AppLocalizations.delegate.load(const Locale('pl'));
     expect(en.learn, 'Learn');
     expect(pl.learn, 'Nauka');
-    expect(pl.greetingNamed('Zosia'), 'Cześć, Zosia! W co dziś gramy?');
+    expect(
+      pl.greetingNamed('Zosia'),
+      'Cześć, Zosia! Wybierz naukę, mini-grę lub partię.',
+    );
     expect(
       AppLocalizations.supportedLocales,
       containsAll([const Locale('en'), const Locale('pl')]),

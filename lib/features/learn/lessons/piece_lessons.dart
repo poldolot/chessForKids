@@ -50,6 +50,9 @@ BoardTaskStep _collectStars(
   hintKey: 'learn.common.limitHint',
 );
 
+/// Promotion belongs to its own lesson; pawn tasks never offer it.
+bool _noPromotion(Position position, Move move) => move.promotion == null;
+
 Lesson _pieceLesson(String id, PieceType type, List<LessonStep> tasks) {
   final piece = Piece(PieceColor.white, type);
   return Lesson(
@@ -74,18 +77,27 @@ final Lesson pawnLesson = _pieceLesson('pawn', PieceType.pawn, [
     goal: (s) => s.goodMoves >= 3 && s.doubleSteps >= 1,
     solution: _moves('e2e4 e4e5 e5e6'),
     moveLimit: 4,
+    moveFilter: _noPromotion,
     hintKey: 'learn.pawn.moveHint',
   ),
-  _capture('pawn', '8/8/8/2p1p3/3p1p2/4P3/8/8 w - - 0 1', 'e3d4 d4c5'),
-  // Five plain moves and three captures; walking past a capture is a
-  // mistake, promotions are not offered, the limit keeps it solvable.
+  BoardTaskStep(
+    lineKey: 'learn.pawn.capture',
+    fen: '8/8/8/2p1p3/3p1p2/4P3/8/8 w - - 0 1',
+    goal: (s) => s.captures >= 2,
+    solution: _moves('e3d4 d4c5'),
+    moveFilter: (p, m) => isCaptureMove(p, m) && _noPromotion(p, m),
+    hintKey: 'learn.common.captureFrame',
+  ),
+  // Take every black pawn, or three of them plus enough plain moves;
+  // walking past a capture is a mistake, promotions are not offered, the
+  // limit keeps it solvable.
   BoardTaskStep(
     lineKey: 'learn.pawn.practice',
     fen: '8/8/8/1p1p1p1p/8/8/PPPPPPPP/8 w - - 0 1',
-    goal: (s) => s.captures >= 3 && s.goodMoves - s.captures >= 5,
+    goal: (s) => s.captures >= 4 || (s.captures >= 3 && s.goodMoves >= 8),
     solution: _moves('a2a4 a4b5 c2c4 c4d5 e2e4 e4f5 b2b3 g2g4'),
     moveLimit: 12,
-    moveFilter: (p, m) => m.promotion == null,
+    moveFilter: _noPromotion,
     verdict: (before, move, after) =>
         _captureAvailable(before.position) &&
             !isCaptureMove(before.position, move)

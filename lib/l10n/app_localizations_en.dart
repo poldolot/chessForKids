@@ -16,11 +16,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get whoIsPlaying => 'Who is playing?';
 
   @override
-  String get greeting => 'Hi! What shall we play today?';
+  String get greeting => 'Hi! Pick a lesson, a mini-game or a match.';
 
   @override
   String greetingNamed(String name) {
-    return 'Hi, $name! What shall we play today?';
+    return 'Hi, $name! Pick a lesson, a mini-game or a match.';
   }
 
   @override

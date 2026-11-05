@@ -95,7 +95,7 @@ void main() {
   );
 
   testWidgets(
-    'an unlocked game opens its level list; pawn war goes straight to play',
+    'an unlocked game opens its level list; pawn war has three levels',
     (tester) async {
       await app.state.updateProfile(
         app.state.currentProfile!.copyWith(unlockAllMiniGames: true),
@@ -111,7 +111,8 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(card('pawnWar'));
       await tester.pumpAndSettle();
-      expect(find.byType(GamePlayScreen), findsOneWidget);
+      expect(find.byType(GameLevelsScreen), findsOneWidget);
+      expect(find.byKey(const Key('level-2')), findsOneWidget);
     },
   );
 

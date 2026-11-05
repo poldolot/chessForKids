@@ -127,4 +127,22 @@ void main() {
     expect(app.speaker.spoken.last.$1, 'learn.common.allDone');
     await tester.pumpAndSettle();
   });
+
+  testWidgets('a short screen shows an arrow while lessons hide below', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(360, 640);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await pumpLearn(tester);
+    await tester.pump();
+    expect(find.byKey(const Key('learn-more')), findsOneWidget);
+    await tester.tap(find.byKey(const Key('learn-more')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('learn-more')), findsOneWidget);
+    final list = find.byType(Scrollable).first;
+    await tester.fling(list, const Offset(0, -4000), 3000);
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('learn-more')), findsNothing);
+  });
 }

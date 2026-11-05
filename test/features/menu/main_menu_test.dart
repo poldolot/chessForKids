@@ -58,13 +58,19 @@ void main() {
 
   testWidgets('greeting uses the name when present', (tester) async {
     await pumpMenu(tester);
-    expect(app.speaker.spoken.last.$2, 'Cześć, Zosia! W co dziś gramy?');
+    expect(
+      app.speaker.spoken.last.$2,
+      'Cześć, Zosia! Wybierz naukę, mini-grę lub partię.',
+    );
   });
 
   testWidgets('greeting without a name', (tester) async {
     await app.state.updateProfile(app.state.currentProfile!.copyWith(name: ''));
     await pumpMenu(tester);
-    expect(app.speaker.spoken.last.$2, 'Cześć! W co dziś gramy?');
+    expect(
+      app.speaker.spoken.last.$2,
+      'Cześć! Wybierz naukę, mini-grę lub partię.',
+    );
   });
 
   testWidgets('tiles call onSection', (tester) async {

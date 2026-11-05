@@ -119,17 +119,18 @@ class _TeacherBubbleState extends State<TeacherBubble> with RouteAware {
         const SizedBox(width: 10),
         Expanded(
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-              color: palette.surface,
-              borderRadius: BorderRadius.circular(18),
+              color: palette.surface.withValues(alpha: 0.7),
+              borderRadius: BorderRadius.circular(16),
             ),
             child: Text(
               widget.text,
               style: TextStyle(
                 color: palette.text,
-                fontSize: 17,
-                fontWeight: FontWeight.w600,
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                height: 1.25,
               ),
             ),
           ),

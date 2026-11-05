@@ -75,7 +75,7 @@ void main() {
   });
 
   test('section stars grow with earned stars', () {
-    expect(gamesMaxStars(games), 21 * 3);
+    expect(gamesMaxStars(games), 23 * 3);
     expect(gamesSectionStars(fresh, games), 0);
     final one = fresh.copyWith(stars: {'game:rookRoads:0': 2});
     expect(gamesEarnedStars(one, games), 2);

@@ -88,7 +88,10 @@ void main() {
       await seedProfile(lastId: 'keep');
       await pumpApp(tester);
       expect(find.byType(MainMenuScreen), findsOneWidget);
-      expect(speaker.spoken.last.$2, 'Cześć, Zosia! W co dziś gramy?');
+      expect(
+        speaker.spoken.last.$2,
+        'Cześć, Zosia! Wybierz naukę, mini-grę lub partię.',
+      );
       expect(speaker.language, 'pl');
     },
   );

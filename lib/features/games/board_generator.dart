@@ -30,6 +30,7 @@ GameBoard generateBoard(
       moveLimit: level.limit,
       unlockedByLesson: level.unlockedByLesson,
       rules: rules,
+      blunder: level.blunder,
     );
   }
   for (var i = 0; i < attempts; i++) {

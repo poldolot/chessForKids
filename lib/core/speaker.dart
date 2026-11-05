@@ -48,6 +48,11 @@ abstract class Speaker extends ChangeNotifier {
   /// Whether speech works for the current language on this device.
   bool get available;
 
+  /// True while a line is being spoken (false when speech is unavailable
+  /// or disabled). Screens use it to hold a "Next" button for a first
+  /// explanation.
+  final ValueNotifier<bool> speaking = ValueNotifier(false);
+
   /// The last text handed to [say], spoken or not.
   String? get lastText => _lastText;
 

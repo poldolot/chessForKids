@@ -153,4 +153,23 @@ void main() {
     );
     expect(m, uci('e5e6'));
   });
+
+  test('a careless pawn war opponent sometimes ignores a capture', () {
+    final p = Position.fromFen('8/8/8/8/3p4/4P3/8/8 b - - 0 1');
+    var ignored = 0;
+    for (var seed = 0; seed < 40; seed++) {
+      final steady = pawnWarMove(p, PieceColor.black, Random(seed));
+      expect(steady, Move.parseUci('d4e3'), reason: 'seed $seed');
+      final careless = pawnWarMove(
+        p,
+        PieceColor.black,
+        Random(seed),
+        blunder: 0.6,
+      );
+      if (careless != Move.parseUci('d4e3')) {
+        ignored++;
+      }
+    }
+    expect(ignored, greaterThan(10));
+  });
 }

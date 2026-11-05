@@ -238,6 +238,7 @@ final class MiniGameSession extends ChangeNotifier {
           childColor.opposite,
           _random,
           rules: board.rules,
+          blunder: board.blunder,
         );
         if (reply == null) {
           _outcome = SessionOutcome.won;

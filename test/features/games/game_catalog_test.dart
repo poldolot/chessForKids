@@ -20,8 +20,12 @@ void main() {
       'hunt',
     ]);
     final pawnWar = gameById(games, 'pawnWar');
-    expect(pawnWar.levels.length, 1);
-    expect(pawnWar.levels.single.fen, isNotNull);
+    expect(pawnWar.levels.length, 3);
+    for (final (i, l) in pawnWar.levels.indexed) {
+      final black = Position.fromFen(l.fen!).pieces(PieceColor.black).length;
+      expect(black, [3, 5, 8][i], reason: 'pawn war level $i');
+      expect(l.blunder, [0.6, 0.35, 0.0][i]);
+    }
     for (final g in games.skip(1)) {
       expect(g.levels.length, 5, reason: g.id);
       for (final (i, l) in g.levels.indexed) {

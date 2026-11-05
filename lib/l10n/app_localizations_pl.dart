@@ -16,11 +16,11 @@ class AppLocalizationsPl extends AppLocalizations {
   String get whoIsPlaying => 'Kto gra?';
 
   @override
-  String get greeting => 'Cześć! W co dziś gramy?';
+  String get greeting => 'Cześć! Wybierz naukę, mini-grę lub partię.';
 
   @override
   String greetingNamed(String name) {
-    return 'Cześć, $name! W co dziś gramy?';
+    return 'Cześć, $name! Wybierz naukę, mini-grę lub partię.';
   }
 
   @override

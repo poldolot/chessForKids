@@ -113,13 +113,13 @@ abstract class AppLocalizations {
   /// No description provided for @greeting.
   ///
   /// In en, this message translates to:
-  /// **'Hi! What shall we play today?'**
+  /// **'Hi! Pick a lesson, a mini-game or a match.'**
   String get greeting;
 
   /// No description provided for @greetingNamed.
   ///
   /// In en, this message translates to:
-  /// **'Hi, {name}! What shall we play today?'**
+  /// **'Hi, {name}! Pick a lesson, a mini-game or a match.'**
   String greetingNamed(String name);
 
   /// No description provided for @learn.

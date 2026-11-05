@@ -9,7 +9,7 @@ import 'speaker.dart';
 /// never broken.
 final class TtsSpeaker extends Speaker {
   TtsSpeaker([FlutterTts? tts]) : _tts = tts ?? FlutterTts() {
-    _tts.setStartHandler(() => _speaking = true);
+    _tts.setStartHandler(() => _setSpeaking(true));
     _tts.setCompletionHandler(_onFinished);
     _tts.setCancelHandler(_onFinished);
     _tts.setErrorHandler((_) => _onFinished());
@@ -81,19 +81,28 @@ final class TtsSpeaker extends Speaker {
     await _speak(text, main: interrupt);
   }
 
+  void _setSpeaking(bool value) {
+    _speaking = value;
+    speaking.value = value;
+  }
+
   Future<void> _speak(String text, {required bool main}) async {
-    _speaking = true;
+    _setSpeaking(true);
     _currentIsMain = main;
-    await _guard(() async {
+    final ok = await _guard(() async {
       await _tts.setSpeechRate(rate.ttsRate);
       await _tts.stop();
       await _tts.speak(text);
       return true;
     });
+    if (ok != true) {
+      // The engine never started, so no completion will come.
+      _setSpeaking(false);
+    }
   }
 
   void _onFinished() {
-    _speaking = false;
+    _setSpeaking(false);
     final pending = _pending;
     if (pending != null && enabled && _available) {
       _pending = null;
@@ -104,7 +113,7 @@ final class TtsSpeaker extends Speaker {
   @override
   Future<void> stop() async {
     _pending = null;
-    _speaking = false;
+    _setSpeaking(false);
     await _guard(() async {
       await _tts.stop();
       return true;
