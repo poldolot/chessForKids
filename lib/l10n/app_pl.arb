@@ -1,7 +1,7 @@
 {
   "@@locale": "pl",
   "appTitle": "Szachy dla dzieci",
-  "whoIsPlaying": "Kto gra?",
+  "whoIsPlaying": "Wybierz profil lub dodaj nowy.",
   "greeting": "Cześć! Wybierz naukę, mini-grę lub partię.",
   "greetingNamed": "Cześć, {name}! Wybierz naukę, mini-grę lub partię.",
   "learn": "Nauka",
@@ -227,5 +227,6 @@
   "computerLevel": "Poziom komputera w partii",
   "levelVeryEasy": "Bardzo łatwy",
   "levelEasy": "Łatwy",
-  "levelNormal": "Normalny"
+  "levelNormal": "Normalny",
+  "learnPawnPromotionNote": "Pion doszedł do końca i zmienił się w hetmana. Poznasz to w lekcji o promocji!"
 }

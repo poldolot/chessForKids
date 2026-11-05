@@ -85,7 +85,8 @@ void main() {
     );
     await tester.pumpWidget(app.wrap(const ProfilePickerScreen()));
     await tester.pumpAndSettle();
-    expect(app.speaker.spoken.last.$2, 'Kto gra?');
+    expect(app.speaker.spoken.last.$2, 'Wybierz profil lub dodaj nowy.');
+    expect(find.byKey(const Key('picker-queen')), findsOneWidget);
     expect(find.text('Ala'), findsOneWidget);
     expect(find.text('Bartek'), findsOneWidget);
     await tester.tap(find.byKey(Key('profile-${a.id}')));

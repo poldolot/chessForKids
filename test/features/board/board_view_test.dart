@@ -233,4 +233,48 @@ void main() {
     expect(decorationIn(sq('b8')).border, isNull);
     expect(decorationIn(sq('b8')).shape, BoxShape.circle);
   });
+
+  testWidgets('castling slides the king first and the rook after it', (
+    tester,
+  ) async {
+    final after = Position.fromFen('4k3/8/8/8/8/8/8/5RK1 b - - 1 1');
+    await tester.pumpWidget(
+      app.wrap(
+        Scaffold(
+          body: Center(
+            child: BoardView(
+              position: after,
+              size: 320,
+              animateMove: Move.parseUci('e1g1'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+    // The king is on its way; the rook still rests on h1 and f1 is empty.
+    expect(find.byKey(const Key('sliding-piece')), findsOneWidget);
+    expect(find.byKey(const Key('castle-rook')), findsOneWidget);
+    expect(
+      find.descendant(of: sq('f1'), matching: find.byType(PieceImage)),
+      findsNothing,
+    );
+    final rookAt = tester.getTopLeft(find.byKey(const Key('castle-rook')));
+    expect(rookAt.dx, greaterThan(tester.getTopLeft(sq('g1')).dx));
+    await tester.pump(const Duration(milliseconds: 500));
+    // Now the rook slides and the king has arrived.
+    expect(find.byKey(const Key('sliding-piece')), findsNothing);
+    expect(find.byKey(const Key('castle-rook')), findsOneWidget);
+    expect(
+      find.descendant(of: sq('g1'), matching: find.byType(PieceImage)),
+      findsOneWidget,
+    );
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('castle-rook')), findsNothing);
+    expect(
+      find.descendant(of: sq('f1'), matching: find.byType(PieceImage)),
+      findsOneWidget,
+    );
+  });
 }

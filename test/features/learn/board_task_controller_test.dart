@@ -251,10 +251,13 @@ void main() {
     expect(c.onMove(uci('g4h5')), TaskEvent.complete);
   });
 
-  test('pawn lesson never offers a promotion', () {
+  test('pawn lesson promotes to a queen only, with a word about it', () {
     for (final step in lessonById('pawn').steps.whereType<BoardTaskStep>()) {
-      final p = Position.fromFen('8/4P3/8/8/8/8/8/8 w - - 0 1');
-      expect(step.moveFilter!(p, uci('e7e8q')), isFalse, reason: step.lineKey);
+      // A capturing promotion passes every pawn task's filter as a queen.
+      final p = Position.fromFen('3r4/4P3/8/8/8/8/8/8 w - - 0 1');
+      expect(step.moveFilter!(p, uci('e7d8q')), isTrue, reason: step.lineKey);
+      expect(step.moveFilter!(p, uci('e7d8r')), isFalse, reason: step.lineKey);
+      expect(step.promotionNoteKey, 'learn.pawn.promotionNote');
     }
   });
 }

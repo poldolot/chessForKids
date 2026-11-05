@@ -5,6 +5,7 @@ import '../../app/theme/app_theme.dart';
 import '../../data/models.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
+import '../../widgets/queen_icon.dart';
 import '../../widgets/teacher_bubble.dart';
 import 'avatar_image.dart';
 import 'profile_wizard_screen.dart';
@@ -32,6 +33,7 @@ class ProfilePickerScreen extends StatelessWidget {
               TeacherBubble(
                 theme: first?.theme ?? TeacherTheme.animals,
                 avatarIndex: 1,
+                leading: const QueenIcon(key: Key('picker-queen'), size: 64),
                 text: l10n.whoIsPlaying,
                 speechKey: 'profiles.whoIsPlaying',
               ),

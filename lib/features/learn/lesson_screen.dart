@@ -180,7 +180,10 @@ class _LessonScreenState extends State<LessonScreen> {
                 TeacherBubble(
                   theme: theme,
                   avatarIndex: 2,
-                  text: learnLine(l10n, step.lineKey),
+                  text: step is IntroStep
+                      ? '${learnLine(l10n, lesson.titleKey)}. '
+                            '${learnLine(l10n, step.lineKey)}'
+                      : learnLine(l10n, step.lineKey),
                   speechKey: step.lineKey,
                   interrupt: !(widget.queueFirstLine && _index == 0),
                 ),

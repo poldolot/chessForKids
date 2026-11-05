@@ -50,8 +50,10 @@ BoardTaskStep _collectStars(
   hintKey: 'learn.common.limitHint',
 );
 
-/// Promotion belongs to its own lesson; pawn tasks never offer it.
-bool _noPromotion(Position position, Move move) => move.promotion == null;
+/// Promotion belongs to its own lesson: a pawn that reaches the end simply
+/// becomes a queen, with a word about it, instead of a choice.
+bool _noPromotion(Position position, Move move) =>
+    move.promotion == null || move.promotion == PieceType.queen;
 
 Lesson _pieceLesson(String id, PieceType type, List<LessonStep> tasks) {
   final piece = Piece(PieceColor.white, type);
@@ -79,6 +81,7 @@ final Lesson pawnLesson = _pieceLesson('pawn', PieceType.pawn, [
     moveLimit: 4,
     moveFilter: _noPromotion,
     hintKey: 'learn.pawn.moveHint',
+    promotionNoteKey: 'learn.pawn.promotionNote',
   ),
   BoardTaskStep(
     lineKey: 'learn.pawn.capture',
@@ -87,6 +90,7 @@ final Lesson pawnLesson = _pieceLesson('pawn', PieceType.pawn, [
     solution: _moves('e3d4 d4c5'),
     moveFilter: (p, m) => isCaptureMove(p, m) && _noPromotion(p, m),
     hintKey: 'learn.common.captureFrame',
+    promotionNoteKey: 'learn.pawn.promotionNote',
   ),
   // Take every black pawn, or three of them plus enough plain moves;
   // walking past a capture is a mistake, promotions are not offered, the
@@ -98,6 +102,7 @@ final Lesson pawnLesson = _pieceLesson('pawn', PieceType.pawn, [
     solution: _moves('a2a4 a4b5 c2c4 c4d5 e2e4 e4f5 b2b3 g2g4'),
     moveLimit: 12,
     moveFilter: _noPromotion,
+    promotionNoteKey: 'learn.pawn.promotionNote',
     verdict: (before, move, after) =>
         _captureAvailable(before.position) &&
             !isCaptureMove(before.position, move)

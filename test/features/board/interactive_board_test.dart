@@ -23,6 +23,9 @@ void main() {
     bool enabled = true,
     PieceColor? movableColor,
     GameRules rules = GameRules.standard,
+    bool Function(Move move)? moveFilter,
+    bool showFilteredMoves = false,
+    ValueChanged<Square>? onRejected,
   }) async {
     await tester.pumpWidget(
       app.wrap(
@@ -34,6 +37,9 @@ void main() {
               enabled: enabled,
               movableColor: movableColor,
               rules: rules,
+              moveFilter: moveFilter,
+              showFilteredMoves: showFilteredMoves,
+              onRejected: onRejected,
               size: 320,
             ),
           ),
@@ -264,4 +270,41 @@ void main() {
       expect(dots(), findsNWidgets(2));
     },
   );
+
+  testWidgets('filtered moves can still be shown; tapping one is rejected', (
+    tester,
+  ) async {
+    final rejected = <Square>[];
+    await pumpBoard(
+      tester,
+      Position.fromFen('8/8/8/8/8/8/4P3/8 w - - 0 1'),
+      moveFilter: (m) => m.to == Square.parse('e4'),
+      showFilteredMoves: true,
+      onRejected: rejected.add,
+    );
+    await tester.tap(sq('e2'));
+    await tester.pump();
+    expect(dots(), findsNWidgets(2));
+    await tester.tap(sq('e3'));
+    await tester.pump();
+    expect(moves, isEmpty);
+    expect(rejected, [Square.parse('e3')]);
+    expect(dots(), findsNothing);
+    await tester.tap(sq('e2'));
+    await tester.pump();
+    await tester.tap(sq('e4'));
+    await tester.pump();
+    expect(moves, [Move.parseUci('e2e4')]);
+  });
+
+  testWidgets('by default filtered moves are not shown', (tester) async {
+    await pumpBoard(
+      tester,
+      Position.fromFen('8/8/8/8/8/8/4P3/8 w - - 0 1'),
+      moveFilter: (m) => m.to == Square.parse('e4'),
+    );
+    await tester.tap(sq('e2'));
+    await tester.pump();
+    expect(dots(), findsOneWidget);
+  });
 }

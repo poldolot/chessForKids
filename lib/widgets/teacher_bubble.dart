@@ -21,6 +21,7 @@ class TeacherBubble extends StatefulWidget {
     this.showSpeakButton = true,
     this.avatarSize = 64,
     this.interrupt = true,
+    this.leading,
   });
 
   final TeacherTheme theme;
@@ -34,6 +35,10 @@ class TeacherBubble extends StatefulWidget {
   /// Whether the line cuts off whatever is being spoken; `false` queues it
   /// behind the current main line instead.
   final bool interrupt;
+
+  /// Shown instead of the teacher avatar (the profile picker shows a queen,
+  /// as no child is chosen yet).
+  final Widget? leading;
 
   @override
   State<TeacherBubble> createState() => _TeacherBubbleState();
@@ -115,7 +120,12 @@ class _TeacherBubbleState extends State<TeacherBubble> with RouteAware {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        AvatarImage(widget.theme, widget.avatarIndex, size: widget.avatarSize),
+        widget.leading ??
+            AvatarImage(
+              widget.theme,
+              widget.avatarIndex,
+              size: widget.avatarSize,
+            ),
         const SizedBox(width: 10),
         Expanded(
           child: Container(

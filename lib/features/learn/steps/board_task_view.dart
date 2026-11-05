@@ -84,6 +84,10 @@ class _BoardTaskViewState extends State<BoardTaskView> {
   void _onMove(Move move) {
     final wasComplete = _controller.isComplete;
     final event = _controller.onMove(move);
+    if (move.promotion != null && widget.step.promotionNoteKey != null) {
+      _say(widget.step.promotionNoteKey!);
+      return;
+    }
     if (wasComplete) {
       return;
     }
@@ -136,6 +140,7 @@ class _BoardTaskViewState extends State<BoardTaskView> {
               enabled: !_controller.isAwaitingReset,
               lastMove: state.lastMove,
               moveFilter: _controller.allows,
+              showFilteredMoves: true,
               onRejected: _onRejected,
               shakeSquare: _shake,
               extraHighlights: BoardHighlights(

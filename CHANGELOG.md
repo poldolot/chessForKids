@@ -6,6 +6,25 @@ All notable changes to Chess for Kids are listed here. The format follows
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-11-05
+
+### Changed
+- Lesson tasks show every legal move of the chosen piece, even the ones the
+  task does not accept (for example plain steps in a capture task); tapping
+  one is explained by the hint.
+- The set-up lesson keeps the tray at full height, so the board no longer
+  jumps as the tray empties.
+- Pawn lesson: a pawn reaching the last rank becomes a queen without a
+  choice, and the teacher says it will be explained in the promotion lesson.
+- A lesson's first line starts with the lesson's name.
+- Castling is shown slowly in two steps: the king first, then the rook; in a
+  match the computer waits for the animation before replying.
+- Every lesson is played as white (the check defences used to be black).
+- A coloured queen (gold crown, red jewels, grey base) stands for the
+  profiles: on the profile screen next to "Choose a profile or add a new
+  one." and in the menu as the way back to it; the menu bubble shows the
+  child's own avatar.
+
 ## [0.2.1] - 2026-11-05
 
 ### Changed
@@ -71,7 +90,8 @@ First complete version for local testing (debug-signed APK).
 - GitHub Actions: analysis, tests and an APK on every push; the APK is attached
   to the release for `v*` tags.
 
-[Unreleased]: https://github.com/poldolot/chessForKids/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/poldolot/chessForKids/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/poldolot/chessForKids/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/poldolot/chessForKids/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/poldolot/chessForKids/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/poldolot/chessForKids/compare/v0.1.0...v0.1.1

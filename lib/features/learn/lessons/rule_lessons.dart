@@ -57,7 +57,6 @@ BoardTaskStep _defence(
   lineKey: lineKey,
   fen: fen,
   passive: false,
-  orientation: PieceColor.black,
   goal: (s) => s.goodMoves >= 1,
   solution: _moves(solution),
   verdict: (before, move, after) =>
@@ -81,21 +80,21 @@ final Lesson checkLesson = _rule('check', Icons.warning_amber_rounded, [
   ),
   _defence(
     'learn.check.escape',
-    'R3k3/8/8/8/8/8/8/4K3 b - - 0 1',
-    'e8e7',
+    '4k3/8/8/8/8/8/8/r3K3 w - - 0 1',
+    'e1e2',
     (before, m) => before.pieceAt(m.from)?.type == PieceType.king,
   ),
   _defence(
     'learn.check.capture',
-    '4k3/8/8/8/8/8/8/q3R1K1 b - - 0 1',
-    'a1e1',
-    (before, m) => m.to == Square.parse('e1'),
+    'Q3r1k1/8/8/8/8/8/8/4K3 w - - 0 1',
+    'a8e8',
+    (before, m) => m.to == Square.parse('e8'),
   ),
   _defence(
     'learn.check.block',
-    'R3k3/3r4/8/8/8/8/8/4K3 b - - 0 1',
-    'd7d8',
-    (before, m) => const ['b8', 'c8', 'd8'].contains(m.to.name),
+    '4k3/8/8/8/8/8/3R4/r3K3 w - - 0 1',
+    'd2d1',
+    (before, m) => const ['b1', 'c1', 'd1'].contains(m.to.name),
   ),
 ]);
 

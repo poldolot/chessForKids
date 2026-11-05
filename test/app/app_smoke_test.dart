@@ -102,7 +102,7 @@ void main() {
     await seedProfile();
     final state = await pumpApp(tester);
     expect(find.byType(ProfilePickerScreen), findsOneWidget);
-    expect(speaker.spoken.last.$2, 'Who is playing?');
+    expect(speaker.spoken.last.$2, 'Choose a profile or add a new one.');
     expect(speaker.language, 'en');
     await tester.tap(find.byKey(Key('profile-${state.profiles.single.id}')));
     await tester.pumpAndSettle();

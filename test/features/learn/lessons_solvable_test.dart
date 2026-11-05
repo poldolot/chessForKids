@@ -28,6 +28,11 @@ void main() {
           expect(c.mistakes, 0);
         });
 
+        test('is played as white, from the white side', () {
+          expect(Position.fromFen(step.fen).sideToMove, PieceColor.white);
+          expect(step.orientation, PieceColor.white);
+        });
+
         test('starts with at least one allowed move', () {
           final c = BoardTaskController(step);
           expect(

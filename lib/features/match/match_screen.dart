@@ -15,6 +15,7 @@ import '../../state/app_state.dart';
 import '../../widgets/game_layout.dart';
 import '../../widgets/teacher_bubble.dart';
 import '../board/board_highlights.dart';
+import '../board/board_view.dart';
 import '../board/interactive_board.dart';
 import 'match_result_view.dart';
 import 'match_session.dart';
@@ -163,8 +164,22 @@ class _MatchScreenState extends State<MatchScreen> {
     }
     setState(() => _thinking = true);
     _thinkTimer?.cancel();
-    _thinkTimer = Timer(_thinkingDelay, _computerMoves);
+    var delay = _thinkingDelay;
+    if (_isCastling(_session.lastMove)) {
+      // Let the king and the rook finish sliding before the reply.
+      const settle = Duration(milliseconds: 200);
+      final needed = BoardView.castlingAnimation + settle;
+      if (delay < needed) {
+        delay = needed;
+      }
+    }
+    _thinkTimer = Timer(delay, _computerMoves);
   }
+
+  bool _isCastling(Move? move) =>
+      move != null &&
+      _session.position.pieceAt(move.to)?.type == PieceType.king &&
+      (move.to.file - move.from.file).abs() == 2;
 
   void _computerMoves() {
     if (!mounted) {

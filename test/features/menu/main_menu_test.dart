@@ -5,6 +5,7 @@ import 'package:chess_for_kids/features/menu/coming_soon_screen.dart';
 import 'package:chess_for_kids/features/menu/main_menu_screen.dart';
 import 'package:chess_for_kids/features/menu/menu_tile.dart';
 import 'package:chess_for_kids/features/menu/parent_lock_button.dart';
+import 'package:chess_for_kids/features/profiles/avatar_image.dart';
 import 'package:chess_for_kids/features/profiles/profile_picker_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -236,5 +237,16 @@ void main() {
     await tester.tap(find.byKey(const Key('badge-tile-hunter')));
     await tester.pump();
     expect(app.speaker.spoken.last.$2, contains('Łowca'));
+  });
+
+  testWidgets('the queen opens the profiles and the bubble shows the child', (
+    tester,
+  ) async {
+    await pumpMenu(tester);
+    expect(find.byKey(const Key('menu-queen')), findsOneWidget);
+    final avatar = tester.widget<AvatarImage>(find.byType(AvatarImage).first);
+    expect(avatar.theme, TeacherTheme.animals);
+    expect(avatar.index, 2);
+    await tester.pumpAndSettle();
   });
 }

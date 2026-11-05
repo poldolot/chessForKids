@@ -27,6 +27,7 @@ class InteractiveBoard extends StatefulWidget {
     this.promotionChooser = showPromotionPicker,
     this.onRejected,
     this.moveFilter,
+    this.showFilteredMoves = false,
     this.extraHighlights = const BoardHighlights(),
     this.shakeSquare,
   });
@@ -50,6 +51,11 @@ class InteractiveBoard extends StatefulWidget {
   /// Only legal moves passing this filter are offered as targets.
   final bool Function(Move move)? moveFilter;
 
+  /// Also highlight the legal moves the [moveFilter] excludes; tapping one
+  /// is reported through [onRejected]. Lessons use it so the child always
+  /// sees how a piece moves, even when only captures are accepted.
+  final bool showFilteredMoves;
+
   /// Highlights laid over the board's own (stars, danger, ghosts...).
   final BoardHighlights extraHighlights;
 
@@ -63,6 +69,10 @@ class InteractiveBoard extends StatefulWidget {
 class _InteractiveBoardState extends State<InteractiveBoard> {
   Square? _selected;
   List<Move> _targets = const [];
+
+  /// Legal moves drawn on the board: [_targets] plus, when asked, the ones
+  /// the filter rejects.
+  List<Move> _shown = const [];
 
   /// The last move the user dragged; it is already on its square, so it is
   /// not slid there again.
@@ -92,6 +102,7 @@ class _InteractiveBoardState extends State<InteractiveBoard> {
   void _clear() {
     _selected = null;
     _targets = const [];
+    _shown = const [];
   }
 
   bool _isOwnPiece(Square s) {
@@ -104,11 +115,9 @@ class _InteractiveBoardState extends State<InteractiveBoard> {
   void _select(Square s) {
     setState(() {
       _selected = s;
-      _targets = legalMoves(
-        widget.position,
-        from: s,
-        rules: widget.rules,
-      ).where(_allowed).toList();
+      final legal = legalMoves(widget.position, from: s, rules: widget.rules);
+      _targets = legal.where(_allowed).toList();
+      _shown = widget.showFilteredMoves ? legal : _targets;
     });
   }
 
@@ -195,11 +204,11 @@ class _InteractiveBoardState extends State<InteractiveBoard> {
     final own = BoardHighlights(
       selected: _selected,
       moveTargets: {
-        for (final m in _targets)
+        for (final m in _shown)
           if (!_isCapture(m)) m.to,
       },
       captureTargets: {
-        for (final m in _targets)
+        for (final m in _shown)
           if (_isCapture(m)) m.to,
       },
       lastMove: widget.lastMove,

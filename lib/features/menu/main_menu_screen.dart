@@ -5,11 +5,11 @@ import '../../app/theme/app_theme.dart';
 import '../../data/models.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
+import '../../widgets/queen_icon.dart';
 import '../../widgets/teacher_bubble.dart';
 import '../games/game_model.dart';
 import '../games/game_progress.dart';
 import '../learn/lesson_progress.dart';
-import '../profiles/avatar_image.dart';
 import '../profiles/profile_picker_screen.dart';
 import 'badge_strings.dart';
 import 'badges_screen.dart';
@@ -113,7 +113,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               builder: (_) => const ProfilePickerScreen(),
             ),
           ),
-          child: AvatarImage(profile.theme, profile.avatarIndex, size: 56),
+          child: const QueenIcon(key: Key('menu-queen'), size: 56),
         ),
         const SizedBox(width: 12),
         Icon(Icons.star_rounded, color: palette.accentDeep, size: 28),
@@ -136,7 +136,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     final badge = _badge;
     final bubble = TeacherBubble(
       theme: profile.theme,
-      avatarIndex: 1,
+      avatarIndex: profile.avatarIndex,
       text: badge == null ? greeting : badgeLine(l10n, badge),
       speechKey: badge == null ? 'menu.greeting' : 'menu.badge',
     );

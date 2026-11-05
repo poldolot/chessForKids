@@ -107,7 +107,7 @@ abstract class AppLocalizations {
   /// No description provided for @whoIsPlaying.
   ///
   /// In en, this message translates to:
-  /// **'Who is playing?'**
+  /// **'Choose a profile or add a new one.'**
   String get whoIsPlaying;
 
   /// No description provided for @greeting.
@@ -1465,6 +1465,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Normal'**
   String get levelNormal;
+
+  /// No description provided for @learnPawnPromotionNote.
+  ///
+  /// In en, this message translates to:
+  /// **'The pawn reached the end and became a queen. You will learn that in the promotion lesson!'**
+  String get learnPawnPromotionNote;
 }
 
 class _AppLocalizationsDelegate

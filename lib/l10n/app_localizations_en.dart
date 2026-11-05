@@ -13,7 +13,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'Chess for Kids';
 
   @override
-  String get whoIsPlaying => 'Who is playing?';
+  String get whoIsPlaying => 'Choose a profile or add a new one.';
 
   @override
   String get greeting => 'Hi! Pick a lesson, a mini-game or a match.';
@@ -740,4 +740,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get levelNormal => 'Normal';
+
+  @override
+  String get learnPawnPromotionNote =>
+      'The pawn reached the end and became a queen. You will learn that in the promotion lesson!';
 }

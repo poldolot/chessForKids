@@ -17,6 +17,10 @@ typedef DragEndCallback = void Function(Square from, Square? to);
 /// dragged is drawn as `drag-ghost`, a piece sliding after a move as
 /// `sliding-piece`; both live in an overlay above every square.
 class BoardView extends StatefulWidget {
+  /// How long a castling move takes to play out on the board (king, then
+  /// rook); opponents wait for it before replying.
+  static const Duration castlingAnimation = Duration(milliseconds: 900);
+
   const BoardView({
     super.key,
     required this.position,
@@ -73,17 +77,46 @@ class _BoardViewState extends State<BoardView> {
 
   static const Duration _slideDuration = Duration(milliseconds: 220);
 
+  /// Castling is shown in two slow steps: the king, then the rook.
+  static const Duration _castleDuration = Duration(milliseconds: 450);
+
+  /// The rook's half of a castling move, while the king or the rook slides.
+  Move? _castleRook;
+  bool _rookSliding = false;
+
   @override
   void initState() {
     super.initState();
-    _sliding = widget.animateMove;
+    _startSlide(widget.animateMove);
+  }
+
+  void _startSlide(Move? move) {
+    _sliding = move;
+    _rookSliding = false;
+    _castleRook = move == null ? null : _rookMoveOf(move);
+  }
+
+  /// For a king move of two files, the rook move that goes with it.
+  Move? _rookMoveOf(Move move) {
+    final piece = widget.position.pieceAt(move.to);
+    if (piece == null ||
+        piece.type != PieceType.king ||
+        (move.to.file - move.from.file).abs() != 2) {
+      return null;
+    }
+    final kingside = move.to.file > move.from.file;
+    final rank = move.to.rank;
+    return Move(
+      Square.fromFileRank(kingside ? 7 : 0, rank),
+      Square.fromFileRank(kingside ? 5 : 3, rank),
+    );
   }
 
   @override
   void didUpdateWidget(BoardView oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.animateMove != oldWidget.animateMove) {
-      _sliding = widget.animateMove;
+      _startSlide(widget.animateMove);
     }
     if (widget.shakeSquare != null &&
         widget.shakeSquare != oldWidget.shakeSquare) {
@@ -101,6 +134,7 @@ class _BoardViewState extends State<BoardView> {
         final square = side / 8;
         final reduceMotion = MediaQuery.disableAnimationsOf(context);
         final sliding = reduceMotion ? null : _sliding;
+        final rook = reduceMotion ? null : _castleRook;
         return SizedBox(
           width: side,
           height: side,
@@ -130,9 +164,35 @@ class _BoardViewState extends State<BoardView> {
               children: [
                 _grid(
                   square,
-                  hidden: {?_dragFrom, if (sliding != null) sliding.to},
+                  hidden: {
+                    ?_dragFrom,
+                    if (sliding != null && !_rookSliding) sliding.to,
+                    if (rook != null) rook.to,
+                  },
                 ),
-                if (sliding != null) _slidingPiece(sliding, square),
+                if (sliding != null && !_rookSliding)
+                  _slidingPiece(
+                    sliding,
+                    square,
+                    duration: rook == null ? _slideDuration : _castleDuration,
+                    onDone: rook == null
+                        ? () => setState(() => _sliding = null)
+                        : () => setState(() => _rookSliding = true),
+                  ),
+                if (rook != null && !_rookSliding)
+                  _restingPiece(rook.from, rook, square),
+                if (rook != null && _rookSliding)
+                  _slidingPiece(
+                    rook,
+                    square,
+                    duration: _castleDuration,
+                    onDone: () => setState(() {
+                      _sliding = null;
+                      _castleRook = null;
+                      _rookSliding = false;
+                    }),
+                    key: const Key('castle-rook'),
+                  ),
                 if (_dragFrom != null && _dragPosition != null)
                   Positioned(
                     left: _dragPosition!.dx - square * 0.6,
@@ -153,7 +213,13 @@ class _BoardViewState extends State<BoardView> {
     );
   }
 
-  Widget _slidingPiece(Move move, double square) {
+  Widget _slidingPiece(
+    Move move,
+    double square, {
+    required Duration duration,
+    required VoidCallback onDone,
+    Key key = const Key('sliding-piece'),
+  }) {
     final piece = widget.position.pieceAt(move.to);
     if (piece == null) {
       return const SizedBox.shrink();
@@ -163,11 +229,11 @@ class _BoardViewState extends State<BoardView> {
     return TweenAnimationBuilder<double>(
       key: ValueKey('slide-${move.uci}'),
       tween: Tween(begin: 0, end: 1),
-      duration: _slideDuration,
+      duration: duration,
       curve: Curves.easeOutCubic,
       onEnd: () {
-        if (mounted && _sliding == move) {
-          setState(() => _sliding = null);
+        if (mounted) {
+          onDone();
         }
       },
       builder: (context, t, child) {
@@ -180,7 +246,30 @@ class _BoardViewState extends State<BoardView> {
           height: square,
           child: Padding(
             padding: EdgeInsets.all(square * 0.06),
-            child: PieceImage(piece, key: const Key('sliding-piece')),
+            child: PieceImage(piece, key: key),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// The castling rook waiting on its old square while the king slides.
+  Widget _restingPiece(Square at, Move move, double square) {
+    final piece = widget.position.pieceAt(move.to);
+    if (piece == null) {
+      return const SizedBox.shrink();
+    }
+    final offset = _offsetOf(at, square);
+    return Positioned(
+      left: offset.dx,
+      top: offset.dy,
+      child: IgnorePointer(
+        child: SizedBox(
+          width: square,
+          height: square,
+          child: Padding(
+            padding: EdgeInsets.all(square * 0.06),
+            child: PieceImage(piece, key: const Key('castle-rook')),
           ),
         ),
       ),

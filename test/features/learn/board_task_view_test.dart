@@ -111,10 +111,27 @@ void main() {
     await pumpTask(tester, taskOf('pawn', 2));
     await tester.tap(sq('e3'));
     await tester.pump();
+    // Every legal move is shown, even the plain step the task does not
+    // accept: the child sees how the piece moves at every stage.
+    expect(
+      find.descendant(
+        of: sq('e4'),
+        matching: find.byKey(const Key('move-dot')),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: sq('d4'),
+        matching: find.byKey(const Key('capture-frame')),
+      ),
+      findsOneWidget,
+    );
     await tester.tap(sq('e4'));
     await tester.pump();
     expect(mistakes, 1);
     expect(app.speaker.spoken.last.$1, 'learn.common.captureFrame');
+    expect(find.byKey(const Key('move-dot')), findsNothing);
     await tester.pumpAndSettle();
   });
 
@@ -196,12 +213,41 @@ void main() {
 
   testWidgets('only the child colour can be moved', (tester) async {
     await pumpTask(tester, taskOf('check', 2));
-    await tester.tap(sq('e1'));
+    // The black king on e8 is not the child's; the white king on e1 is.
+    await tester.tap(sq('e8'));
     await tester.pump();
     expect(find.byKey(const Key('move-dot')), findsNothing);
-    await tester.tap(sq('e8'));
+    await tester.tap(sq('e1'));
     await tester.pump();
     expect(find.byKey(const Key('move-dot')), findsWidgets);
     await tester.pumpAndSettle();
   });
+
+  testWidgets(
+    'a pawn reaching the end becomes a queen and the teacher explains',
+    (tester) async {
+      final step = BoardTaskStep(
+        lineKey: 'learn.pawn.move',
+        fen: '8/4P3/8/8/8/8/8/8 w - - 0 1',
+        goal: (s) => s.goodMoves >= 2,
+        solution: const [],
+        moveFilter: (p, m) =>
+            m.promotion == null || m.promotion == PieceType.queen,
+        promotionNoteKey: 'learn.pawn.promotionNote',
+      );
+      await pumpTask(tester, step);
+      await tester.tap(sq('e7'));
+      await tester.pump();
+      await tester.tap(sq('e8'));
+      await tester.pump();
+      expect(find.byKey(const Key('promote-q')), findsNothing);
+      expect(app.speaker.spoken.last.$1, 'learn.pawn.promotionNote');
+      expect(app.speaker.spoken.last.$2, contains('hetmana'));
+      await tester.pumpAndSettle();
+      expect(
+        find.descendant(of: sq('e8'), matching: find.byType(PieceImage)),
+        findsOneWidget,
+      );
+    },
+  );
 }

@@ -31,6 +31,7 @@ void main() {
   ) async {
     await pumpLesson(tester, 'rook');
     expect(app.speaker.spoken.last.$1, 'learn.rook.intro');
+    expect(app.speaker.spoken.last.$2, startsWith('Wieża. '));
     expect(find.byType(IntroStepView), findsOneWidget);
     await tester.tap(find.byKey(const Key('lesson-next')));
     await tester.pump();

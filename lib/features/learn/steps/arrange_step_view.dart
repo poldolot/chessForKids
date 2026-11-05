@@ -45,7 +45,21 @@ class _ArrangeStepViewState extends State<ArrangeStepView> {
   final GlobalKey _boardKey = GlobalKey();
   late final Position _target = Position.fromFen(widget.step.targetFen);
   late Position _position = Position.empty();
+  static const double _pieceSize = 56;
+  static const double _traySpacing = 4;
+
   late final List<_TrayItem> _tray = _buildTray();
+
+  /// Height of the tray when it holds every piece of the step.
+  double _trayHeight(double width) {
+    final inner = width - 16;
+    final perRow = ((inner + _traySpacing) / (_pieceSize + _traySpacing))
+        .floor()
+        .clamp(1, 64);
+    final rows = (widget.step.tray.length / perRow).ceil();
+    return rows * _pieceSize + (rows - 1) * _traySpacing + 16;
+  }
+
   Timer? _pawnTimer;
   bool _finished = false;
 
@@ -159,31 +173,49 @@ class _ArrangeStepViewState extends State<ArrangeStepView> {
           ),
         ),
         const SizedBox(height: 12),
-        if (!_finished)
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            decoration: BoxDecoration(
-              color: palette.surface,
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 4,
-              children: [
-                for (final item in _tray)
-                  Draggable<_TrayItem>(
-                    key: ValueKey(item.key),
-                    data: item,
-                    feedback: PieceImage(item.piece, size: _feedbackSize),
-                    childWhenDragging: Opacity(
-                      opacity: 0.3,
-                      child: PieceImage(item.piece, size: 56),
+        // The tray keeps the height it needs for the full set of pieces, so
+        // the board above does not move as the tray empties.
+        LayoutBuilder(
+          builder: (context, constraints) => SizedBox(
+            height: _trayHeight(constraints.maxWidth),
+            child: _finished
+                ? null
+                : Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 8,
                     ),
-                    child: PieceImage(item.piece, size: 56),
+                    decoration: BoxDecoration(
+                      color: palette.surface,
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: Wrap(
+                        alignment: WrapAlignment.center,
+                        spacing: _traySpacing,
+                        runSpacing: _traySpacing,
+                        children: [
+                          for (final item in _tray)
+                            Draggable<_TrayItem>(
+                              key: ValueKey(item.key),
+                              data: item,
+                              feedback: PieceImage(
+                                item.piece,
+                                size: _feedbackSize,
+                              ),
+                              childWhenDragging: Opacity(
+                                opacity: 0.3,
+                                child: PieceImage(item.piece, size: _pieceSize),
+                              ),
+                              child: PieceImage(item.piece, size: _pieceSize),
+                            ),
+                        ],
+                      ),
+                    ),
                   ),
-              ],
-            ),
           ),
+        ),
       ],
     );
   }

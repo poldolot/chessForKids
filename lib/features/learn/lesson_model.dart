@@ -135,6 +135,7 @@ final class BoardTaskStep extends LessonStep {
     this.hintKey,
     this.showDanger = false,
     this.orientation = PieceColor.white,
+    this.promotionNoteKey,
   });
 
   final String fen;
@@ -163,6 +164,9 @@ final class BoardTaskStep extends LessonStep {
   /// Show the squares the opponent attacks.
   final bool showDanger;
   final PieceColor orientation;
+
+  /// Line spoken when a move promotes (lessons before the promotion one).
+  final String? promotionNoteKey;
 }
 
 /// "Set up the pieces": drag pieces from a tray onto their shadows.

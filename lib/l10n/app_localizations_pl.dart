@@ -13,7 +13,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get appTitle => 'Szachy dla dzieci';
 
   @override
-  String get whoIsPlaying => 'Kto gra?';
+  String get whoIsPlaying => 'Wybierz profil lub dodaj nowy.';
 
   @override
   String get greeting => 'Cześć! Wybierz naukę, mini-grę lub partię.';
@@ -735,4 +735,8 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get levelNormal => 'Normalny';
+
+  @override
+  String get learnPawnPromotionNote =>
+      'Pion doszedł do końca i zmienił się w hetmana. Poznasz to w lekcji o promocji!';
 }

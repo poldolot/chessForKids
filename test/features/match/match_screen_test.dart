@@ -253,4 +253,22 @@ void main() {
     );
     await tester.pumpAndSettle();
   });
+
+  testWidgets('after castling the computer waits for the animation', (
+    tester,
+  ) async {
+    final s = MatchSession(
+      childColor: PieceColor.white,
+      start: Position.fromFen('4k3/8/8/8/8/8/8/4K2R w K - 0 1'),
+      random: Random(1),
+    );
+    await pumpMatch(tester, session: s);
+    await tapMove(tester, 'e1', 'g1');
+    expect(s.toJson()['moves'], ['e1g1']);
+    await tester.pump(const Duration(milliseconds: 600));
+    expect(s.toJson()['moves'], hasLength(1));
+    await tester.pump(const Duration(milliseconds: 600));
+    expect(s.toJson()['moves'], hasLength(2));
+    await tester.pumpAndSettle();
+  });
 }

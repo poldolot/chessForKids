@@ -1,7 +1,7 @@
 {
   "@@locale": "en",
   "appTitle": "Chess for Kids",
-  "whoIsPlaying": "Who is playing?",
+  "whoIsPlaying": "Choose a profile or add a new one.",
   "greeting": "Hi! Pick a lesson, a mini-game or a match.",
   "greetingNamed": "Hi, {name}! Pick a lesson, a mini-game or a match.",
   "@greetingNamed": {
@@ -262,5 +262,6 @@
   "computerLevel": "Computer level in matches",
   "levelVeryEasy": "Very easy",
   "levelEasy": "Easy",
-  "levelNormal": "Normal"
+  "levelNormal": "Normal",
+  "learnPawnPromotionNote": "The pawn reached the end and became a queen. You will learn that in the promotion lesson!"
 }

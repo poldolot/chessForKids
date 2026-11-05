@@ -144,4 +144,18 @@ void main() {
       expect(mistakes, 0);
     },
   );
+
+  testWidgets('the board stays put while the tray empties', (tester) async {
+    tester.view.physicalSize = const Size(360, 640);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await pumpArrange(tester);
+    final before = tester.getRect(sq('a1'));
+    await dragTo(tester, 'R0', tester.getCenter(sq('a1')));
+    await dragTo(tester, 'R1', tester.getCenter(sq('h1')));
+    await dragTo(tester, 'Q0', tester.getCenter(sq('d1')));
+    await dragTo(tester, 'K0', tester.getCenter(sq('e1')));
+    expect(tester.getRect(sq('a1')), before);
+    await tester.pumpAndSettle();
+  });
 }
