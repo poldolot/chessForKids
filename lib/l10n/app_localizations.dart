@@ -749,13 +749,13 @@ abstract class AppLocalizations {
   /// No description provided for @learnPawnMove.
   ///
   /// In en, this message translates to:
-  /// **'A pawn moves one square. From its start it may move two!'**
+  /// **'A pawn moves one square. From its start it may move two! Try it: make three moves.'**
   String get learnPawnMove;
 
   /// No description provided for @learnPawnCapture.
   ///
   /// In en, this message translates to:
-  /// **'A pawn captures diagonally. Never straight ahead!'**
+  /// **'A pawn captures diagonally. Never straight ahead! Capture the two black pawns.'**
   String get learnPawnCapture;
 
   /// No description provided for @learnPawnPractice.
@@ -791,13 +791,13 @@ abstract class AppLocalizations {
   /// No description provided for @learnRookMove.
   ///
   /// In en, this message translates to:
-  /// **'The rook goes straight: up, down, left, right.'**
+  /// **'The rook goes straight: up, down, left, right. Try it: make three moves.'**
   String get learnRookMove;
 
   /// No description provided for @learnRookCapture.
   ///
   /// In en, this message translates to:
-  /// **'The rook captures what stands in its way.'**
+  /// **'The rook captures what stands in its way. Capture the two black pawns.'**
   String get learnRookCapture;
 
   /// No description provided for @learnRookPractice.
@@ -827,13 +827,13 @@ abstract class AppLocalizations {
   /// No description provided for @learnBishopMove.
   ///
   /// In en, this message translates to:
-  /// **'The bishop moves only diagonally and always stays on its color.'**
+  /// **'The bishop moves only diagonally and always stays on its color. Try it: make three moves.'**
   String get learnBishopMove;
 
   /// No description provided for @learnBishopCapture.
   ///
   /// In en, this message translates to:
-  /// **'The bishop captures along a diagonal.'**
+  /// **'The bishop captures along a diagonal. Capture the two black pawns.'**
   String get learnBishopCapture;
 
   /// No description provided for @learnBishopPractice.
@@ -863,13 +863,13 @@ abstract class AppLocalizations {
   /// No description provided for @learnQueenMove.
   ///
   /// In en, this message translates to:
-  /// **'The queen moves straight and diagonally, like a rook and bishop together.'**
+  /// **'The queen moves straight and diagonally, like a rook and bishop together. Try it: make three moves.'**
   String get learnQueenMove;
 
   /// No description provided for @learnQueenCapture.
   ///
   /// In en, this message translates to:
-  /// **'The queen captures in every direction.'**
+  /// **'The queen captures in every direction. Capture the two black pawns.'**
   String get learnQueenCapture;
 
   /// No description provided for @learnQueenPractice.
@@ -899,13 +899,13 @@ abstract class AppLocalizations {
   /// No description provided for @learnKingMove.
   ///
   /// In en, this message translates to:
-  /// **'The king takes just one step, in any direction.'**
+  /// **'The king takes just one step, in any direction. Try it: take three steps.'**
   String get learnKingMove;
 
   /// No description provided for @learnKingCapture.
   ///
   /// In en, this message translates to:
-  /// **'The king can capture a piece next to him.'**
+  /// **'The king can capture a piece next to him. Capture the two black pawns.'**
   String get learnKingCapture;
 
   /// No description provided for @learnKingPractice.
@@ -935,13 +935,13 @@ abstract class AppLocalizations {
   /// No description provided for @learnKnightMove.
   ///
   /// In en, this message translates to:
-  /// **'The knight jumps in an L: two squares straight and one to the side.'**
+  /// **'The knight jumps in an L: two squares straight and one to the side. Try it: make three jumps.'**
   String get learnKnightMove;
 
   /// No description provided for @learnKnightCapture.
   ///
   /// In en, this message translates to:
-  /// **'The knight captures where it lands.'**
+  /// **'The knight captures where it lands. Capture the two black pawns.'**
   String get learnKnightCapture;
 
   /// No description provided for @learnKnightPractice.
@@ -1279,6 +1279,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your pawns against mine. Reach the far side or capture all of mine!'**
   String get gamesPawnWarIntro;
+
+  /// No description provided for @gamesPawnWarWonReached.
+  ///
+  /// In en, this message translates to:
+  /// **'You win! Your pawn reached the end. Well done!'**
+  String get gamesPawnWarWonReached;
+
+  /// No description provided for @gamesPawnWarWonBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'You win! The black pawns cannot move, and whoever has no move loses. Well done!'**
+  String get gamesPawnWarWonBlocked;
+
+  /// No description provided for @gamesPawnWarLostReached.
+  ///
+  /// In en, this message translates to:
+  /// **'A black pawn reached the end first. Try again!'**
+  String get gamesPawnWarLostReached;
+
+  /// No description provided for @gamesPawnWarLostBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Your pawns are blocked and you have no move. Whoever cannot move loses. Try again!'**
+  String get gamesPawnWarLostBlocked;
 
   /// No description provided for @gamesPawnWarHint.
   ///

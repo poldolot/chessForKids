@@ -6,6 +6,15 @@ All notable changes to Chess for Kids are listed here. The format follows
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-11-11
+
+### Changed
+- The "how it moves" and "how it captures" steps of the piece lessons end
+  with a clear instruction ("Try it: make three moves", "Capture the two
+  black pawns").
+- Pawn War says how the board ended: a pawn reached the end, or one side
+  had no move left and whoever cannot move loses.
+
 ## [0.3.0] - 2026-11-11
 
 ### Added
@@ -131,7 +140,8 @@ First complete version for local testing (debug-signed APK).
 - GitHub Actions: analysis, tests and an APK on every push; the APK is attached
   to the release for `v*` tags.
 
-[Unreleased]: https://github.com/poldolot/chessForKids/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/poldolot/chessForKids/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/poldolot/chessForKids/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/poldolot/chessForKids/compare/v0.2.3...v0.3.0
 [0.2.3]: https://github.com/poldolot/chessForKids/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/poldolot/chessForKids/compare/v0.2.1...v0.2.2

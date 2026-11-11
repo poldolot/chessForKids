@@ -365,10 +365,11 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get learnPawnMove =>
-      'Pion idzie o jedno pole. Z początku może iść o dwa!';
+      'Pion idzie o jedno pole. Z początku może iść o dwa! Wypróbuj: zrób trzy ruchy.';
 
   @override
-  String get learnPawnCapture => 'Pion bije na ukos. Prosto nie bije!';
+  String get learnPawnCapture =>
+      'Pion bije na ukos. Prosto nie bije! Zbij dwa czarne pionki.';
 
   @override
   String get learnPawnPractice => 'Ruszaj pionkami i bij, co się da!';
@@ -387,10 +388,11 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get learnRookMove =>
-      'Wieża jedzie prosto: w górę, w dół, w lewo, w prawo.';
+      'Wieża jedzie prosto: w górę, w dół, w lewo, w prawo. Wypróbuj: zrób trzy ruchy.';
 
   @override
-  String get learnRookCapture => 'Wieża bije to, co stoi na jej drodze.';
+  String get learnRookCapture =>
+      'Wieża bije to, co stoi na jej drodze. Zbij dwa czarne pionki.';
 
   @override
   String get learnRookPractice => 'Zbierz gwiazdki w pięciu ruchach!';
@@ -406,10 +408,11 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get learnBishopMove =>
-      'Goniec jedzie tylko na ukos i zawsze zostaje na swoim kolorze.';
+      'Goniec jedzie tylko na ukos i zawsze zostaje na swoim kolorze. Wypróbuj: zrób trzy ruchy.';
 
   @override
-  String get learnBishopCapture => 'Goniec bije po skosie.';
+  String get learnBishopCapture =>
+      'Goniec bije po skosie. Zbij dwa czarne pionki.';
 
   @override
   String get learnBishopPractice => 'Zbierz gwiazdki po skosie!';
@@ -425,10 +428,11 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get learnQueenMove =>
-      'Hetman jedzie prosto i na ukos, jak wieża i goniec razem.';
+      'Hetman jedzie prosto i na ukos, jak wieża i goniec razem. Wypróbuj: zrób trzy ruchy.';
 
   @override
-  String get learnQueenCapture => 'Hetman bije we wszystkich kierunkach.';
+  String get learnQueenCapture =>
+      'Hetman bije we wszystkich kierunkach. Zbij dwa czarne pionki.';
 
   @override
   String get learnQueenPractice => 'Zbierz gwiazdki ze wszystkich rogów!';
@@ -445,10 +449,12 @@ class AppLocalizationsPl extends AppLocalizations {
       'To jest król. Najważniejszy. Trzeba go chronić!';
 
   @override
-  String get learnKingMove => 'Król robi tylko jeden krok, w każdą stronę.';
+  String get learnKingMove =>
+      'Król robi tylko jeden krok, w każdą stronę. Wypróbuj: zrób trzy kroki.';
 
   @override
-  String get learnKingCapture => 'Król może zbić figurę obok siebie.';
+  String get learnKingCapture =>
+      'Król może zbić figurę obok siebie. Zbij dwa czarne pionki.';
 
   @override
   String get learnKingPractice =>
@@ -466,10 +472,11 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get learnKnightMove =>
-      'Skoczek skacze literą L: dwa pola prosto i jedno w bok.';
+      'Skoczek skacze literą L: dwa pola prosto i jedno w bok. Wypróbuj: zrób trzy skoki.';
 
   @override
-  String get learnKnightCapture => 'Skoczek bije tam, gdzie wyląduje.';
+  String get learnKnightCapture =>
+      'Skoczek bije tam, gdzie wyląduje. Zbij dwa czarne pionki.';
 
   @override
   String get learnKnightPractice => 'Przeskocz przez labirynt po gwiazdki!';
@@ -652,6 +659,22 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get gamesPawnWarIntro =>
       'Twoje pionki kontra moje. Dojdź pionkiem na drugi koniec albo zbij wszystkie moje!';
+
+  @override
+  String get gamesPawnWarWonReached =>
+      'Wygrana! Twój pion doszedł do końca. Brawo!';
+
+  @override
+  String get gamesPawnWarWonBlocked =>
+      'Wygrana! Czarne pionki nie mogą się ruszyć, a kto nie ma ruchu, przegrywa. Brawo!';
+
+  @override
+  String get gamesPawnWarLostReached =>
+      'Czarny pion doszedł do końca pierwszy. Spróbuj jeszcze raz!';
+
+  @override
+  String get gamesPawnWarLostBlocked =>
+      'Twoje pionki są zablokowane i nie masz ruchu. Kto nie może się ruszyć, przegrywa. Spróbuj jeszcze raz!';
 
   @override
   String get gamesPawnWarHint =>

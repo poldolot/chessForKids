@@ -365,11 +365,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get learnPawnMove =>
-      'A pawn moves one square. From its start it may move two!';
+      'A pawn moves one square. From its start it may move two! Try it: make three moves.';
 
   @override
   String get learnPawnCapture =>
-      'A pawn captures diagonally. Never straight ahead!';
+      'A pawn captures diagonally. Never straight ahead! Capture the two black pawns.';
 
   @override
   String get learnPawnPractice => 'Move your pawns and capture what you can!';
@@ -387,10 +387,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get learnRookIntro => 'This is the rook. Strong as a castle.';
 
   @override
-  String get learnRookMove => 'The rook goes straight: up, down, left, right.';
+  String get learnRookMove =>
+      'The rook goes straight: up, down, left, right. Try it: make three moves.';
 
   @override
-  String get learnRookCapture => 'The rook captures what stands in its way.';
+  String get learnRookCapture =>
+      'The rook captures what stands in its way. Capture the two black pawns.';
 
   @override
   String get learnRookPractice => 'Collect the stars in five moves!';
@@ -406,10 +408,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get learnBishopMove =>
-      'The bishop moves only diagonally and always stays on its color.';
+      'The bishop moves only diagonally and always stays on its color. Try it: make three moves.';
 
   @override
-  String get learnBishopCapture => 'The bishop captures along a diagonal.';
+  String get learnBishopCapture =>
+      'The bishop captures along a diagonal. Capture the two black pawns.';
 
   @override
   String get learnBishopPractice => 'Collect the stars along the diagonals!';
@@ -425,10 +428,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get learnQueenMove =>
-      'The queen moves straight and diagonally, like a rook and bishop together.';
+      'The queen moves straight and diagonally, like a rook and bishop together. Try it: make three moves.';
 
   @override
-  String get learnQueenCapture => 'The queen captures in every direction.';
+  String get learnQueenCapture =>
+      'The queen captures in every direction. Capture the two black pawns.';
 
   @override
   String get learnQueenPractice => 'Collect the stars from every corner!';
@@ -445,10 +449,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'This is the king. The most important one. Protect him!';
 
   @override
-  String get learnKingMove => 'The king takes just one step, in any direction.';
+  String get learnKingMove =>
+      'The king takes just one step, in any direction. Try it: take three steps.';
 
   @override
-  String get learnKingCapture => 'The king can capture a piece next to him.';
+  String get learnKingCapture =>
+      'The king can capture a piece next to him. Capture the two black pawns.';
 
   @override
   String get learnKingPractice =>
@@ -466,10 +472,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get learnKnightMove =>
-      'The knight jumps in an L: two squares straight and one to the side.';
+      'The knight jumps in an L: two squares straight and one to the side. Try it: make three jumps.';
 
   @override
-  String get learnKnightCapture => 'The knight captures where it lands.';
+  String get learnKnightCapture =>
+      'The knight captures where it lands. Capture the two black pawns.';
 
   @override
   String get learnKnightPractice => 'Hop through the maze to the stars!';
@@ -655,6 +662,22 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get gamesPawnWarIntro =>
       'Your pawns against mine. Reach the far side or capture all of mine!';
+
+  @override
+  String get gamesPawnWarWonReached =>
+      'You win! Your pawn reached the end. Well done!';
+
+  @override
+  String get gamesPawnWarWonBlocked =>
+      'You win! The black pawns cannot move, and whoever has no move loses. Well done!';
+
+  @override
+  String get gamesPawnWarLostReached =>
+      'A black pawn reached the end first. Try again!';
+
+  @override
+  String get gamesPawnWarLostBlocked =>
+      'Your pawns are blocked and you have no move. Whoever cannot move loses. Try again!';
 
   @override
   String get gamesPawnWarHint =>

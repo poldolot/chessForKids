@@ -8,6 +8,10 @@ import 'policies.dart';
 
 enum SessionOutcome { playing, won, lost }
 
+/// Why a pawn war board ended: a pawn reached the last rank, or the side
+/// to move had no move left (and whoever cannot move has lost).
+enum GameEnding { reachedEnd, noMoves }
+
 /// What a child's move led to.
 enum SessionEvent { moved, star, won, lost, limitReset }
 
@@ -54,6 +58,7 @@ final class MiniGameSession extends ChangeNotifier {
   bool _lostPawn = false;
   Move? _lastMove;
   SessionOutcome _outcome = SessionOutcome.playing;
+  GameEnding? _ending;
   bool _awaitingOpponent = false;
   final List<_Snapshot> _history = [];
   int _initialHuntDistance = 1;
@@ -67,6 +72,7 @@ final class MiniGameSession extends ChangeNotifier {
     _lostPawn = false;
     _lastMove = null;
     _outcome = SessionOutcome.playing;
+    _ending = null;
     _awaitingOpponent = false;
     _history.clear();
     if (game.kind == MiniGameKind.hunt) {
@@ -75,6 +81,7 @@ final class MiniGameSession extends ChangeNotifier {
     if (game.kind == MiniGameKind.pawnWar &&
         legalMoves(_position, rules: board.rules).isEmpty) {
       _outcome = SessionOutcome.lost;
+      _ending = GameEnding.noMoves;
     }
   }
 
@@ -84,6 +91,10 @@ final class MiniGameSession extends ChangeNotifier {
   Set<Square> get starsLeft => _starsLeft;
   Move? get lastMove => _lastMove;
   SessionOutcome get outcome => _outcome;
+
+  /// How the board ended; `null` while playing and in games other than
+  /// pawn war, whose only way to end is winning.
+  GameEnding? get ending => _ending;
   bool get awaitingOpponent => _awaitingOpponent;
   bool get lostPawn => _lostPawn;
   bool get canUndo => _history.isNotEmpty && _outcome == SessionOutcome.playing;
@@ -218,8 +229,15 @@ final class MiniGameSession extends ChangeNotifier {
       case MiniGameKind.hunt:
         return preyBefore != null && move.to == preyBefore;
       case MiniGameKind.pawnWar:
-        return move.promotion != null ||
-            legalMoves(_position, rules: board.rules).isEmpty;
+        if (move.promotion != null) {
+          _ending = GameEnding.reachedEnd;
+          return true;
+        }
+        if (legalMoves(_position, rules: board.rules).isEmpty) {
+          _ending = GameEnding.noMoves;
+          return true;
+        }
+        return false;
     }
   }
 
@@ -242,6 +260,7 @@ final class MiniGameSession extends ChangeNotifier {
         );
         if (reply == null) {
           _outcome = SessionOutcome.won;
+          _ending = GameEnding.noMoves;
           break;
         }
         if (isCapture(_position, reply)) {
@@ -249,9 +268,12 @@ final class MiniGameSession extends ChangeNotifier {
         }
         _position = _position.play(reply);
         _lastMove = reply;
-        if (reply.promotion != null ||
-            legalMoves(_position, rules: board.rules).isEmpty) {
+        if (reply.promotion != null) {
           _outcome = SessionOutcome.lost;
+          _ending = GameEnding.reachedEnd;
+        } else if (legalMoves(_position, rules: board.rules).isEmpty) {
+          _outcome = SessionOutcome.lost;
+          _ending = GameEnding.noMoves;
         }
       case MiniGameKind.hunt:
         final hunter = _hunter;

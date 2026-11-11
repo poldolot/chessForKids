@@ -127,6 +127,22 @@ class _GameResultViewState extends State<GameResultView> {
     );
   }
 
+  /// Pawn war says how the board ended (a pawn at the end, or no move
+  /// left), because a blocked board is a surprise for a child; the other
+  /// games can only be won.
+  String _resultKey() {
+    final ending = widget.session.ending;
+    if (widget.game.kind != MiniGameKind.pawnWar || ending == null) {
+      return _won ? 'games.common.won' : 'games.common.lost';
+    }
+    return switch ((_won, ending)) {
+      (true, GameEnding.reachedEnd) => 'games.pawnWar.wonReached',
+      (true, GameEnding.noMoves) => 'games.pawnWar.wonBlocked',
+      (false, GameEnding.reachedEnd) => 'games.pawnWar.lostReached',
+      (false, GameEnding.noMoves) => 'games.pawnWar.lostBlocked',
+    };
+  }
+
   static String _badgeKey(String badge) => badge == 'hunter'
       ? 'games.common.badgeHunter'
       : 'games.common.badgeCollector';
@@ -154,7 +170,7 @@ class _GameResultViewState extends State<GameResultView> {
             widget.game.levels[widget.board.index],
             profile,
           );
-    final lineKey = _won ? 'games.common.won' : 'games.common.lost';
+    final lineKey = _resultKey();
     return GameLayout(
       key: const Key('game-result'),
       bubble: TeacherBubble(

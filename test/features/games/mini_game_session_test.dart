@@ -274,4 +274,65 @@ void main() {
     expect(s.starsLeft.length, 5);
     expect(s.outcome, SessionOutcome.playing);
   });
+
+  group('pawn war endings', () {
+    const rules = GameRules(enPassant: false, castling: false);
+    GameBoard board(String fen) => GameBoard(index: 0, fen: fen, rules: rules);
+
+    test('a promotion wins by reaching the end', () {
+      final s = session(
+        'pawnWar',
+        0,
+        custom: board('8/P7/8/8/8/8/8/7p w - - 0 1'),
+      );
+      expect(s.ending, isNull);
+      s.playChild(uci('a7a8q'));
+      expect(s.outcome, SessionOutcome.won);
+      expect(s.ending, GameEnding.reachedEnd);
+    });
+
+    test('leaving black without a move wins by blocking', () {
+      final s = session(
+        'pawnWar',
+        0,
+        custom: board('8/8/p7/8/P7/8/7P/8 w - - 0 1'),
+      );
+      s.playChild(uci('a4a5'));
+      expect(s.outcome, SessionOutcome.won);
+      expect(s.ending, GameEnding.noMoves);
+    });
+
+    test('a black promotion loses by the end being reached', () {
+      final s = session(
+        'pawnWar',
+        0,
+        custom: board('8/8/8/8/8/8/P6p/8 w - - 0 1'),
+      );
+      s.playChild(uci('a2a3'));
+      expect(s.playOpponent(), isNotNull);
+      expect(s.outcome, SessionOutcome.lost);
+      expect(s.ending, GameEnding.reachedEnd);
+    });
+
+    test('being left without a move loses by blocking', () {
+      final s = session(
+        'pawnWar',
+        0,
+        custom: board('8/7p/p7/8/P7/8/8/8 w - - 0 1'),
+      );
+      s.playChild(uci('a4a5'));
+      expect(s.playOpponent(), isNotNull);
+      expect(s.outcome, SessionOutcome.lost);
+      expect(s.ending, GameEnding.noMoves);
+    });
+
+    test('collect games have no ending reason', () {
+      final s = session('rookRoads', 0);
+      for (final m in ['a1a8', 'a8h8', 'h8h1', 'h1d1', 'd1d4']) {
+        s.playChild(uci(m));
+      }
+      expect(s.outcome, SessionOutcome.won);
+      expect(s.ending, isNull);
+    });
+  });
 }

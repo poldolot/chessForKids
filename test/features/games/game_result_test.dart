@@ -261,4 +261,39 @@ void main() {
     expect(find.byKey(const Key('result-badge')), findsNothing);
     await tester.pumpAndSettle();
   });
+
+  testWidgets('pawn war explains how the board ended', (tester) async {
+    final pawnWar = gameById(app.games, 'pawnWar');
+    const rules = GameRules(enPassant: false, castling: false);
+    MiniGameSession ended(String fen, List<String> ucis) {
+      final session = MiniGameSession(
+        pawnWar,
+        GameBoard(index: 0, fen: fen, rules: rules),
+        random: Random(1),
+      );
+      for (final u in ucis) {
+        session.playChild(Move.parseUci(u));
+        session.playOpponent();
+      }
+      expect(session.outcome, isNot(SessionOutcome.playing));
+      return session;
+    }
+
+    await pumpResult(tester, ended('8/7p/p7/8/P7/8/8/8 w - - 0 1', ['a4a5']));
+    expect(app.speaker.spoken.last.$1, 'games.pawnWar.lostBlocked');
+    expect(app.speaker.spoken.last.$2, contains('nie masz ruchu'));
+    await tester.pumpAndSettle();
+    await tester.pumpWidget(const SizedBox());
+    await pumpResult(tester, ended('8/8/8/8/8/8/P6p/8 w - - 0 1', ['a2a3']));
+    expect(app.speaker.spoken.last.$1, 'games.pawnWar.lostReached');
+    await tester.pumpAndSettle();
+    await tester.pumpWidget(const SizedBox());
+    await pumpResult(tester, ended('8/8/p7/8/P7/8/7P/8 w - - 0 1', ['a4a5']));
+    expect(app.speaker.spoken.last.$1, 'games.pawnWar.wonBlocked');
+    await tester.pumpAndSettle();
+    await tester.pumpWidget(const SizedBox());
+    await pumpResult(tester, ended('8/P7/8/8/8/8/8/7p w - - 0 1', ['a7a8q']));
+    expect(app.speaker.spoken.last.$1, 'games.pawnWar.wonReached');
+    await tester.pumpAndSettle();
+  });
 }
