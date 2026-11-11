@@ -279,7 +279,7 @@ void main() {
     final learn = tester.widget<MenuTile>(find.byKey(const Key('tile-learn')));
     expect(learn.progress, 0);
     expect(play.counter, '6/30');
-    expect(learn.counter, '0/42');
+    expect(learn.counter, '0/45');
     expect(find.text('6/30'), findsOneWidget);
     expect(find.byKey(const Key('tile-counter')), findsNWidgets(3));
   });

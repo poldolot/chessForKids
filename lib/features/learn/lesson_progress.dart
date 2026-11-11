@@ -3,10 +3,11 @@ import 'lesson_model.dart';
 import 'lessons/catalog.dart';
 
 /// The first lesson is always open; every other one opens when the
-/// previous lesson is done.
+/// previous lesson is done. A lesson once done never locks again, even if
+/// a newer lesson is placed before it.
 bool isLessonUnlocked(Lesson lesson, Profile profile) {
   final index = lessons.indexOf(lesson);
-  if (index <= 0) {
+  if (index <= 0 || profile.lessonsDone.contains(lesson.id)) {
     return true;
   }
   return profile.lessonsDone.contains(lessons[index - 1].id);
@@ -22,10 +23,15 @@ int starsForMistakes(int mistakes) {
 
 /// The badge a finished lesson earns, given the profile after it was marked
 /// done: piece lessons give their own badge, the rule lessons together give
-/// `chessPlayer`.
+/// `chessPlayer`, the story lesson none.
 String? badgeForLesson(Lesson lesson, Profile profileAfterDone) {
-  if (lesson.kind == LessonKind.piece) {
-    return lesson.id;
+  switch (lesson.kind) {
+    case LessonKind.piece:
+      return lesson.id;
+    case LessonKind.story:
+      return null;
+    case LessonKind.rule:
+      break;
   }
   final allRulesDone = kRuleLessonIds.every(
     profileAfterDone.lessonsDone.contains,

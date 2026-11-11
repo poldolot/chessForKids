@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,19 +9,14 @@ import '../../../l10n/app_localizations.dart';
 import '../../board/interactive_board.dart';
 import '../lesson_model.dart';
 import '../lesson_strings.dart';
+import 'speech_pause.dart';
 
 /// "Watch": the board plays the step's moves by itself.
 class DemoStepView extends StatefulWidget {
-  const DemoStepView({
-    super.key,
-    required this.step,
-    required this.onDone,
-    this.stepDelay = const Duration(milliseconds: 1200),
-  });
+  const DemoStepView({super.key, required this.step, required this.onDone});
 
   final DemoStep step;
   final VoidCallback onDone;
-  final Duration stepDelay;
 
   @override
   State<DemoStepView> createState() => _DemoStepViewState();
@@ -35,23 +28,18 @@ class _DemoStepViewState extends State<DemoStepView> {
   late Position _position = Position.fromFen(widget.step.fen);
   Move? _lastMove;
   int _played = 0;
-  Timer? _timer;
+  late final SpeechPause _pause = SpeechPause(context.read<Speaker>());
 
   @override
   void initState() {
     super.initState();
-    _schedule(_firstDelay);
+    _pause.schedule(_firstDelay, _tick);
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
+    _pause.cancel();
     super.dispose();
-  }
-
-  void _schedule(Duration delay) {
-    _timer?.cancel();
-    _timer = Timer(delay, _tick);
   }
 
   void _tick() {
@@ -72,7 +60,7 @@ class _DemoStepViewState extends State<DemoStepView> {
       final l10n = AppLocalizations.of(context);
       context.read<Speaker>().say(learnLine(l10n, lineKey), key: lineKey);
     }
-    _schedule(widget.stepDelay);
+    _pause.schedule(widget.step.pace, _tick);
   }
 
   void _replay() {
@@ -81,7 +69,7 @@ class _DemoStepViewState extends State<DemoStepView> {
       _lastMove = null;
       _played = 0;
     });
-    _schedule(_firstDelay);
+    _pause.schedule(_firstDelay, _tick);
   }
 
   @override

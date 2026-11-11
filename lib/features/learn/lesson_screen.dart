@@ -16,7 +16,9 @@ import 'steps/arrange_step_view.dart';
 import 'steps/board_task_view.dart';
 import 'steps/compare_step_view.dart';
 import 'steps/demo_step_view.dart';
+import 'steps/find_step_view.dart';
 import 'steps/intro_step_view.dart';
+import 'steps/spotlight_step_view.dart';
 import 'widgets/step_dots.dart';
 
 /// Plays a lesson step by step, counts mistakes and ends with a celebration.
@@ -46,6 +48,10 @@ class _LessonScreenState extends State<LessonScreen> {
   /// How long at most a first explanation holds the Next button, in case
   /// the speech engine never reports the end of the line.
   static const Duration _maxHold = Duration(seconds: 20);
+
+  /// The bubble never gets shorter than this, so the board below does not
+  /// move between steps with lines of different length.
+  static const double _bubbleMinHeight = 112;
 
   int _index = 0;
   int _mistakes = 0;
@@ -85,8 +91,12 @@ class _LessonScreenState extends State<LessonScreen> {
     }
   }
 
-  /// The first time a child meets a lesson, the explanation is heard to the
-  /// end before Next works; later visits (and tasks) are never held.
+  /// The opening explanation of a lesson, the one that carries its title.
+  bool get _isOpening => _index == 0 && _step is IntroStep;
+
+  /// The first time a child meets a lesson, every explanation (the opening
+  /// and any closing words) is heard to the end before Next works; later
+  /// visits and tasks are never held.
   bool get _holdsForSpeech =>
       _firstVisit && _step is IntroStep && !_holdExpired;
 
@@ -122,7 +132,22 @@ class _LessonScreenState extends State<LessonScreen> {
   Widget _stepView(LessonStep step) {
     return switch (step) {
       IntroStep() => IntroStepView(step: step),
-      DemoStep() => DemoStepView(step: step, onDone: _onTaskDone),
+      DemoStep() => DemoStepView(
+        key: ValueKey('demo-$_index'),
+        step: step,
+        onDone: _onTaskDone,
+      ),
+      SpotlightStep() => SpotlightStepView(
+        key: ValueKey('demo-$_index'),
+        step: step,
+        onDone: _onTaskDone,
+      ),
+      FindStep() => FindStepView(
+        key: ValueKey('task-$_index'),
+        step: step,
+        onDone: _onTaskDone,
+        onMistake: _onMistake,
+      ),
       BoardTaskStep() => BoardTaskView(
         key: ValueKey('task-$_index'),
         step: step,
@@ -177,15 +202,23 @@ class _LessonScreenState extends State<LessonScreen> {
               ),
               const SizedBox(height: 8),
               if (step != null) ...[
-                TeacherBubble(
-                  theme: theme,
-                  avatarIndex: 2,
-                  text: step is IntroStep
-                      ? '${learnLine(l10n, lesson.titleKey)}. '
-                            '${learnLine(l10n, step.lineKey)}'
-                      : learnLine(l10n, step.lineKey),
-                  speechKey: step.lineKey,
-                  interrupt: !(widget.queueFirstLine && _index == 0),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    minHeight: _bubbleMinHeight,
+                  ),
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: TeacherBubble(
+                      theme: theme,
+                      avatarIndex: 2,
+                      text: _isOpening
+                          ? '${learnLine(l10n, lesson.titleKey)}. '
+                                '${learnLine(l10n, step.lineKey)}'
+                          : learnLine(l10n, step.lineKey),
+                      speechKey: step.lineKey,
+                      interrupt: !(widget.queueFirstLine && _index == 0),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 12),
                 Expanded(child: _stepView(step)),

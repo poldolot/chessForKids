@@ -247,6 +247,116 @@ class AppLocalizationsEn extends AppLocalizations {
   String get learnCommonAllDone => 'All lessons done. You are a champion!';
 
   @override
+  String get learnChessTitle => 'What chess is';
+
+  @override
+  String get learnChessIntro =>
+      'Chess is a game for two. One has the white army, the other the black one. See what it is about.';
+
+  @override
+  String get learnChessArmy =>
+      'This is the board at the start. Each army has sixteen pieces.';
+
+  @override
+  String get learnChessPawns => 'Eight pawns stand in front.';
+
+  @override
+  String get learnChessRooks => 'Two rooks stand in the corners.';
+
+  @override
+  String get learnChessKnights =>
+      'Next to them two knights, the little horses.';
+
+  @override
+  String get learnChessBishops => 'Then two bishops.';
+
+  @override
+  String get learnChessQueens => 'One queen.';
+
+  @override
+  String get learnChessKings =>
+      'And one king. You will meet them all, one by one.';
+
+  @override
+  String get learnChessFindKing => 'The king matters most. Tap the white king.';
+
+  @override
+  String get learnChessFindBlackKing => 'Well done! Now tap the black king.';
+
+  @override
+  String get learnChessKingsFound =>
+      'Great! Each player guards their own king.';
+
+  @override
+  String get learnChessFindHint =>
+      'That is not the king. The king has a little cross on its crown. Try again.';
+
+  @override
+  String get learnChessTurns => 'The players take turns. White always starts.';
+
+  @override
+  String get learnChessTurnWhite => 'White made a move.';
+
+  @override
+  String get learnChessTurnBlack => 'Now black.';
+
+  @override
+  String get learnChessTurnWhiteAgain => 'White again.';
+
+  @override
+  String get learnChessTurnRule =>
+      'And black. Always one move each, taking turns.';
+
+  @override
+  String get learnChessCapture =>
+      'When you step onto a square where an enemy stands, you take it off the board. That is a capture.';
+
+  @override
+  String get learnChessCaptureWhite =>
+      'The white pawn captured the black pawn.';
+
+  @override
+  String get learnChessCaptureBlack =>
+      'And the black queen captured the white pawn. Captured pieces leave the board.';
+
+  @override
+  String get learnChessGoal =>
+      'The aim is to catch the other king. Watch a short game.';
+
+  @override
+  String get learnChessQueenAims => 'The white queen aims at the black king.';
+
+  @override
+  String get learnChessMate => 'Check! The queen attacks the king.';
+
+  @override
+  String get learnChessWhyMate => 'Can the king save himself? Look.';
+
+  @override
+  String get learnChessWhyGuard =>
+      'The king would like to capture the queen, but the bishop guards her. A king may never step onto a square where he would be captured.';
+
+  @override
+  String get learnChessWhyNoEscape =>
+      'He cannot run away either. His own pieces stand next to him, and the queen attacks the free square too.';
+
+  @override
+  String get learnChessWhyMateEnd =>
+      'The king has no move at all. That is checkmate. White wins!';
+
+  @override
+  String get learnChessTask =>
+      'Now you! Tap the white queen and capture the pawn next to the black king. Checkmate!';
+
+  @override
+  String get learnChessTaskHint =>
+      'Tap the white queen, then the pawn in the red frame next to the black king.';
+
+  @override
+  String get learnChessOutro =>
+      'Sometimes nobody wins and it is a draw. More on that later. Now meet the first piece: the pawn!';
+
+  @override
   String get learnPawnTitle => 'Pawn';
 
   @override

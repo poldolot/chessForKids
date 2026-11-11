@@ -21,6 +21,10 @@ final class TtsSpeaker extends Speaker {
   bool _available = false;
   bool _speaking = false;
 
+  /// True while a new line is being handed to the engine: the cancel event
+  /// the engine sends for the line we just stopped must not count as quiet.
+  bool _handingOver = false;
+
   /// Whether the line being spoken is a main (interrupting) line; hints are
   /// never queued behind another hint, so a child tapping around hears the
   /// hint once per teacher line, not once per tap.
@@ -89,12 +93,14 @@ final class TtsSpeaker extends Speaker {
   Future<void> _speak(String text, {required bool main}) async {
     _setSpeaking(true);
     _currentIsMain = main;
+    _handingOver = true;
     final ok = await _guard(() async {
       await _tts.setSpeechRate(rate.ttsRate);
       await _tts.stop();
       await _tts.speak(text);
       return true;
     });
+    _handingOver = false;
     if (ok != true) {
       // The engine never started, so no completion will come.
       _setSpeaking(false);
@@ -102,6 +108,9 @@ final class TtsSpeaker extends Speaker {
   }
 
   void _onFinished() {
+    if (_handingOver) {
+      return;
+    }
     _setSpeaking(false);
     final pending = _pending;
     if (pending != null && enabled && _available) {

@@ -247,6 +247,116 @@ class AppLocalizationsPl extends AppLocalizations {
       'Wszystkie lekcje zrobione. Jesteś mistrzem!';
 
   @override
+  String get learnChessTitle => 'Co to są szachy';
+
+  @override
+  String get learnChessIntro =>
+      'Szachy to gra dla dwóch osób. Jedna ma białe wojsko, druga czarne. Zobacz, o co w niej chodzi.';
+
+  @override
+  String get learnChessArmy =>
+      'Tak wygląda plansza na początku. Każde wojsko ma szesnaście bierek.';
+
+  @override
+  String get learnChessPawns => 'Z przodu stoi osiem pionów.';
+
+  @override
+  String get learnChessRooks => 'W rogach stoją dwie wieże.';
+
+  @override
+  String get learnChessKnights => 'Obok nich dwa skoczki, to te koniki.';
+
+  @override
+  String get learnChessBishops => 'Dalej dwa gońce.';
+
+  @override
+  String get learnChessQueens => 'Jeden hetman.';
+
+  @override
+  String get learnChessKings => 'I jeden król. Poznasz je wszystkie po kolei.';
+
+  @override
+  String get learnChessFindKing =>
+      'Król jest najważniejszy. Dotknij białego króla.';
+
+  @override
+  String get learnChessFindBlackKing =>
+      'Brawo! A teraz dotknij czarnego króla.';
+
+  @override
+  String get learnChessKingsFound =>
+      'Super! Każdy gracz pilnuje swojego króla.';
+
+  @override
+  String get learnChessFindHint =>
+      'To nie król. Król ma krzyżyk na koronie. Spróbuj jeszcze raz.';
+
+  @override
+  String get learnChessTurns =>
+      'Gracze ruszają się na zmianę. Zawsze zaczynają białe.';
+
+  @override
+  String get learnChessTurnWhite => 'Białe zrobiły ruch.';
+
+  @override
+  String get learnChessTurnBlack => 'Teraz czarne.';
+
+  @override
+  String get learnChessTurnWhiteAgain => 'Znowu białe.';
+
+  @override
+  String get learnChessTurnRule =>
+      'I czarne. Zawsze po jednym ruchu, na zmianę.';
+
+  @override
+  String get learnChessCapture =>
+      'Gdy wejdziesz na pole, na którym stoi przeciwnik, zabierasz go z planszy. To bicie.';
+
+  @override
+  String get learnChessCaptureWhite => 'Biały pion zbił czarnego piona.';
+
+  @override
+  String get learnChessCaptureBlack =>
+      'A czarny hetman zbił białego piona. Zbite bierki znikają z planszy.';
+
+  @override
+  String get learnChessGoal =>
+      'Celem gry jest złapać króla przeciwnika. Zobacz krótką partię.';
+
+  @override
+  String get learnChessQueenAims => 'Biały hetman celuje w czarnego króla.';
+
+  @override
+  String get learnChessMate => 'Szach! Hetman atakuje króla.';
+
+  @override
+  String get learnChessWhyMate => 'Czy król może się uratować? Zobacz.';
+
+  @override
+  String get learnChessWhyGuard =>
+      'Król chciałby zbić hetmana, ale hetmana pilnuje goniec. Król nie może wejść na pole, na którym sam zostałby zbity.';
+
+  @override
+  String get learnChessWhyNoEscape =>
+      'Uciec też nie może. Obok stoją jego własne bierki, a wolne pole także atakuje hetman.';
+
+  @override
+  String get learnChessWhyMateEnd =>
+      'Król nie ma żadnego ruchu. To mat. Białe wygrały!';
+
+  @override
+  String get learnChessTask =>
+      'Teraz ty! Dotknij białego hetmana i zbij piona obok czarnego króla. Daj mata!';
+
+  @override
+  String get learnChessTaskHint =>
+      'Dotknij białego hetmana, a potem piona w czerwonej ramce obok czarnego króla.';
+
+  @override
+  String get learnChessOutro =>
+      'Czasem nikt nie wygrywa i jest remis. O tym później. Teraz poznaj pierwszą bierkę: piona!';
+
+  @override
   String get learnPawnTitle => 'Pion';
 
   @override

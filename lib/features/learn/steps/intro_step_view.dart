@@ -63,7 +63,14 @@ class _IntroStepViewState extends State<IntroStepView>
   Widget build(BuildContext context) {
     final palette = AppTheme.of(context).ui;
     final step = widget.step;
-    final Widget picture = step.piece != null
+    final Widget picture = step.pieces.isNotEmpty
+        ? Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (final piece in step.pieces) PieceImage(piece, size: 120),
+            ],
+          )
+        : step.piece != null
         ? PieceImage(step.piece!, size: 160)
         : Icon(
             step.icon ?? Icons.school_rounded,

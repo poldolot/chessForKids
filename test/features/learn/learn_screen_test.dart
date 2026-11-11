@@ -1,5 +1,6 @@
 import 'package:chess_for_kids/data/models.dart';
 import 'package:chess_for_kids/engine/engine.dart';
+import 'package:chess_for_kids/features/board/piece_image.dart';
 import 'package:chess_for_kids/features/learn/learn_screen.dart';
 import 'package:chess_for_kids/features/learn/lesson_model.dart';
 import 'package:chess_for_kids/features/learn/lesson_screen.dart';
@@ -38,9 +39,27 @@ void main() {
     await tester.pump();
   }
 
+  testWidgets('a fresh profile starts with the story lesson only', (
+    tester,
+  ) async {
+    await pumpLearn(tester);
+    expect(find.byType(LessonNode), findsNWidgets(lessons.length));
+    expect(tester.widget<LessonNode>(node('chess')).unlocked, isTrue);
+    expect(tester.widget<LessonNode>(node('chess')).isNext, isTrue);
+    expect(tester.widget<LessonNode>(node('pawn')).unlocked, isFalse);
+    expect(
+      find.descendant(of: node('chess'), matching: find.byType(PieceImage)),
+      findsNWidgets(2),
+      reason: 'the story lesson shows the two kings',
+    );
+    expect(app.speaker.spoken.last.$1, 'learn.chess.title');
+    await tester.pumpAndSettle();
+  });
+
   testWidgets(
-    'path lists 14 lessons, only the first unlocked for a fresh profile',
+    'path lists 15 lessons, after the story only the pawn is unlocked',
     (tester) async {
+      await app.state.markLessonDone('chess');
       await pumpLearn(tester);
       expect(find.byType(LessonNode), findsWidgets);
       await tester.scrollUntilVisible(
@@ -77,6 +96,7 @@ void main() {
   testWidgets(
     'finishing a lesson returns to the path with stars and unlocks the next',
     (tester) async {
+      await app.state.markLessonDone('chess');
       await pumpLearn(tester);
       await tester.tap(node('pawn'));
       await tester.pumpAndSettle();
@@ -104,6 +124,7 @@ void main() {
   );
 
   testWidgets('leaving a lesson midway saves nothing', (tester) async {
+    await app.state.markLessonDone('chess');
     await pumpLearn(tester);
     await tester.tap(node('pawn'));
     await tester.pumpAndSettle();
@@ -113,7 +134,7 @@ void main() {
     await tester.tap(find.byKey(const Key('lesson-back')));
     await tester.pumpAndSettle();
     expect(find.byType(LearnScreen), findsOneWidget);
-    expect(app.state.currentProfile!.lessonsDone, isEmpty);
+    expect(app.state.currentProfile!.lessonsDone, {'chess'});
     expect(app.state.currentProfile!.stars, isEmpty);
   });
 

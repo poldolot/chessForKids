@@ -399,6 +399,11 @@ class _BoardViewState extends State<BoardView> {
         fit: StackFit.expand,
         children: [
           if (isLast) const SizedBox.shrink(key: Key('last-move')),
+          if (h.spotlight.contains(s))
+            Container(
+              key: Key('spotlight-${s.name}'),
+              color: palette.selected.withValues(alpha: 0.5),
+            ),
           if (isCheck) SizedBox.shrink(key: Key('check-${s.name}')),
           if (h.selected == s)
             Container(

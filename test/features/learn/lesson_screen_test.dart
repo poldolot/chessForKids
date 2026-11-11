@@ -1,4 +1,6 @@
 import 'package:chess_for_kids/data/models.dart';
+import 'package:chess_for_kids/features/board/board_view.dart';
+import 'package:chess_for_kids/features/board/piece_image.dart';
 import 'package:chess_for_kids/features/learn/lesson_model.dart';
 import 'package:chess_for_kids/features/learn/lesson_screen.dart';
 import 'package:chess_for_kids/features/learn/lessons/catalog.dart';
@@ -178,6 +180,127 @@ void main() {
     expect(nextButton(tester).onPressed, isNull);
     await tester.pump(const Duration(seconds: 21));
     expect(nextButton(tester).onPressed, isNotNull);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('only the first step carries the title; both intros hold Next', (
+    tester,
+  ) async {
+    final lesson = Lesson(
+      id: 'chess',
+      kind: LessonKind.story,
+      titleKey: 'learn.chess.title',
+      steps: const [
+        IntroStep(lineKey: 'learn.chess.intro'),
+        IntroStep(lineKey: 'learn.chess.outro'),
+      ],
+    );
+    app.speaker.speaking.value = true;
+    await tester.pumpWidget(app.wrap(LessonScreen(lesson: lesson)));
+    await tester.pump();
+    expect(app.speaker.spoken.last.$2, startsWith('Co to są szachy. '));
+    expect(nextButton(tester).onPressed, isNull);
+    app.speaker.speaking.value = false;
+    await tester.pump();
+    await tester.tap(find.byKey(const Key('lesson-next')));
+    await tester.pump();
+    expect(app.speaker.spoken.last.$1, 'learn.chess.outro');
+    expect(app.speaker.spoken.last.$2, startsWith('Czasem'));
+    app.speaker.speaking.value = true;
+    await tester.pump();
+    expect(
+      nextButton(tester).onPressed,
+      isNull,
+      reason: 'the closing words are heard to the end as well',
+    );
+    app.speaker.speaking.value = false;
+    await tester.pump();
+    expect(nextButton(tester).onPressed, isNotNull);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('two demos in a row each start from their own position', (
+    tester,
+  ) async {
+    await app.state.markLessonDone('chess');
+    final chess = lessonById('chess');
+    final demos = chess.steps.whereType<DemoStep>().toList();
+    final lesson = Lesson(
+      id: 'chess',
+      kind: LessonKind.story,
+      titleKey: 'learn.chess.title',
+      steps: [demos[0], demos[1]],
+    );
+    await tester.pumpWidget(app.wrap(LessonScreen(lesson: lesson)));
+    await tester.pump();
+    Finder pieceOn(String name) => find.descendant(
+      of: find.byKey(Key('sq-$name')),
+      matching: find.byType(PieceImage),
+    );
+    expect(pieceOn('e2'), findsOneWidget);
+    // Let the first demo play out.
+    await tester.pump(const Duration(seconds: 12));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(pieceOn('e4'), findsOneWidget);
+    await tester.tap(find.byKey(const Key('lesson-next')));
+    await tester.pump();
+    // The capture demo starts after 1.e4 d5: a black pawn on d5, e7 home.
+    expect(pieceOn('d5'), findsOneWidget);
+    expect(pieceOn('e7'), findsOneWidget);
+    expect(pieceOn('c6'), findsNothing);
+    await tester.pump(const Duration(milliseconds: 700));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(pieceOn('e4'), findsNothing, reason: 'exd5 was played');
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the board stays put across demo, find and task steps', (
+    tester,
+  ) async {
+    await app.state.markLessonDone('chess');
+    final chess = lessonById('chess');
+    final lesson = Lesson(
+      id: 'chess',
+      kind: LessonKind.story,
+      titleKey: 'learn.chess.title',
+      steps: [
+        chess.steps.whereType<SpotlightStep>().first,
+        chess.steps.whereType<FindStep>().single,
+        chess.steps.whereType<DemoStep>().first,
+        chess.steps.whereType<BoardTaskStep>().single,
+      ],
+    );
+    await tester.pumpWidget(app.wrap(LessonScreen(lesson: lesson)));
+    await tester.pump();
+    Offset boardAt() => tester.getTopLeft(find.byType(BoardView));
+    Future<void> next() async {
+      await tester.tap(find.byKey(const Key('lesson-next')));
+      await tester.pump();
+    }
+
+    Future<void> tapSquare(String name) async {
+      await tester.tap(find.byKey(Key('sq-$name')));
+      await tester.pump();
+    }
+
+    final first = boardAt();
+    // Spotlight plays out by itself.
+    await tester.pump(const Duration(seconds: 10));
+    await next();
+    expect(boardAt(), first, reason: 'find step');
+    await tapSquare('e1');
+    await tapSquare('e8');
+    await tester.pump(const Duration(seconds: 1));
+    await next();
+    expect(boardAt(), first, reason: 'demo step');
+    await tester.pump(const Duration(seconds: 12));
+    await tester.pump(const Duration(milliseconds: 300));
+    await next();
+    expect(boardAt(), first, reason: 'task step');
+    await tapSquare('h5');
+    await tapSquare('f7');
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(boardAt(), first, reason: 'task step after the move');
     await tester.pumpAndSettle();
   });
 }

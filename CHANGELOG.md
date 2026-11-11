@@ -6,6 +6,32 @@ All notable changes to Chess for Kids are listed here. The format follows
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-11
+
+### Added
+- Opening lesson "What chess is", first on the Learn path: two armies, the
+  pieces lit up one group at a time, find the kings, taking turns, capturing,
+  a whole short game to checkmate with an explanation of why the king cannot
+  escape, and the child plays the mating move. 15 lessons, 45 stars in all.
+- Two new lesson step types: "look here" (parts of a position light up with
+  their own line) and "find it" (tap the asked squares in order).
+- A blinking cursor in the answer field of the parent gate.
+
+### Changed
+- Demos and narrated steps wait for the teacher to finish talking before the
+  next move or part; the Next button also waits for the closing words of a
+  step on the first visit.
+- The teacher bubble keeps a minimum height and every board step shares the
+  same strip under the board, so the board stays in one place between steps.
+- A lesson once finished never locks again, even when a new lesson is placed
+  before it on the path.
+
+### Fixed
+- Two demos in a row no longer share state: the second one starts from its
+  own position.
+- The speech engine no longer reports silence for a moment while one line is
+  replaced by the next, which let demos run ahead of the voice.
+
 ## [0.2.3] - 2026-11-05
 
 ### Changed
@@ -105,7 +131,8 @@ First complete version for local testing (debug-signed APK).
 - GitHub Actions: analysis, tests and an APK on every push; the APK is attached
   to the release for `v*` tags.
 
-[Unreleased]: https://github.com/poldolot/chessForKids/compare/v0.2.3...HEAD
+[Unreleased]: https://github.com/poldolot/chessForKids/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/poldolot/chessForKids/compare/v0.2.3...v0.3.0
 [0.2.3]: https://github.com/poldolot/chessForKids/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/poldolot/chessForKids/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/poldolot/chessForKids/compare/v0.2.0...v0.2.1

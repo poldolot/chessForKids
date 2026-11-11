@@ -24,6 +24,15 @@ void main() {
     expect(isLessonUnlocked(lessonById('bishop'), p), isFalse);
   });
 
+  test('a lesson done earlier stays open when a new one precedes it', () {
+    // A profile from before the story lesson existed has the pawn done.
+    final p = fresh.copyWith(lessonsDone: {'pawn'});
+    expect(isLessonUnlocked(lessonById('chess'), p), isTrue);
+    expect(isLessonUnlocked(lessonById('pawn'), p), isTrue);
+    expect(isLessonUnlocked(lessonById('rook'), p), isTrue);
+    expect(isLessonUnlocked(lessonById('bishop'), p), isFalse);
+  });
+
   test('stars from mistakes follow the spec', () {
     expect(starsForMistakes(0), 3);
     expect(starsForMistakes(1), 2);
@@ -49,7 +58,7 @@ void main() {
     expect(learnEarnedStars(fresh), 0);
     expect(learnSectionStars(fresh), 0);
     expect(learnSectionStars(fresh.copyWith(stars: {'lesson:pawn': 1})), 1);
-    final half = {for (final l in lessons.take(7)) 'lesson:${l.id}': 3};
+    final half = {for (final l in lessons.take(8)) 'lesson:${l.id}': 3};
     expect(learnSectionStars(fresh.copyWith(stars: half)), 2);
     final all = {for (final l in lessons) 'lesson:${l.id}': 3};
     expect(learnEarnedStars(fresh.copyWith(stars: all)), kLearnMaxStars);
@@ -58,9 +67,9 @@ void main() {
   });
 
   test('nextLesson skips done lessons and is null at the end', () {
-    expect(nextLesson(fresh)?.id, 'pawn');
+    expect(nextLesson(fresh)?.id, 'chess');
     expect(
-      nextLesson(fresh.copyWith(lessonsDone: {'pawn', 'rook'}))?.id,
+      nextLesson(fresh.copyWith(lessonsDone: {'chess', 'pawn', 'rook'}))?.id,
       'bishop',
     );
     expect(

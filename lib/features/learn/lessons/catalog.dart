@@ -1,4 +1,5 @@
 import '../lesson_model.dart';
+import 'chess_lesson.dart';
 import 'piece_lessons.dart';
 import 'rule_lessons.dart';
 
@@ -14,8 +15,10 @@ const List<String> kRuleLessonIds = [
   'values',
 ];
 
-/// Every lesson in the order the child meets them.
+/// Every lesson in the order the child meets them: the story of the game,
+/// the six pieces, then the rules.
 final List<Lesson> lessons = List.unmodifiable([
+  chessLesson,
   ...pieceLessons,
   ...ruleLessons,
 ]);

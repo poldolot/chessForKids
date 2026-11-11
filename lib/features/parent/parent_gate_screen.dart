@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -24,11 +25,24 @@ class _ParentGateScreenState extends State<ParentGateScreen> {
   String _answer = '';
   int _wrong = 0;
   bool _showError = false;
+  bool _cursorOn = true;
+  Timer? _blink;
+
+  static const Duration _blinkPeriod = Duration(milliseconds: 500);
 
   @override
   void initState() {
     super.initState();
     _newTask();
+    _blink = Timer.periodic(_blinkPeriod, (_) {
+      setState(() => _cursorOn = !_cursorOn);
+    });
+  }
+
+  @override
+  void dispose() {
+    _blink?.cancel();
+    super.dispose();
   }
 
   void _newTask() {
@@ -107,14 +121,30 @@ class _ParentGateScreenState extends State<ParentGateScreen> {
                     width: 2,
                   ),
                 ),
-                child: Text(
-                  _answer,
-                  key: const Key('gate-answer'),
-                  style: TextStyle(
-                    color: palette.text,
-                    fontSize: 30,
-                    fontWeight: FontWeight.w700,
-                  ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      _answer,
+                      key: const Key('gate-answer'),
+                      style: TextStyle(
+                        color: palette.text,
+                        fontSize: 30,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    AnimatedOpacity(
+                      key: const Key('gate-cursor'),
+                      opacity: _cursorOn ? 1 : 0,
+                      duration: const Duration(milliseconds: 120),
+                      child: Container(
+                        width: 2,
+                        height: 34,
+                        margin: const EdgeInsets.only(left: 2),
+                        color: palette.text,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(

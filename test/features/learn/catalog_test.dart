@@ -6,7 +6,15 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   test('lessons are ordered as the spec says and have unique ids', () {
     final ids = lessons.map((l) => l.id).toList();
-    expect(ids.take(6), ['pawn', 'rook', 'bishop', 'queen', 'king', 'knight']);
+    expect(ids.first, 'chess');
+    expect(ids.skip(1).take(6), [
+      'pawn',
+      'rook',
+      'bishop',
+      'queen',
+      'king',
+      'knight',
+    ]);
     expect(ids.toSet().length, ids.length);
   });
 
@@ -21,8 +29,8 @@ void main() {
 
   test('rule lessons follow the piece lessons in spec order', () {
     final ids = lessons.map((l) => l.id).toList();
-    expect(ids.length, 14);
-    expect(ids.skip(6).toList(), kRuleLessonIds);
+    expect(ids.length, 15);
+    expect(ids.skip(7).toList(), kRuleLessonIds);
     expect(kRuleLessonIds, [
       'setup',
       'check',
@@ -33,7 +41,7 @@ void main() {
       'promotion',
       'values',
     ]);
-    for (final lesson in lessons.skip(6)) {
+    for (final lesson in lessons.skip(7)) {
       expect(lesson.kind, LessonKind.rule, reason: lesson.id);
       expect(lesson.icon, isNotNull, reason: lesson.id);
       expect(lesson.steps.first, isA<IntroStep>(), reason: lesson.id);
@@ -70,6 +78,39 @@ void main() {
       expect(tray.length, 8);
     },
   );
+
+  test('the opening lesson tells the story with two tasks', () {
+    final chess = lessonById('chess');
+    expect(chess.kind, LessonKind.story);
+    expect(chess.steps.first, isA<IntroStep>());
+    expect(chess.steps.last, isA<IntroStep>());
+    expect(chess.taskCount, 2);
+    expect(chess.steps.whereType<FindStep>().single.targets.length, 2);
+    final spotlights = chess.steps.whereType<SpotlightStep>().toList();
+    expect(spotlights.length, 2);
+    final all = spotlights[0].parts.expand((p) => p.$1).toSet();
+    expect(all.length, 32, reason: 'every piece of the start position');
+    // The second spotlight explains the mate: the guarded queen first.
+    final why = spotlights[1];
+    expect(
+      evaluatePosition(Position.fromFen(why.fen)).outcome,
+      GameOutcome.checkmate,
+    );
+    expect(why.parts.first.$1, {Square.parse('c4'), Square.parse('f7')});
+    expect(why.parts.last.$1, {Square.parse('e8')});
+    final demos = chess.steps.whereType<DemoStep>().toList();
+    expect(chess.steps.indexOf(why), chess.steps.indexOf(demos.last) + 1);
+    final mate = chess.steps.whereType<BoardTaskStep>().single;
+    final after = Position.fromFen(mate.fen).play(mate.solution.single);
+    expect(evaluatePosition(after).outcome, GameOutcome.checkmate);
+    for (final demo in chess.steps.whereType<DemoStep>()) {
+      var position = Position.fromFen(demo.fen);
+      for (final (move, _) in demo.moves) {
+        expect(legalMoves(position), contains(move), reason: demo.lineKey);
+        position = position.play(move);
+      }
+    }
+  });
 
   test('lessonById finds lessons and rejects unknown ids', () {
     expect(lessonById('rook').titleKey, 'learn.rook.title');

@@ -72,4 +72,38 @@ void main() {
     expect(pieceOn('a8'), findsOneWidget);
     await tester.pumpAndSettle();
   });
+
+  testWidgets('a narrated demo waits for the line before the next move', (
+    tester,
+  ) async {
+    final narrated = DemoStep(
+      lineKey: 'learn.chess.turns',
+      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      pace: const Duration(milliseconds: 1000),
+      moves: [
+        (Move.parseUci('e2e4'), 'learn.chess.turnWhite'),
+        (Move.parseUci('e7e5'), 'learn.chess.turnBlack'),
+      ],
+    );
+    await tester.pumpWidget(
+      app.wrap(
+        Scaffold(
+          body: DemoStepView(step: narrated, onDone: () {}),
+        ),
+      ),
+    );
+    await tester.pump(const Duration(milliseconds: 700));
+    // The teacher starts explaining the first move.
+    app.speaker.speaking.value = true;
+    await settleSlide(tester);
+    expect(pieceOn('e4'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 3));
+    await settleSlide(tester);
+    expect(pieceOn('e7'), findsOneWidget);
+    app.speaker.speaking.value = false;
+    await tester.pump(const Duration(milliseconds: 1000));
+    await settleSlide(tester);
+    expect(pieceOn('e5'), findsOneWidget);
+    await tester.pumpAndSettle();
+  });
 }

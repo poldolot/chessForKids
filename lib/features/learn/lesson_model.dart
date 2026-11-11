@@ -2,8 +2,9 @@ import 'package:flutter/widgets.dart';
 
 import '../../engine/engine.dart';
 
-/// Piece lessons teach one piece; rule lessons teach a rule of the game.
-enum LessonKind { piece, rule }
+/// Piece lessons teach one piece, rule lessons a rule of the game, and the
+/// story lesson tells what the game is about.
+enum LessonKind { piece, rule, story }
 
 /// How a move counts in a board task.
 enum MoveVerdict {
@@ -95,12 +96,19 @@ sealed class LessonStep {
   final String lineKey;
 }
 
-/// "Meet the piece": a big picture and one sentence.
+/// "Meet the piece": a big picture and one sentence. [pieces] shows a few
+/// pieces side by side instead of one.
 final class IntroStep extends LessonStep {
-  const IntroStep({required super.lineKey, this.piece, this.icon});
+  const IntroStep({
+    required super.lineKey,
+    this.piece,
+    this.icon,
+    this.pieces = const [],
+  });
 
   final Piece? piece;
   final IconData? icon;
+  final List<Piece> pieces;
 }
 
 /// "Watch": moves played automatically, each with an optional line.
@@ -111,11 +119,47 @@ final class DemoStep extends LessonStep {
     required this.moves,
     this.rules = GameRules.standard,
     this.orientation = PieceColor.white,
+    this.pace = const Duration(milliseconds: 1200),
   });
 
   final String fen;
   final List<(Move move, String? lineKey)> moves;
   final GameRules rules;
+  final PieceColor orientation;
+
+  /// Pause between moves, counted from the end of the previous move's line.
+  final Duration pace;
+}
+
+/// "Look here": a still position whose parts light up one after another,
+/// each with its own line.
+final class SpotlightStep extends LessonStep {
+  const SpotlightStep({
+    required super.lineKey,
+    required this.fen,
+    required this.parts,
+    this.orientation = PieceColor.white,
+  });
+
+  final String fen;
+  final List<(Set<Square> squares, String lineKey)> parts;
+  final PieceColor orientation;
+}
+
+/// "Find it": the child taps the asked squares in order. A wrong tap is a
+/// mistake; each found square may have a line of its own.
+final class FindStep extends LessonStep {
+  const FindStep({
+    required super.lineKey,
+    required this.fen,
+    required this.targets,
+    required this.hintKey,
+    this.orientation = PieceColor.white,
+  });
+
+  final String fen;
+  final List<(Square square, String? lineKey)> targets;
+  final String hintKey;
   final PieceColor orientation;
 }
 
@@ -197,6 +241,7 @@ final class Lesson {
     required this.steps,
     this.piece,
     this.icon,
+    this.pieces = const [],
   });
 
   final String id;
@@ -206,8 +251,17 @@ final class Lesson {
   final Piece? piece;
   final IconData? icon;
 
+  /// A few pieces shown side by side on the path instead of one.
+  final List<Piece> pieces;
+
   /// Steps in which mistakes are counted.
   int get taskCount => steps
-      .where((s) => s is BoardTaskStep || s is ArrangeStep || s is CompareStep)
+      .where(
+        (s) =>
+            s is BoardTaskStep ||
+            s is ArrangeStep ||
+            s is CompareStep ||
+            s is FindStep,
+      )
       .length;
 }

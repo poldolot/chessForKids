@@ -40,6 +40,15 @@ void main() {
   Iterable<MethodCall> named(String method) =>
       calls.where((c) => c.method == method);
 
+  Future<void> platformSays(String method) async {
+    await TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .handlePlatformMessage(
+          'flutter_tts',
+          const StandardMethodCodec().encodeMethodCall(MethodCall(method)),
+          (_) {},
+        );
+  }
+
   test('say forwards to the plugin with language and rate', () async {
     await speaker.setLanguage('pl');
     speaker.rate = SpeechRate.slow;
@@ -101,21 +110,37 @@ void main() {
     },
   );
 
+  test('the cancel of the previous line does not report quiet', () async {
+    // On a device the engine answers our stop() with speak.onCancel before
+    // the new line starts; the hand-over must still count as speaking.
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (call) async {
+          calls.add(call);
+          if (call.method == 'isLanguageAvailable') {
+            return true;
+          }
+          if (call.method == 'stop') {
+            await platformSays('speak.onCancel');
+          }
+          return 1;
+        });
+    await speaker.setLanguage('pl');
+    await speaker.say('Pierwsza', key: 'a');
+    await platformSays('speak.onStart');
+    expect(speaker.speaking.value, isTrue);
+    await speaker.say('Druga', key: 'b');
+    expect(speaker.speaking.value, isTrue, reason: 'hand-over to Druga');
+    await platformSays('speak.onStart');
+    await platformSays('speak.onComplete');
+    expect(speaker.speaking.value, isFalse);
+  });
+
   test('plugin errors are swallowed', () async {
     throwOnEverything = true;
     await speaker.setLanguage('pl');
     await expectLater(speaker.say('x', key: 'k'), completes);
     expect(speaker.available, isFalse);
   });
-
-  Future<void> platformSays(String method) async {
-    await TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .handlePlatformMessage(
-          'flutter_tts',
-          const StandardMethodCodec().encodeMethodCall(MethodCall(method)),
-          (_) {},
-        );
-  }
 
   test(
     'a non-interrupting line waits for the current one and then plays',

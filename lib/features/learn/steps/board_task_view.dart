@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../app/constants.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../../core/speaker.dart';
 import '../../../engine/engine.dart';
@@ -151,13 +152,25 @@ class _BoardTaskViewState extends State<BoardTaskView> {
           ),
         ),
         const SizedBox(height: 8),
-        if (step.moveLimit case final limit?)
-          _MovesLeft(left: limit - state.movesMade, total: limit)
-        else if (step.stars.isNotEmpty)
-          _StarsLeft(
-            left: _controller.starsLeft.length,
-            total: step.stars.length,
+        // The same strip as under a demo board, so the board does not move
+        // between a demo and a task.
+        SizedBox(
+          height: kMinTouchTarget,
+          child: Center(
+            child: switch (step) {
+              BoardTaskStep(moveLimit: final limit?) => _MovesLeft(
+                left: limit - state.movesMade,
+                total: limit,
+              ),
+              BoardTaskStep(stars: final stars) when stars.isNotEmpty =>
+                _StarsLeft(
+                  left: _controller.starsLeft.length,
+                  total: stars.length,
+                ),
+              _ => const SizedBox.shrink(),
+            },
           ),
+        ),
       ],
     );
   }

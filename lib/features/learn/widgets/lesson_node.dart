@@ -44,7 +44,14 @@ class _LessonNodeState extends State<LessonNode> {
   Widget build(BuildContext context) {
     final palette = AppTheme.of(context).ui;
     final lesson = widget.lesson;
-    final Widget picture = lesson.piece != null
+    final Widget picture = lesson.pieces.isNotEmpty
+        ? Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (final piece in lesson.pieces) PieceImage(piece, size: 36),
+            ],
+          )
+        : lesson.piece != null
         ? PieceImage(lesson.piece!, size: 52)
         : Icon(lesson.icon, size: 44, color: palette.text);
     Widget circle = Material(

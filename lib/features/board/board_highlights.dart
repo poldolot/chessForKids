@@ -11,6 +11,7 @@ final class BoardHighlights {
     this.danger = const {},
     this.stars = const {},
     this.ghosts = const {},
+    this.spotlight = const {},
   });
 
   final Square? selected;
@@ -28,6 +29,9 @@ final class BoardHighlights {
   /// Faded pieces marking where a piece belongs (setup lesson).
   final Map<Square, Piece> ghosts;
 
+  /// Squares lit up while the teacher talks about them.
+  final Set<Square> spotlight;
+
   /// This set of highlights with [other]'s non-empty fields laid on top.
   BoardHighlights merge(BoardHighlights other) {
     return BoardHighlights(
@@ -39,6 +43,7 @@ final class BoardHighlights {
       danger: {...danger, ...other.danger},
       stars: {...stars, ...other.stars},
       ghosts: {...ghosts, ...other.ghosts},
+      spotlight: {...spotlight, ...other.spotlight},
     );
   }
 }

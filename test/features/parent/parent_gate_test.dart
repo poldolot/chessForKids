@@ -57,6 +57,18 @@ void main() {
     await tester.pumpAndSettle();
   }
 
+  testWidgets('answer field shows a blinking cursor', (tester) async {
+    await pumpGate(tester, _FixedRandom([1, 2]));
+    final cursor = find.byKey(const Key('gate-cursor'));
+    expect(cursor, findsOneWidget);
+    double opacity() => tester.widget<AnimatedOpacity>(cursor).opacity;
+    final first = opacity();
+    await tester.pump(const Duration(milliseconds: 600));
+    expect(opacity(), isNot(first));
+    await tester.pump(const Duration(milliseconds: 600));
+    expect(opacity(), first);
+  });
+
   testWidgets('correct sum opens the parent zone', (tester) async {
     // nextInt(8) + 2 → 7 and 5
     await pumpGate(tester, _FixedRandom([5, 3]));

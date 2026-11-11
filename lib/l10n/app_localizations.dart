@@ -548,6 +548,192 @@ abstract class AppLocalizations {
   /// **'All lessons done. You are a champion!'**
   String get learnCommonAllDone;
 
+  /// No description provided for @learnChessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What chess is'**
+  String get learnChessTitle;
+
+  /// No description provided for @learnChessIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Chess is a game for two. One has the white army, the other the black one. See what it is about.'**
+  String get learnChessIntro;
+
+  /// No description provided for @learnChessArmy.
+  ///
+  /// In en, this message translates to:
+  /// **'This is the board at the start. Each army has sixteen pieces.'**
+  String get learnChessArmy;
+
+  /// No description provided for @learnChessPawns.
+  ///
+  /// In en, this message translates to:
+  /// **'Eight pawns stand in front.'**
+  String get learnChessPawns;
+
+  /// No description provided for @learnChessRooks.
+  ///
+  /// In en, this message translates to:
+  /// **'Two rooks stand in the corners.'**
+  String get learnChessRooks;
+
+  /// No description provided for @learnChessKnights.
+  ///
+  /// In en, this message translates to:
+  /// **'Next to them two knights, the little horses.'**
+  String get learnChessKnights;
+
+  /// No description provided for @learnChessBishops.
+  ///
+  /// In en, this message translates to:
+  /// **'Then two bishops.'**
+  String get learnChessBishops;
+
+  /// No description provided for @learnChessQueens.
+  ///
+  /// In en, this message translates to:
+  /// **'One queen.'**
+  String get learnChessQueens;
+
+  /// No description provided for @learnChessKings.
+  ///
+  /// In en, this message translates to:
+  /// **'And one king. You will meet them all, one by one.'**
+  String get learnChessKings;
+
+  /// No description provided for @learnChessFindKing.
+  ///
+  /// In en, this message translates to:
+  /// **'The king matters most. Tap the white king.'**
+  String get learnChessFindKing;
+
+  /// No description provided for @learnChessFindBlackKing.
+  ///
+  /// In en, this message translates to:
+  /// **'Well done! Now tap the black king.'**
+  String get learnChessFindBlackKing;
+
+  /// No description provided for @learnChessKingsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Great! Each player guards their own king.'**
+  String get learnChessKingsFound;
+
+  /// No description provided for @learnChessFindHint.
+  ///
+  /// In en, this message translates to:
+  /// **'That is not the king. The king has a little cross on its crown. Try again.'**
+  String get learnChessFindHint;
+
+  /// No description provided for @learnChessTurns.
+  ///
+  /// In en, this message translates to:
+  /// **'The players take turns. White always starts.'**
+  String get learnChessTurns;
+
+  /// No description provided for @learnChessTurnWhite.
+  ///
+  /// In en, this message translates to:
+  /// **'White made a move.'**
+  String get learnChessTurnWhite;
+
+  /// No description provided for @learnChessTurnBlack.
+  ///
+  /// In en, this message translates to:
+  /// **'Now black.'**
+  String get learnChessTurnBlack;
+
+  /// No description provided for @learnChessTurnWhiteAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'White again.'**
+  String get learnChessTurnWhiteAgain;
+
+  /// No description provided for @learnChessTurnRule.
+  ///
+  /// In en, this message translates to:
+  /// **'And black. Always one move each, taking turns.'**
+  String get learnChessTurnRule;
+
+  /// No description provided for @learnChessCapture.
+  ///
+  /// In en, this message translates to:
+  /// **'When you step onto a square where an enemy stands, you take it off the board. That is a capture.'**
+  String get learnChessCapture;
+
+  /// No description provided for @learnChessCaptureWhite.
+  ///
+  /// In en, this message translates to:
+  /// **'The white pawn captured the black pawn.'**
+  String get learnChessCaptureWhite;
+
+  /// No description provided for @learnChessCaptureBlack.
+  ///
+  /// In en, this message translates to:
+  /// **'And the black queen captured the white pawn. Captured pieces leave the board.'**
+  String get learnChessCaptureBlack;
+
+  /// No description provided for @learnChessGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'The aim is to catch the other king. Watch a short game.'**
+  String get learnChessGoal;
+
+  /// No description provided for @learnChessQueenAims.
+  ///
+  /// In en, this message translates to:
+  /// **'The white queen aims at the black king.'**
+  String get learnChessQueenAims;
+
+  /// No description provided for @learnChessMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Check! The queen attacks the king.'**
+  String get learnChessMate;
+
+  /// No description provided for @learnChessWhyMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Can the king save himself? Look.'**
+  String get learnChessWhyMate;
+
+  /// No description provided for @learnChessWhyGuard.
+  ///
+  /// In en, this message translates to:
+  /// **'The king would like to capture the queen, but the bishop guards her. A king may never step onto a square where he would be captured.'**
+  String get learnChessWhyGuard;
+
+  /// No description provided for @learnChessWhyNoEscape.
+  ///
+  /// In en, this message translates to:
+  /// **'He cannot run away either. His own pieces stand next to him, and the queen attacks the free square too.'**
+  String get learnChessWhyNoEscape;
+
+  /// No description provided for @learnChessWhyMateEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'The king has no move at all. That is checkmate. White wins!'**
+  String get learnChessWhyMateEnd;
+
+  /// No description provided for @learnChessTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Now you! Tap the white queen and capture the pawn next to the black king. Checkmate!'**
+  String get learnChessTask;
+
+  /// No description provided for @learnChessTaskHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the white queen, then the pawn in the red frame next to the black king.'**
+  String get learnChessTaskHint;
+
+  /// No description provided for @learnChessOutro.
+  ///
+  /// In en, this message translates to:
+  /// **'Sometimes nobody wins and it is a draw. More on that later. Now meet the first piece: the pawn!'**
+  String get learnChessOutro;
+
   /// No description provided for @learnPawnTitle.
   ///
   /// In en, this message translates to:

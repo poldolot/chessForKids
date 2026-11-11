@@ -7,8 +7,10 @@ Polish version: [README.pl.md](README.pl.md)
 
 ## What it will do
 
-- **Learn** – one lesson per piece (pawn, rook, bishop, queen, king, knight), then the
-  rules: setup, check, checkmate, stalemate, castling, en passant, promotion.
+- **Learn** – an opening story about what chess is (two armies, the king, taking
+  turns, capturing, a whole short game to checkmate), one lesson per piece (pawn,
+  rook, bishop, queen, king, knight), then the rules: setup, check, checkmate,
+  stalemate, castling, en passant, promotion, piece values.
 - **Mini-games** – Pawn War, Rook Roads, Bishop Tracks, King Race, The Hunt.
 - **Play** – a full game against a deliberately gentle computer opponent.
 - Stars, progress bars and badges; several child profiles on one device.
@@ -22,7 +24,7 @@ with recorded voice planned later. Polish and English at launch.
 
 ## Status
 
-All three sections of v1 are in place: Learn (14 lessons), Mini-games (five games with five generated levels each: every board is drawn fresh and checked to be solvable) and
+All three sections of v1 are in place: Learn (15 lessons), Mini-games (five games with five generated levels each: every board is drawn fresh and checked to be solvable) and
 Match against a simple computer opponent (full FIDE rules, hints, undo, resign, saved
 and resumed games, stars and badges), with spoken guidance in Polish and English on top
 of the app shell (profiles, menu, parent zone) and a tested chess rules engine. Next:
