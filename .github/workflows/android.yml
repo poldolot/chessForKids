@@ -11,22 +11,22 @@ on:
 permissions:
   contents: write
 
+env:
+  FLUTTER_VERSION: '3.47.9'
+
 jobs:
-  build:
+  # Analysis and tests run beside the APK build, not before it, so the
+  # whole run takes as long as the slower of the two.
+  test:
     runs-on: ubuntu-24.04
-    timeout-minutes: 40
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
-
-      - uses: actions/setup-java@v6
-        with:
-          distribution: temurin
-          java-version: '17'
 
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: '3.47.9'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           cache: true
 
       - run: flutter pub get
@@ -34,6 +34,26 @@ jobs:
       - run: flutter analyze
 
       - run: flutter test --reporter expanded --timeout 120s
+
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - run: flutter pub get
 
       - name: Build APK (debug-signed until a release keystore is configured)
         run: flutter build apk --release
@@ -44,9 +64,19 @@ jobs:
           path: build/app/outputs/flutter-apk/app-release.apk
           retention-days: 30
 
+  # A tag gets its release only when both the tests and the build passed.
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [test, build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: chess-for-kids-apk
+
       - name: Attach the APK to the release
-        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v3
         with:
-          files: build/app/outputs/flutter-apk/app-release.apk
+          files: app-release.apk
           generate_release_notes: true
